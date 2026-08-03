@@ -91,7 +91,8 @@ export async function updateBook(
 ): Promise<BookWithCopies | undefined> {
   // Normalize empty/whitespace-only isbn to null so it's stored as NULL, not ''
   // This prevents unique constraint violations when multiple books lack an ISBN
-  const normalizedInput = { ...input };
+  type NormalizedInput = Omit<Partial<Omit<NewBookInput, 'format'>>, 'isbn'> & { isbn?: string | null };
+  const normalizedInput: NormalizedInput = { ...input };
   if (input.isbn !== undefined) {
     normalizedInput.isbn = input.isbn?.trim() || null;
   }
