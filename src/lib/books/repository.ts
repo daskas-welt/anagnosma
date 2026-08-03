@@ -20,12 +20,14 @@ export type BookWithCopies = typeof books.$inferSelect & {
 
 export async function createBook(input: NewBookInput): Promise<BookWithCopies> {
   const { format, ...bookFields } = input;
-  const [book] = await db.insert(books).values(bookFields).returning();
-  const [copy] = await db
-    .insert(copies)
-    .values({ bookId: book.id, format })
-    .returning();
-  return { ...book, copies: [copy] };
+  return db.transaction(async (tx) => {
+    const [book] = await tx.insert(books).values(bookFields).returning();
+    const [copy] = await tx
+      .insert(copies)
+      .values({ bookId: book.id, format })
+      .returning();
+    return { ...book, copies: [copy] };
+  });
 }
 
 export async function getBook(id: number): Promise<BookWithCopies | undefined> {
