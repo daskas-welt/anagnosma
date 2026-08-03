@@ -132,7 +132,9 @@ export function CsvImportWizard() {
               <ul className="mt-2 list-disc pl-4">
                 {result.duplicates.map((d) => (
                   <li key={d.row}>
-                    Row {d.row}: possible duplicate of book #{d.matchedId}
+                    {d.reason === 'isbn'
+                      ? `Row ${d.row}: skipped — already in your library (ISBN match, book #${d.matchedId})`
+                      : `Row ${d.row}: possible duplicate of book #${d.matchedId} — imported anyway`}
                   </li>
                 ))}
               </ul>

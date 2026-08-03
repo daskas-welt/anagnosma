@@ -49,7 +49,7 @@ describe('import API', () => {
     );
     const body = await res.json();
     expect(body.failures).toHaveLength(0);
-    expect(body.duplicates).toHaveLength(1);
+    expect(body.duplicates).toEqual([{ row: 1, matchedId: expect.any(Number), reason: 'isbn' }]);
     expect(body.successCount).toBe(1);
 
     const stored = await listBooks();
