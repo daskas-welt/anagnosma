@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +21,7 @@ export default function CatalogPage() {
 }
 
 function CatalogPageInner() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [books, setBooks] = useState<BookWithCopies[]>([]);
   const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -75,7 +76,14 @@ function CatalogPageInner() {
         />
       </div>
       {tagId != null && (
-        <Badge variant="outline" className="cursor-pointer" onClick={() => setTagId(null)}>
+        <Badge
+          variant="outline"
+          className="cursor-pointer"
+          onClick={() => {
+            setTagId(null);
+            router.replace('/');
+          }}
+        >
           Filtering by tag &times;
         </Badge>
       )}
