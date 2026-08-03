@@ -1,25 +1,33 @@
 import { NextResponse } from 'next/server';
-import { deleteBook, getBook, updateBook } from '@/lib/books/repository';
+import { deleteBook, getBook, updateBook, type NewBookInput } from '@/lib/books/repository';
+import { parseId, parseJsonBody } from '@/lib/api-helpers';
 
 type Params = { params: Promise<{ id: string }> };
 
 export async function GET(_request: Request, { params }: Params) {
   const { id } = await params;
-  const book = await getBook(Number(id));
+  const bookId = parseId(id);
+  if (bookId == null) return NextResponse.json({ error: 'invalid id' }, { status: 400 });
+  const book = await getBook(bookId);
   if (!book) return NextResponse.json({ error: 'not found' }, { status: 404 });
   return NextResponse.json(book);
 }
 
 export async function PATCH(request: Request, { params }: Params) {
   const { id } = await params;
-  const body = await request.json();
-  const updated = await updateBook(Number(id), body);
+  const bookId = parseId(id);
+  if (bookId == null) return NextResponse.json({ error: 'invalid id' }, { status: 400 });
+  const { data: body, error } = await parseJsonBody<Partial<Omit<NewBookInput, 'format'>>>(request);
+  if (error) return error;
+  const updated = await updateBook(bookId, body);
   if (!updated) return NextResponse.json({ error: 'not found' }, { status: 404 });
   return NextResponse.json(updated);
 }
 
 export async function DELETE(_request: Request, { params }: Params) {
   const { id } = await params;
-  await deleteBook(Number(id));
+  const bookId = parseId(id);
+  if (bookId == null) return NextResponse.json({ error: 'invalid id' }, { status: 400 });
+  await deleteBook(bookId);
   return new NextResponse(null, { status: 204 });
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createBook, listBooks } from '@/lib/books/repository';
+import { createBook, listBooks, type NewBookInput } from '@/lib/books/repository';
+import { parseJsonBody } from '@/lib/api-helpers';
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -12,13 +13,14 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const body = await request.json();
+  const { data: body, error } = await parseJsonBody<Partial<NewBookInput>>(request);
+  if (error) return error;
   if (!body.title || !body.author || !body.format) {
     return NextResponse.json(
       { error: 'title, author, and format are required' },
       { status: 400 },
     );
   }
-  const book = await createBook(body);
+  const book = await createBook(body as NewBookInput);
   return NextResponse.json(book, { status: 201 });
 }
