@@ -26,6 +26,7 @@ export function BookTableRow({
       </TableCell>
       <TableCell>{book.title}</TableCell>
       <TableCell>{book.author}</TableCell>
+      <TableCell>{book.isbn ?? '—'}</TableCell>
       <TableCell>{book.publisher ?? '—'}</TableCell>
       <TableCell>{book.publishYear ?? '—'}</TableCell>
       <TableCell>{formatLabel(book.copies[0]?.format)}</TableCell>
@@ -44,7 +45,6 @@ export function BookTableRow({
           )}
         </TableCell>
       )}
-      <TableCell>{book.isbn ?? '—'}</TableCell>
       <TableCell className="max-w-xs truncate text-muted-foreground">{book.copies[0]?.notes ?? '—'}</TableCell>
     </TableRow>
   );

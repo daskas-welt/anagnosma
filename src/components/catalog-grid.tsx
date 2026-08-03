@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,10 +10,11 @@ import type { BookWithCopies } from '@/lib/books/repository';
 
 export function CatalogGrid({ books, onSelect }: { books: BookWithCopies[]; onSelect: (id: number) => void }) {
   const subjectNamesByBook = useSubjectNamesByBook(true);
+  const sortedBooks = useMemo(() => [...books].sort((a, b) => a.title.localeCompare(b.title)), [books]);
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {books.map((book) => {
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      {sortedBooks.map((book) => {
         const subjectNames = subjectNamesByBook?.[book.id] ?? [];
         return (
           <Card key={book.id} className="cursor-pointer" onClick={() => onSelect(book.id)}>
@@ -33,6 +35,7 @@ export function CatalogGrid({ books, onSelect }: { books: BookWithCopies[]; onSe
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{book.title}</p>
                 <p className="truncate text-xs text-muted-foreground">{book.author}</p>
+                <p className="truncate text-xs text-muted-foreground">{book.isbn ?? '—'}</p>
                 <p className="truncate text-xs text-muted-foreground">{book.publisher ?? '—'}</p>
                 <p className="text-xs text-muted-foreground">
                   {book.publishYear ?? '—'} &middot; {formatLabel(book.copies[0]?.format)}
@@ -46,7 +49,6 @@ export function CatalogGrid({ books, onSelect }: { books: BookWithCopies[]; onSe
                     ))}
                   </div>
                 )}
-                <p className="truncate text-xs text-muted-foreground">{book.isbn ?? '—'}</p>
                 {book.copies[0]?.notes && (
                   <p className="line-clamp-2 text-xs text-muted-foreground">{book.copies[0].notes}</p>
                 )}

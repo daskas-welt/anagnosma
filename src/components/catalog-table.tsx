@@ -8,10 +8,10 @@ import { formatLabel } from '@/lib/formats';
 import { useSubjectNamesByBook } from '@/lib/use-subject-names-by-book';
 import type { BookWithCopies } from '@/lib/books/repository';
 
-type SortKey = 'title' | 'author' | 'publisher' | 'publishYear' | 'format';
+type SortKey = 'title' | 'author' | 'publisher' | 'publishYear' | 'format' | 'subjects';
 type SortDir = 'asc' | 'desc';
 
-const SORT_ACCESSORS: Record<SortKey, (book: BookWithCopies) => string | number | null> = {
+const SORT_ACCESSORS: Record<Exclude<SortKey, 'subjects'>, (book: BookWithCopies) => string | number | null> = {
   title: (book) => book.title,
   author: (book) => book.author,
   publisher: (book) => book.publisher,
@@ -61,7 +61,7 @@ export function CatalogTable({
   showSubjectsColumn?: boolean;
   subjectNamesByBookId?: Record<number, string[]>;
 }) {
-  const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey | null>('title');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
 
   const fetchedMap = useSubjectNamesByBook(showSubjectsColumn && !subjectNamesByBookId);
@@ -78,7 +78,10 @@ export function CatalogTable({
 
   const sortedBooks = useMemo(() => {
     if (!sortKey) return books;
-    const accessor = SORT_ACCESSORS[sortKey];
+    const accessor: (book: BookWithCopies) => string | number | null =
+      sortKey === 'subjects'
+        ? (book) => (resolvedMap?.[book.id]?.length ? resolvedMap[book.id].join(', ') : null)
+        : SORT_ACCESSORS[sortKey];
     const sorted = [...books].sort((a, b) => {
       const valueA = accessor(a);
       const valueB = accessor(b);
@@ -90,7 +93,7 @@ export function CatalogTable({
     });
     if (sortDir === 'desc') sorted.reverse();
     return sorted;
-  }, [books, sortKey, sortDir]);
+  }, [books, sortKey, sortDir, resolvedMap]);
 
   return (
     <Table>
@@ -99,11 +102,13 @@ export function CatalogTable({
           <TableHead className="w-[96px]"></TableHead>
           <SortableHead label="Title" column="title" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[20%]" />
           <SortableHead label="Author" column="author" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[13%]" />
+          <TableHead className="w-[130px]">ISBN</TableHead>
           <SortableHead label="Publisher" column="publisher" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[11%]" />
           <SortableHead label="Year" column="publishYear" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[90px]" />
           <SortableHead label="Format" column="format" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[110px]" />
-          {showSubjectsColumn && <TableHead className="w-[16%]">Subject(s)</TableHead>}
-          <TableHead className="w-[130px]">ISBN</TableHead>
+          {showSubjectsColumn && (
+            <SortableHead label="Subject(s)" column="subjects" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[16%]" />
+          )}
           <TableHead>Notes</TableHead>
         </TableRow>
       </TableHeader>
