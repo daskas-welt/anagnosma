@@ -10,7 +10,7 @@ import { Progress } from '@/components/ui/progress';
 import { parseCsv, mapColumns, HEADER_PRESETS } from '@/lib/csv/parse';
 import type { ImportResult } from '@/lib/csv/import';
 
-const TARGET_FIELDS = ['title', 'author', 'isbn', 'format', 'status', 'rating', 'notes', 'publisher', 'pageCount'];
+const TARGET_FIELDS = ['title', 'author', 'isbn', 'format', 'notes', 'publisher', 'pageCount'];
 
 export function CsvImportWizard() {
   const [headers, setHeaders] = useState<string[]>([]);

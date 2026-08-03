@@ -25,20 +25,18 @@ describe('copies API', () => {
     expect(body.bookId).toBe(book.id);
   });
 
-  it('PATCH updates copy reading state', async () => {
+  it('PATCH updates copy notes', async () => {
     const book = await createBook({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
     const copyId = book.copies[0].id;
     const res = await PATCH(
       new Request(`http://localhost/api/copies/${copyId}`, {
         method: 'PATCH',
-        body: JSON.stringify({ status: 'reading', progressPage: 120, rating: 5 }),
+        body: JSON.stringify({ notes: 'Great world-building.' }),
       }),
       { params: Promise.resolve({ id: String(copyId) }) },
     );
     const body = await res.json();
-    expect(body.status).toBe('reading');
-    expect(body.progressPage).toBe(120);
-    expect(body.rating).toBe(5);
+    expect(body.notes).toBe('Great world-building.');
   });
 
   it('DELETE removes a copy without deleting the book', async () => {

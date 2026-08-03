@@ -18,7 +18,6 @@ describe('books repository', () => {
     expect(created.title).toBe('Dune');
     expect(created.copies).toHaveLength(1);
     expect(created.copies[0].format).toBe('paperback');
-    expect(created.copies[0].status).toBe('to-read');
   });
 
   it('gets a book by id with its copies', async () => {

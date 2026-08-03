@@ -25,15 +25,10 @@ export async function POST(request: Request) {
       pageCount: pageCount != null && !Number.isNaN(pageCount) ? pageCount : undefined,
     });
 
-    // status/rating/notes apply to a specific copy, not the book itself —
-    // stamp them on the first copy created alongside this book.
-    const rating = row.rating ? Number(row.rating) : undefined;
-    const copyPatch: Record<string, unknown> = {};
-    if (row.status) copyPatch.status = row.status;
-    if (rating != null && !Number.isNaN(rating)) copyPatch.rating = rating;
-    if (row.notes) copyPatch.notes = row.notes;
-    if (Object.keys(copyPatch).length > 0 && book.copies[0]) {
-      await updateCopy(book.copies[0].id, copyPatch);
+    // notes apply to a specific copy, not the book itself — stamp it on the
+    // first copy created alongside this book.
+    if (row.notes && book.copies[0]) {
+      await updateCopy(book.copies[0].id, { notes: row.notes });
     }
 
     return book;

@@ -2,9 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Book covers come from the Google Books ISBN lookup (see src/lib/google-books/client.ts),
-    // which serves thumbnail images from books.google.com. next/image hard-errors on
-    // unconfigured remote hosts, so this must stay in sync with any future cover sources.
+    // Book covers come from the ISBN lookup (see src/lib/isbn-lookup/client.ts), which
+    // serves thumbnails from Open Library's free, keyless cover API. books.google.com
+    // stays allowlisted for any pre-existing records with a Google-hosted cover URL.
+    // next/image hard-errors on unconfigured remote hosts, so this must stay in sync
+    // with any future cover sources.
     remotePatterns: [
       {
         protocol: 'https',
@@ -13,6 +15,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'http',
         hostname: 'books.google.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'covers.openlibrary.org',
       },
     ],
   },
