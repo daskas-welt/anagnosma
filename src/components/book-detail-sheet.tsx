@@ -6,6 +6,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { FORMATS } from '@/lib/formats';
 import type { BookWithCopies } from '@/lib/books/repository';
 
 type Subject = { id: number; name: string; bookCount: number };
@@ -119,6 +121,58 @@ export function BookDetailSheet({
             <div className="space-y-6 px-4 pb-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
+                  <h3 className="mb-2 text-sm font-medium">Title</h3>
+                  <Input
+                    key={displayedBook.id}
+                    defaultValue={displayedBook.title}
+                    placeholder="Title"
+                    onBlur={(e) => {
+                      if (e.target.value && e.target.value !== displayedBook.title) {
+                        updateBookField({ title: e.target.value });
+                      }
+                    }}
+                  />
+                </div>
+                <div>
+                  <h3 className="mb-2 text-sm font-medium">Author</h3>
+                  <Input
+                    key={displayedBook.id}
+                    defaultValue={displayedBook.author}
+                    placeholder="Author"
+                    onBlur={(e) => {
+                      if (e.target.value && e.target.value !== displayedBook.author) {
+                        updateBookField({ author: e.target.value });
+                      }
+                    }}
+                  />
+                </div>
+                <div>
+                  <h3 className="mb-2 text-sm font-medium">ISBN</h3>
+                  <Input
+                    key={displayedBook.id}
+                    defaultValue={displayedBook.isbn ?? ''}
+                    placeholder="ISBN"
+                    onBlur={(e) => {
+                      if (e.target.value !== (displayedBook.isbn ?? '')) {
+                        updateBookField({ isbn: e.target.value });
+                      }
+                    }}
+                  />
+                </div>
+                <div>
+                  <h3 className="mb-2 text-sm font-medium">Cover URL</h3>
+                  <Input
+                    key={displayedBook.id}
+                    defaultValue={displayedBook.coverUrl ?? ''}
+                    placeholder="Cover URL"
+                    onBlur={(e) => {
+                      if (e.target.value !== (displayedBook.coverUrl ?? '')) {
+                        updateBookField({ coverUrl: e.target.value });
+                      }
+                    }}
+                  />
+                </div>
+                <div>
                   <h3 className="mb-2 text-sm font-medium">Publisher</h3>
                   <Input
                     key={displayedBook.id}
@@ -171,7 +225,18 @@ export function BookDetailSheet({
                 <h3 className="text-sm font-medium">Copies</h3>
                 {displayedBook.copies.map((copy) => (
                   <div key={copy.id} className="space-y-2 rounded border p-3">
-                    <span className="text-sm font-medium">{copy.format}</span>
+                    <Select value={copy.format} onValueChange={(v) => v != null && updateCopy(copy.id, { format: v })}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FORMATS.map((f) => (
+                          <SelectItem key={f.value} value={f.value}>
+                            {f.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <Textarea
                       defaultValue={copy.notes ?? ''}
                       placeholder="Notes"
