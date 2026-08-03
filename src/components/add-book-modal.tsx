@@ -74,7 +74,13 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
 
   async function handleIsbnBlur(isbn: string) {
     if (!isbn) return;
-    const res = await fetch(`/api/lookup?isbn=${encodeURIComponent(isbn)}`);
+    let res: Response;
+    try {
+      res = await fetch(`/api/lookup?isbn=${encodeURIComponent(isbn)}`);
+    } catch {
+      toast.error('No match found for that ISBN — fill in the details manually.');
+      return;
+    }
     if (!res.ok) {
       toast.error('No match found for that ISBN — fill in the details manually.');
       return;

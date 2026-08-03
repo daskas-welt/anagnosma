@@ -14,7 +14,7 @@ export async function lookupByIsbn(
   fetchImpl: typeof fetch = fetch,
 ): Promise<BookMetadata | null> {
   try {
-    const res = await fetchImpl(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+    const res = await fetchImpl(`https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(isbn)}`);
     if (!res.ok) return null;
     const data = await res.json();
     if (!data.totalItems || !data.items?.length) return null;
