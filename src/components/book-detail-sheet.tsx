@@ -25,6 +25,11 @@ export function BookDetailSheet({
   const [book, setBook] = useState<BookWithCopies | null>(null);
   const [allTags, setAllTags] = useState<Tag[]>([]);
   const [assignedTagIds, setAssignedTagIds] = useState<Set<number>>(new Set());
+  // Tracks which bookId `assignedTagIds` was fetched for, so a response that
+  // resolves after the user has already switched to a different book can be
+  // recognized as stale (see `displayedAssignedTagIds` below) instead of
+  // being shown — and toggled — against the wrong book.
+  const [assignedTagIdsBookId, setAssignedTagIdsBookId] = useState<number | null>(null);
 
   useEffect(() => {
     if (bookId == null) return;
@@ -32,12 +37,20 @@ export function BookDetailSheet({
     fetch('/api/tags').then((r) => r.json()).then(setAllTags);
     fetch(`/api/books/${bookId}/tags`)
       .then((r) => r.json())
-      .then((ids: number[]) => setAssignedTagIds(new Set(ids)));
+      .then((ids: number[]) => {
+        setAssignedTagIds(new Set(ids));
+        setAssignedTagIdsBookId(bookId);
+      });
   }, [bookId]);
 
   // Guard against showing stale data from a previously selected book while the
   // fetch for the newly selected `bookId` is still in flight.
   const displayedBook = book && book.id === bookId ? book : null;
+  // Same guard for assigned tags: only trust `assignedTagIds` once it was
+  // fetched for the currently selected book. Otherwise a badge that's
+  // actually from the previous book could read as "assigned" and invert the
+  // toggle (DELETE instead of POST) when clicked.
+  const displayedAssignedTagIds = assignedTagIdsBookId === bookId ? assignedTagIds : new Set<number>();
 
   async function updateCopy(copyId: number, patch: Record<string, unknown>) {
     const res = await fetch(`/api/copies/${copyId}`, {
@@ -57,22 +70,27 @@ export function BookDetailSheet({
   }
 
   async function toggleTag(tagId: number, assigned: boolean) {
-    if (!book) return;
+    if (!displayedBook) return;
     if (assigned) {
-      await fetch(`/api/books/${book.id}/tags?tagId=${tagId}`, { method: 'DELETE' });
+      await fetch(`/api/books/${displayedBook.id}/tags?tagId=${tagId}`, { method: 'DELETE' });
     } else {
-      await fetch(`/api/books/${book.id}/tags`, {
+      await fetch(`/api/books/${displayedBook.id}/tags`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tagId }),
       });
     }
-    setAssignedTagIds((prev) => {
-      const next = new Set(prev);
+    // Base the update on `displayedAssignedTagIds` (the value actually shown
+    // and toggled), not the raw `assignedTagIds`, in case the fetch for this
+    // book hadn't resolved yet — and stamp the bookId so this now-correct
+    // state isn't immediately treated as stale by the guard above.
+    setAssignedTagIds(() => {
+      const next = new Set(displayedAssignedTagIds);
       if (assigned) next.delete(tagId);
       else next.add(tagId);
       return next;
     });
+    setAssignedTagIdsBookId(displayedBook.id);
     onChanged();
   }
 
@@ -90,7 +108,7 @@ export function BookDetailSheet({
                 <h3 className="mb-2 text-sm font-medium">Tags</h3>
                 <div className="flex flex-wrap gap-2">
                   {allTags.map((tag) => {
-                    const assigned = assignedTagIds.has(tag.id);
+                    const assigned = displayedAssignedTagIds.has(tag.id);
                     return (
                       <Badge
                         key={tag.id}
