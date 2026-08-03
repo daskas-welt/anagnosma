@@ -96,7 +96,7 @@ export function CatalogTable({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[64px]"></TableHead>
+          <TableHead className="w-[96px]"></TableHead>
           <SortableHead label="Title" column="title" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[20%]" />
           <SortableHead label="Author" column="author" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[13%]" />
           <SortableHead label="Publisher" column="publisher" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[11%]" />
