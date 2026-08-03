@@ -20,8 +20,11 @@ export type BookWithCopies = typeof books.$inferSelect & {
 
 export async function createBook(input: NewBookInput): Promise<BookWithCopies> {
   const { format, ...bookFields } = input;
+  // Normalize empty/whitespace-only isbn to undefined so it's stored as NULL, not ''
+  // This prevents unique constraint violations when multiple books lack an ISBN
+  const isbn = input.isbn?.trim() || undefined;
   return db.transaction(async (tx) => {
-    const [book] = await tx.insert(books).values(bookFields).returning();
+    const [book] = await tx.insert(books).values({ ...bookFields, isbn }).returning();
     const [copy] = await tx
       .insert(copies)
       .values({ bookId: book.id, format })

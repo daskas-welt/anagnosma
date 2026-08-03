@@ -51,4 +51,27 @@ describe('books repository', () => {
     await deleteBook(created.id);
     expect(await getBook(created.id)).toBeUndefined();
   });
+
+  it('creates multiple books with empty isbn without unique constraint violation', async () => {
+    // Regression test for bug where empty string ISBN collides on unique constraint.
+    // Empty/whitespace isbn should be normalized to NULL so multiple books can omit it.
+    const book1 = await createBook({
+      title: 'Book One',
+      author: 'Author One',
+      isbn: '',
+      format: 'paperback',
+    });
+    const book2 = await createBook({
+      title: 'Book Two',
+      author: 'Author Two',
+      isbn: '',
+      format: 'hardcover',
+    });
+    expect(book1.isbn).toBeNull();
+    expect(book2.isbn).toBeNull();
+    const fetched1 = await getBook(book1.id);
+    const fetched2 = await getBook(book2.id);
+    expect(fetched1?.isbn).toBeNull();
+    expect(fetched2?.isbn).toBeNull();
+  });
 });
