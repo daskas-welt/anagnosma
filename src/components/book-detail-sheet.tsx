@@ -24,11 +24,15 @@ export function BookDetailSheet({
 }) {
   const [book, setBook] = useState<BookWithCopies | null>(null);
   const [allTags, setAllTags] = useState<Tag[]>([]);
+  const [assignedTagIds, setAssignedTagIds] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     if (bookId == null) return;
     fetch(`/api/books/${bookId}`).then((r) => r.json()).then(setBook);
     fetch('/api/tags').then((r) => r.json()).then(setAllTags);
+    fetch(`/api/books/${bookId}/tags`)
+      .then((r) => r.json())
+      .then((ids: number[]) => setAssignedTagIds(new Set(ids)));
   }, [bookId]);
 
   // Guard against showing stale data from a previously selected book while the
@@ -63,6 +67,12 @@ export function BookDetailSheet({
         body: JSON.stringify({ tagId }),
       });
     }
+    setAssignedTagIds((prev) => {
+      const next = new Set(prev);
+      if (assigned) next.delete(tagId);
+      else next.add(tagId);
+      return next;
+    });
     onChanged();
   }
 
@@ -79,16 +89,19 @@ export function BookDetailSheet({
               <div>
                 <h3 className="mb-2 text-sm font-medium">Tags</h3>
                 <div className="flex flex-wrap gap-2">
-                  {allTags.map((tag) => (
-                    <Badge
-                      key={tag.id}
-                      variant="outline"
-                      className="cursor-pointer"
-                      onClick={() => toggleTag(tag.id, false)}
-                    >
-                      {tag.name}
-                    </Badge>
-                  ))}
+                  {allTags.map((tag) => {
+                    const assigned = assignedTagIds.has(tag.id);
+                    return (
+                      <Badge
+                        key={tag.id}
+                        variant={assigned ? 'default' : 'outline'}
+                        className="cursor-pointer"
+                        onClick={() => toggleTag(tag.id, assigned)}
+                      >
+                        {tag.name}
+                      </Badge>
+                    );
+                  })}
                 </div>
               </div>
               <div className="space-y-4">

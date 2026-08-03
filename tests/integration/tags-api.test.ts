@@ -5,7 +5,7 @@ import { books, copies, tags, bookTags } from '@/lib/db/schema';
 import { createBook } from '@/lib/books/repository';
 import { GET, POST } from '@/app/api/tags/route';
 import { PATCH, DELETE } from '@/app/api/tags/[id]/route';
-import { POST as ASSIGN, DELETE as UNASSIGN } from '@/app/api/books/[id]/tags/route';
+import { GET as BOOK_TAGS, POST as ASSIGN, DELETE as UNASSIGN } from '@/app/api/books/[id]/tags/route';
 
 beforeEach(async () => {
   await db.delete(bookTags);
@@ -30,6 +30,24 @@ describe('tags API', () => {
     );
     const list = await (await GET()).json();
     expect(list.find((t: any) => t.id === tag.id).bookCount).toBe(1);
+  });
+
+  it('GET /api/books/:id/tags returns assigned tag ids so the UI can distinguish assigned vs unassigned', async () => {
+    const book = await createBook({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const tag = await (await POST(new Request('http://localhost/api/tags', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }))).json();
+    const before = await (
+      await BOOK_TAGS(new Request(`http://localhost/api/books/${book.id}/tags`), { params: Promise.resolve({ id: String(book.id) }) })
+    ).json();
+    expect(before).toEqual([]);
+
+    await ASSIGN(
+      new Request(`http://localhost/api/books/${book.id}/tags`, { method: 'POST', body: JSON.stringify({ tagId: tag.id }) }),
+      { params: Promise.resolve({ id: String(book.id) }) },
+    );
+    const after = await (
+      await BOOK_TAGS(new Request(`http://localhost/api/books/${book.id}/tags`), { params: Promise.resolve({ id: String(book.id) }) })
+    ).json();
+    expect(after).toEqual([tag.id]);
   });
 
   it('removes a tag from a book', async () => {

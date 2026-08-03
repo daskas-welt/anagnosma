@@ -29,6 +29,11 @@ export async function assignTag(bookId: number, tagId: number) {
   await db.insert(bookTags).values({ bookId, tagId }).onConflictDoNothing();
 }
 
+export async function listTagIdsForBook(bookId: number): Promise<number[]> {
+  const rows = await db.select({ tagId: bookTags.tagId }).from(bookTags).where(eq(bookTags.bookId, bookId));
+  return rows.map((r) => r.tagId);
+}
+
 export async function removeTag(bookId: number, tagId: number) {
   await db.delete(bookTags).where(and(eq(bookTags.bookId, bookId), eq(bookTags.tagId, tagId)));
 }
