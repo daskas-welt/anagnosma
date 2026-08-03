@@ -53,7 +53,13 @@ export async function updateBook(
   id: number,
   input: Partial<Omit<NewBookInput, 'format'>>,
 ): Promise<BookWithCopies | undefined> {
-  const [updated] = await db.update(books).set(input).where(eq(books.id, id)).returning();
+  // Normalize empty/whitespace-only isbn to null so it's stored as NULL, not ''
+  // This prevents unique constraint violations when multiple books lack an ISBN
+  const normalizedInput = { ...input };
+  if (input.isbn !== undefined) {
+    normalizedInput.isbn = input.isbn?.trim() || null;
+  }
+  const [updated] = await db.update(books).set(normalizedInput).where(eq(books.id, id)).returning();
   if (!updated) return undefined;
   return getBook(id);
 }
