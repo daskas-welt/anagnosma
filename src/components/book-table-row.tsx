@@ -17,9 +17,9 @@ export function BookTableRow({
     <TableRow className="cursor-pointer" onClick={() => onSelect(book.id)}>
       <TableCell>
         {book.coverUrl ? (
-          <Image src={book.coverUrl} alt={book.title} width={48} height={72} className="h-[72px] w-[48px] object-cover" />
+          <Image src={book.coverUrl} alt={book.title} width={80} height={120} className="h-[120px] w-[80px] object-cover" />
         ) : (
-          <div className="flex h-[72px] w-[48px] items-center justify-center bg-muted text-[8px] text-muted-foreground">
+          <div className="flex h-[120px] w-[80px] items-center justify-center bg-muted text-xs text-muted-foreground">
             —
           </div>
         )}
