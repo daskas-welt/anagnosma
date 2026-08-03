@@ -60,4 +60,10 @@ describe('lookupByIsbn', () => {
     const result = await lookupByIsbn('9780060853976', fetchImpl as any);
     expect(result?.author).toBe('Terry Pratchett, Neil Gaiman');
   });
+
+  it('returns null on network error', async () => {
+    const fetchImpl = vi.fn().mockRejectedValue(new Error('network error'));
+    const result = await lookupByIsbn('9780441013593', fetchImpl as any);
+    expect(result).toBeNull();
+  });
 });
