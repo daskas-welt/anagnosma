@@ -9,6 +9,7 @@ import { AddBookModal } from '@/components/add-book-modal';
 import { CatalogFilters } from '@/components/catalog-filters';
 import { CatalogGrid } from '@/components/catalog-grid';
 import { CatalogTable } from '@/components/catalog-table';
+import { CatalogBySubject } from '@/components/catalog-by-subject';
 import { BookDetailSheet } from '@/components/book-detail-sheet';
 import type { BookWithCopies } from '@/lib/books/repository';
 
@@ -24,21 +25,19 @@ function CatalogPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [books, setBooks] = useState<BookWithCopies[]>([]);
-  const [view, setView] = useState<'grid' | 'list'>('grid');
+  const [view, setView] = useState<'grid' | 'list' | 'subject'>('grid');
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
   const [format, setFormat] = useState('all');
-  const [tagId, setTagId] = useState<number | null>(
-    searchParams.get('tagId') ? Number(searchParams.get('tagId')) : null,
+  const [subjectId, setSubjectId] = useState<number | null>(
+    searchParams.get('subjectId') ? Number(searchParams.get('subjectId')) : null,
   );
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   async function refresh() {
     const params = new URLSearchParams();
     if (query) params.set('q', query);
-    if (status !== 'all') params.set('status', status);
     if (format !== 'all') params.set('format', format);
-    if (tagId) params.set('tagId', String(tagId));
+    if (subjectId) params.set('subjectId', String(subjectId));
     const res = await fetch(`/api/books?${params.toString()}`);
     setBooks(await res.json());
   }
@@ -48,7 +47,7 @@ function CatalogPageInner() {
       await refresh();
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, status, format, tagId]);
+  }, [query, format, subjectId]);
 
   return (
     <div className="space-y-4">
@@ -62,36 +61,30 @@ function CatalogPageInner() {
         <AddBookModal onCreated={(book) => setBooks((prev) => [book, ...prev])} />
       </div>
       <div className="flex items-center justify-between gap-4">
-        <Tabs value={view} onValueChange={(v) => setView(v as 'grid' | 'list')}>
+        <Tabs value={view} onValueChange={(v) => setView(v as 'grid' | 'list' | 'subject')}>
           <TabsList>
             <TabsTrigger value="grid">Grid</TabsTrigger>
             <TabsTrigger value="list">List</TabsTrigger>
+            <TabsTrigger value="subject">By Subject</TabsTrigger>
           </TabsList>
         </Tabs>
-        <CatalogFilters
-          status={status}
-          format={format}
-          onStatusChange={setStatus}
-          onFormatChange={setFormat}
-        />
+        <CatalogFilters format={format} onFormatChange={setFormat} />
       </div>
-      {tagId != null && (
+      {subjectId != null && (
         <Badge
           variant="outline"
           className="cursor-pointer"
           onClick={() => {
-            setTagId(null);
+            setSubjectId(null);
             router.replace('/');
           }}
         >
-          Filtering by tag &times;
+          Filtering by subject &times;
         </Badge>
       )}
-      {view === 'grid' ? (
-        <CatalogGrid books={books} onSelect={setSelectedId} />
-      ) : (
-        <CatalogTable books={books} onSelect={setSelectedId} />
-      )}
+      {view === 'grid' && <CatalogGrid books={books} onSelect={setSelectedId} />}
+      {view === 'list' && <CatalogTable books={books} onSelect={setSelectedId} />}
+      {view === 'subject' && <CatalogBySubject books={books} onSelect={setSelectedId} />}
       <BookDetailSheet bookId={selectedId} onClose={() => setSelectedId(null)} onChanged={refresh} />
     </div>
   );

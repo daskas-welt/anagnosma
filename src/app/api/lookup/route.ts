@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { lookupByIsbn } from '@/lib/google-books/client';
+import { lookupByIsbn } from '@/lib/isbn-lookup/client';
 
 export async function GET(request: Request) {
   const isbn = new URL(request.url).searchParams.get('isbn');

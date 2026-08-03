@@ -5,16 +5,7 @@ import { copies } from '@/lib/db/schema';
 export type NewCopyInput = {
   bookId: number;
   format: string;
-  condition?: string;
-  purchasePrice?: string;
-  purchaseDate?: string;
-  shelfLocation?: string;
-  status?: string;
-  progressPage?: number;
-  rating?: number;
   notes?: string;
-  dateStarted?: string;
-  dateFinished?: string;
 };
 
 export async function createCopy(input: NewCopyInput) {

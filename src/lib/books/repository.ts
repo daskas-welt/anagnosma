@@ -1,6 +1,6 @@
 import { eq, and, or, ilike, inArray } from 'drizzle-orm';
 import { db } from '@/lib/db';
-import { books, copies, bookTags } from '@/lib/db/schema';
+import { books, copies, bookSubjects } from '@/lib/db/schema';
 
 export type NewBookInput = {
   isbn?: string;
@@ -42,16 +42,18 @@ export async function getBook(id: number): Promise<BookWithCopies | undefined> {
 
 export type BookFilters = {
   q?: string;
-  status?: string;
   format?: string;
-  tagId?: number;
+  subjectId?: number;
 };
 
 export async function listBooks(filters: BookFilters = {}): Promise<BookWithCopies[]> {
   let bookIds: number[] | undefined;
 
-  if (filters.tagId) {
-    const rows = await db.select({ bookId: bookTags.bookId }).from(bookTags).where(eq(bookTags.tagId, filters.tagId));
+  if (filters.subjectId) {
+    const rows = await db
+      .select({ bookId: bookSubjects.bookId })
+      .from(bookSubjects)
+      .where(eq(bookSubjects.subjectId, filters.subjectId));
     bookIds = rows.map((r) => r.bookId);
   }
 
@@ -66,7 +68,6 @@ export async function listBooks(filters: BookFilters = {}): Promise<BookWithCopi
     .where(bookConditions.length ? and(...bookConditions) : undefined);
 
   const copyConditions = [
-    filters.status ? eq(copies.status, filters.status) : undefined,
     filters.format ? eq(copies.format, filters.format) : undefined,
   ].filter((c): c is NonNullable<typeof c> => c !== undefined);
 
@@ -82,7 +83,7 @@ export async function listBooks(filters: BookFilters = {}): Promise<BookWithCopi
 
   return allBooks
     .map((book) => ({ ...book, copies: copiesByBook.get(book.id) ?? [] }))
-    .filter((book) => (filters.status || filters.format ? book.copies.length > 0 : true));
+    .filter((book) => (filters.format ? book.copies.length > 0 : true));
 }
 
 export async function updateBook(

@@ -24,8 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import type { BookWithCopies } from '@/lib/books/repository';
-
-const FORMATS = ['paperback', 'hardcover', 'ebook', 'audiobook'] as const;
+import { FORMATS } from '@/lib/formats';
 
 const schema = z.object({
   isbn: z.string().optional(),
@@ -33,6 +32,10 @@ const schema = z.object({
   author: z.string().min(1, 'Author is required'),
   format: z.string().min(1, 'Format is required'),
   publisher: z.string().optional(),
+  publishYear: z
+    .string()
+    .optional()
+    .refine((v) => !v || /^\d{4}$/.test(v), 'Enter a 4-digit year'),
   coverUrl: z.string().optional(),
 });
 
@@ -44,6 +47,7 @@ const defaultValues: FormValues = {
   author: '',
   format: 'paperback',
   publisher: '',
+  publishYear: '',
   coverUrl: '',
 };
 
@@ -89,6 +93,7 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
     setValue('title', meta.title);
     setValue('author', meta.author);
     if (meta.publisher) setValue('publisher', meta.publisher);
+    if (meta.publishYear) setValue('publishYear', String(meta.publishYear));
     if (meta.coverUrl) setValue('coverUrl', meta.coverUrl);
   }
 
@@ -96,7 +101,10 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
     const res = await fetch('/api/books', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values),
+      body: JSON.stringify({
+        ...values,
+        publishYear: values.publishYear ? Number(values.publishYear) : undefined,
+      }),
     });
     if (!res.ok) {
       toast.error('Could not save the book.');
@@ -154,6 +162,21 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
               <Input id="author" aria-invalid={!!errors.author} {...register('author')} />
               <FieldError errors={errors.author ? [errors.author] : undefined} />
             </Field>
+            <Field data-invalid={!!errors.publisher}>
+              <FieldLabel htmlFor="publisher">Publisher</FieldLabel>
+              <Input id="publisher" aria-invalid={!!errors.publisher} {...register('publisher')} />
+              <FieldError errors={errors.publisher ? [errors.publisher] : undefined} />
+            </Field>
+            <Field data-invalid={!!errors.publishYear}>
+              <FieldLabel htmlFor="publishYear">Publication Year</FieldLabel>
+              <Input
+                id="publishYear"
+                inputMode="numeric"
+                aria-invalid={!!errors.publishYear}
+                {...register('publishYear')}
+              />
+              <FieldError errors={errors.publishYear ? [errors.publishYear] : undefined} />
+            </Field>
             <Field data-invalid={!!errors.format}>
               <FieldLabel htmlFor="format">Format</FieldLabel>
               <Controller
@@ -167,8 +190,8 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
                     <SelectContent>
                       <SelectGroup>
                         {FORMATS.map((format) => (
-                          <SelectItem key={format} value={format}>
-                            {format}
+                          <SelectItem key={format.value} value={format.value}>
+                            {format.label}
                           </SelectItem>
                         ))}
                       </SelectGroup>

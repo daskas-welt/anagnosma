@@ -5,10 +5,9 @@ import { parseJsonBody } from '@/lib/api-helpers';
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const q = url.searchParams.get('q') ?? undefined;
-  const status = url.searchParams.get('status') ?? undefined;
   const format = url.searchParams.get('format') ?? undefined;
-  const tagIdParam = url.searchParams.get('tagId');
-  const books = await listBooks({ q, status, format, tagId: tagIdParam ? Number(tagIdParam) : undefined });
+  const subjectIdParam = url.searchParams.get('subjectId');
+  const books = await listBooks({ q, format, subjectId: subjectIdParam ? Number(subjectIdParam) : undefined });
   return NextResponse.json(books);
 }
 

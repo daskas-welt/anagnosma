@@ -10,7 +10,7 @@ export function Nav() {
         <nav className="flex gap-4 text-sm">
           <Link href="/">Catalog</Link>
           <Link href="/import">Import</Link>
-          <Link href="/tags">Tags</Link>
+          <Link href="/subjects">Subjects</Link>
         </nav>
       </div>
     </header>

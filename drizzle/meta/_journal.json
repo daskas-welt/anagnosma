@@ -8,6 +8,41 @@
       "when": 1785736166583,
       "tag": "0000_lowly_dormammu",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785913200000,
+      "tag": "0001_rename_tags_to_subjects",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1785785829314,
+      "tag": "0002_drop_copies_status",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1785786012383,
+      "tag": "0003_drop_copies_rating_shelf",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1785786059989,
+      "tag": "0004_drop_copies_progress_dates",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1785786105817,
+      "tag": "0005_drop_copies_condition_price_date",
+      "breakpoints": true
     }
   ]
 }

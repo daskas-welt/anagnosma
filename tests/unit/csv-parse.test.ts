@@ -36,8 +36,7 @@ describe('HEADER_PRESETS', () => {
       Title: 'title',
       Author: 'author',
       ISBN13: 'isbn',
-      'Exclusive Shelf': 'status',
-      'My Rating': 'rating',
+      'My Review': 'notes',
     });
   });
 });

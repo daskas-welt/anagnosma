@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { createTag, listTagsWithCounts } from '@/lib/tags/repository';
+import { createSubject, listSubjectsWithCounts } from '@/lib/subjects/repository';
 import { parseJsonBody } from '@/lib/api-helpers';
 
 export async function GET() {
-  return NextResponse.json(await listTagsWithCounts());
+  return NextResponse.json(await listSubjectsWithCounts());
 }
 
 export async function POST(request: Request) {
@@ -12,6 +12,6 @@ export async function POST(request: Request) {
   if (!body.name || !body.name.trim()) {
     return NextResponse.json({ error: 'name is required' }, { status: 400 });
   }
-  const tag = await createTag(body.name);
-  return NextResponse.json(tag, { status: 201 });
+  const subject = await createSubject(body.name);
+  return NextResponse.json(subject, { status: 201 });
 }

@@ -7,16 +7,16 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-type Tag = { id: number; name: string; bookCount: number };
+type Subject = { id: number; name: string; bookCount: number };
 
-export default function TagsPage() {
-  const [tags, setTags] = useState<Tag[]>([]);
+export default function SubjectsPage() {
+  const [subjects, setSubjects] = useState<Subject[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
 
   async function refresh() {
-    const res = await fetch('/api/tags');
-    setTags(await res.json());
+    const res = await fetch('/api/subjects');
+    setSubjects(await res.json());
   }
 
   useEffect(() => {
@@ -26,13 +26,13 @@ export default function TagsPage() {
   }, []);
 
   async function rename(id: number) {
-    const res = await fetch(`/api/tags/${id}`, {
+    const res = await fetch(`/api/subjects/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: editValue }),
     });
     if (!res.ok) {
-      toast.error('Could not rename tag.');
+      toast.error('Could not rename subject.');
       return;
     }
     setEditingId(null);
@@ -40,7 +40,7 @@ export default function TagsPage() {
   }
 
   async function remove(id: number) {
-    await fetch(`/api/tags/${id}`, { method: 'DELETE' });
+    await fetch(`/api/subjects/${id}`, { method: 'DELETE' });
     refresh();
   }
 
@@ -54,19 +54,19 @@ export default function TagsPage() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {tags.map((tag) => (
-          <TableRow key={tag.id}>
+        {subjects.map((subject) => (
+          <TableRow key={subject.id}>
             <TableCell>
-              {editingId === tag.id ? (
+              {editingId === subject.id ? (
                 <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
               ) : (
-                <Link href={`/?tagId=${tag.id}`}>{tag.name}</Link>
+                <Link href={`/?subjectId=${subject.id}`}>{subject.name}</Link>
               )}
             </TableCell>
-            <TableCell>{tag.bookCount}</TableCell>
+            <TableCell>{subject.bookCount}</TableCell>
             <TableCell className="space-x-2">
-              {editingId === tag.id ? (
-                <Button size="sm" onClick={() => rename(tag.id)}>
+              {editingId === subject.id ? (
+                <Button size="sm" onClick={() => rename(subject.id)}>
                   Save
                 </Button>
               ) : (
@@ -74,14 +74,14 @@ export default function TagsPage() {
                   size="sm"
                   variant="outline"
                   onClick={() => {
-                    setEditingId(tag.id);
-                    setEditValue(tag.name);
+                    setEditingId(subject.id);
+                    setEditValue(subject.name);
                   }}
                 >
                   Rename
                 </Button>
               )}
-              <Button size="sm" variant="destructive" onClick={() => remove(tag.id)}>
+              <Button size="sm" variant="destructive" onClick={() => remove(subject.id)}>
                 Delete
               </Button>
             </TableCell>
