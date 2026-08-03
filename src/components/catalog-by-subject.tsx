@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CatalogTable } from '@/components/catalog-table';
 import type { BookWithCopies } from '@/lib/books/repository';
 
@@ -21,6 +21,15 @@ export function CatalogBySubject({
     fetch('/api/subjects/book-map').then((r) => r.json()).then(setBookMap);
   }, []);
 
+  const subjectNamesByBookId = useMemo(() => {
+    const subjectNameById = new Map(subjects.map((s) => [s.id, s.name]));
+    const map: Record<number, string[]> = {};
+    for (const [bookId, subjectIds] of Object.entries(bookMap)) {
+      map[Number(bookId)] = subjectIds.map((id) => subjectNameById.get(id)).filter((n): n is string => !!n);
+    }
+    return map;
+  }, [subjects, bookMap]);
+
   const sortedSubjects = [...subjects].sort((a, b) => a.name.localeCompare(b.name));
   const categorizedBookIds = new Set<number>();
   const sections = sortedSubjects
@@ -38,13 +47,13 @@ export function CatalogBySubject({
       {sections.map(({ subject, books: sectionBooks }) => (
         <div key={subject.id}>
           <h2 className="mb-2 border-b pb-1 text-lg font-semibold">{subject.name}</h2>
-          <CatalogTable books={sectionBooks} onSelect={onSelect} showSubjectsColumn={false} />
+          <CatalogTable books={sectionBooks} onSelect={onSelect} subjectNamesByBookId={subjectNamesByBookId} />
         </div>
       ))}
       {uncategorized.length > 0 && (
         <div>
           <h2 className="mb-2 border-b pb-1 text-lg font-semibold text-muted-foreground">Uncategorized</h2>
-          <CatalogTable books={uncategorized} onSelect={onSelect} showSubjectsColumn={false} />
+          <CatalogTable books={uncategorized} onSelect={onSelect} subjectNamesByBookId={subjectNamesByBookId} />
         </div>
       )}
     </div>
