@@ -74,4 +74,35 @@ describe('books repository', () => {
     expect(fetched1?.isbn).toBeNull();
     expect(fetched2?.isbn).toBeNull();
   });
+
+  it('updates multiple books with empty isbn without unique constraint violation', async () => {
+    // Regression test for updateBook: empty string ISBN should normalize to NULL
+    // so two books can both have their ISBN cleared without unique constraint error.
+    const book1 = await createBook({
+      title: 'Book One',
+      author: 'Author One',
+      isbn: '978-0-123456-78-9',
+      format: 'paperback',
+    });
+    const book2 = await createBook({
+      title: 'Book Two',
+      author: 'Author Two',
+      isbn: '978-0-987654-32-1',
+      format: 'hardcover',
+    });
+
+    // Update both books to have empty ISBN
+    const updated1 = await updateBook(book1.id, { isbn: '' });
+    const updated2 = await updateBook(book2.id, { isbn: '' });
+
+    // Both updates should succeed and result in NULL isbn
+    expect(updated1?.isbn).toBeNull();
+    expect(updated2?.isbn).toBeNull();
+
+    // Verify persistence
+    const fetched1 = await getBook(book1.id);
+    const fetched2 = await getBook(book2.id);
+    expect(fetched1?.isbn).toBeNull();
+    expect(fetched2?.isbn).toBeNull();
+  });
 });
