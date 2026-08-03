@@ -25,10 +25,13 @@ export function CsvImportWizard() {
     setHeaders(parsedHeaders);
     setRawRows(rows);
     setResult(null);
-    const matchesPreset = parsedHeaders.every((h) => HEADER_PRESETS.goodreads[h]);
+    // Match headers against known export presets individually rather than
+    // requiring every column in the file to be present in a single preset —
+    // real exports have many more columns than any preset covers.
     const preset: Record<string, string> = {};
-    if (matchesPreset) {
-      for (const h of parsedHeaders) preset[h] = HEADER_PRESETS.goodreads[h];
+    for (const h of parsedHeaders) {
+      const target = HEADER_PRESETS.goodreads[h] ?? HEADER_PRESETS.librarything[h];
+      if (target) preset[h] = target;
     }
     setMapping(preset);
   }
