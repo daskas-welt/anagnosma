@@ -28,4 +28,31 @@ describe('import API', () => {
     const stored = await listBooks();
     expect(stored).toHaveLength(1);
   });
+
+  it('flags an ISBN duplicate against an existing book as a duplicate, not a failure, and does not create a second row', async () => {
+    await POST(
+      new Request('http://localhost/api/import', {
+        method: 'POST',
+        body: JSON.stringify({
+          rows: [{ title: 'Dune', author: 'Frank Herbert', format: 'paperback', isbn: '9780441013593' }],
+        }),
+      }),
+    );
+
+    const res = await POST(
+      new Request('http://localhost/api/import', {
+        method: 'POST',
+        body: JSON.stringify({
+          rows: [{ title: 'Dune', author: 'Frank Herbert', format: 'hardcover', isbn: '9780441013593' }],
+        }),
+      }),
+    );
+    const body = await res.json();
+    expect(body.failures).toHaveLength(0);
+    expect(body.duplicates).toHaveLength(1);
+    expect(body.successCount).toBe(1);
+
+    const stored = await listBooks();
+    expect(stored).toHaveLength(1);
+  });
 });
