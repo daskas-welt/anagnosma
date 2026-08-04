@@ -114,6 +114,23 @@ describe('runImport', () => {
     expect(result.failures).toHaveLength(0);
   });
 
+  it('reports a friendly message (not the raw Postgres error) when createBookFn rejects with a unique-violation', async () => {
+    // Simulates a cross-tenant-turned-per-tenant ISBN collision that slips
+    // past in-batch/existing-book duplicate detection and hits the DB's
+    // per-user unique constraint directly.
+    const pgError = Object.assign(new Error('duplicate key value violates unique constraint "books_user_id_isbn_unique"'), {
+      code: '23505',
+    });
+    const create = vi.fn().mockRejectedValue(pgError);
+    const result = await runImport(
+      [{ title: 'Dune', author: 'Frank Herbert', format: 'paperback', isbn: '9780441013593' }],
+      [],
+      create,
+    );
+    expect(result.failures).toEqual([{ row: 1, reason: 'you already have a book with this ISBN' }]);
+    expect(result.failures[0].reason).not.toMatch(/constraint|postgres/i);
+  });
+
   it('continues importing subsequent rows after a create call throws', async () => {
     const create = vi
       .fn()

@@ -1,4 +1,5 @@
 import { findDuplicate, type ExistingBook } from '@/lib/books/duplicates';
+import { isUniqueViolation } from '@/lib/api-helpers';
 
 export type ImportRow = { title: string; author: string; format?: string; isbn?: string; [key: string]: string | undefined };
 export type ImportResult = {
@@ -51,7 +52,12 @@ export async function runImport(
       working.push({ id: created.id, isbn: isbn ?? null, title: row.title, author: row.author });
       if (duplicate) result.duplicates.push({ row: rowNumber, matchedId: duplicate.id, reason: duplicate.reason });
     } catch (err) {
-      result.failures.push({ row: rowNumber, reason: err instanceof Error ? err.message : 'unknown error' });
+      const reason = isUniqueViolation(err)
+        ? 'you already have a book with this ISBN'
+        : err instanceof Error
+          ? err.message
+          : 'unknown error';
+      result.failures.push({ row: rowNumber, reason });
     }
   }
 
