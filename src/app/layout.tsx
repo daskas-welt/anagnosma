@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { Nav } from "@/components/nav";
@@ -32,11 +33,13 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Nav />
-          <main className="p-6">{children}</main>
-          <Toaster />
-        </ThemeProvider>
+        <ClerkProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Nav />
+            <main className="p-6">{children}</main>
+            <Toaster />
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
