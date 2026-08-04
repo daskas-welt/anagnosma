@@ -18,13 +18,11 @@ export type BookWithCopies = typeof books.$inferSelect & {
   copies: (typeof copies.$inferSelect)[];
 };
 
-export async function createBook(input: NewBookInput): Promise<BookWithCopies> {
+export async function createBook(userId: string, input: NewBookInput): Promise<BookWithCopies> {
   const { format, ...bookFields } = input;
-  // Normalize empty/whitespace-only isbn to undefined so it's stored as NULL, not ''
-  // This prevents unique constraint violations when multiple books lack an ISBN
   const isbn = input.isbn?.trim() || undefined;
   return db.transaction(async (tx) => {
-    const [book] = await tx.insert(books).values({ ...bookFields, isbn }).returning();
+    const [book] = await tx.insert(books).values({ ...bookFields, isbn, userId }).returning();
     const [copy] = await tx
       .insert(copies)
       .values({ bookId: book.id, format })
@@ -33,8 +31,8 @@ export async function createBook(input: NewBookInput): Promise<BookWithCopies> {
   });
 }
 
-export async function getBook(id: number): Promise<BookWithCopies | undefined> {
-  const [book] = await db.select().from(books).where(eq(books.id, id));
+export async function getBook(userId: string, id: number): Promise<BookWithCopies | undefined> {
+  const [book] = await db.select().from(books).where(and(eq(books.id, id), eq(books.userId, userId)));
   if (!book) return undefined;
   const bookCopies = await db.select().from(copies).where(eq(copies.bookId, id));
   return { ...book, copies: bookCopies };
@@ -46,7 +44,7 @@ export type BookFilters = {
   subjectId?: number;
 };
 
-export async function listBooks(filters: BookFilters = {}): Promise<BookWithCopies[]> {
+export async function listBooks(userId: string, filters: BookFilters = {}): Promise<BookWithCopies[]> {
   let bookIds: number[] | undefined;
 
   if (filters.subjectId) {
@@ -58,6 +56,7 @@ export async function listBooks(filters: BookFilters = {}): Promise<BookWithCopi
   }
 
   const bookConditions = [
+    eq(books.userId, userId),
     filters.q ? or(ilike(books.title, `%${filters.q}%`), ilike(books.author, `%${filters.q}%`)) : undefined,
     bookIds ? inArray(books.id, bookIds.length ? bookIds : [-1]) : undefined,
   ].filter((c): c is NonNullable<typeof c> => c !== undefined);
@@ -65,7 +64,7 @@ export async function listBooks(filters: BookFilters = {}): Promise<BookWithCopi
   const allBooks = await db
     .select()
     .from(books)
-    .where(bookConditions.length ? and(...bookConditions) : undefined);
+    .where(and(...bookConditions));
 
   const copyConditions = [
     filters.format ? eq(copies.format, filters.format) : undefined,
@@ -87,21 +86,24 @@ export async function listBooks(filters: BookFilters = {}): Promise<BookWithCopi
 }
 
 export async function updateBook(
+  userId: string,
   id: number,
   input: Partial<Omit<NewBookInput, 'format'>>,
 ): Promise<BookWithCopies | undefined> {
-  // Normalize empty/whitespace-only isbn to null so it's stored as NULL, not ''
-  // This prevents unique constraint violations when multiple books lack an ISBN
   type NormalizedInput = Omit<Partial<Omit<NewBookInput, 'format'>>, 'isbn'> & { isbn?: string | null };
   const normalizedInput: NormalizedInput = { ...input };
   if (input.isbn !== undefined) {
     normalizedInput.isbn = input.isbn?.trim() || null;
   }
-  const [updated] = await db.update(books).set(normalizedInput).where(eq(books.id, id)).returning();
+  const [updated] = await db
+    .update(books)
+    .set(normalizedInput)
+    .where(and(eq(books.id, id), eq(books.userId, userId)))
+    .returning();
   if (!updated) return undefined;
-  return getBook(id);
+  return getBook(userId, id);
 }
 
-export async function deleteBook(id: number): Promise<void> {
-  await db.delete(books).where(eq(books.id, id));
+export async function deleteBook(userId: string, id: number): Promise<void> {
+  await db.delete(books).where(and(eq(books.id, id), eq(books.userId, userId)));
 }
