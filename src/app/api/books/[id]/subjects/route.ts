@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { assignSubject, listSubjectIdsForBook, removeSubject } from '@/lib/subjects/repository';
+import { getBook } from '@/lib/books/repository';
 import { parseId, parseJsonBody } from '@/lib/api-helpers';
 import { requireUserId } from '@/lib/auth-helpers';
 
@@ -11,6 +12,8 @@ export async function GET(_request: Request, { params }: Params) {
   const { id } = await params;
   const bookId = parseId(id);
   if (bookId == null) return NextResponse.json({ error: 'invalid id' }, { status: 400 });
+  const book = await getBook(userId, bookId);
+  if (!book) return NextResponse.json({ error: 'not found' }, { status: 404 });
   const subjectIds = await listSubjectIdsForBook(userId, bookId);
   return NextResponse.json(subjectIds);
 }
