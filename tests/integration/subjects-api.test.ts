@@ -1,7 +1,12 @@
 // tests/integration/subjects-api.test.ts
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '@/lib/db';
 import { books, copies, subjects, bookSubjects } from '@/lib/db/schema';
+
+vi.mock('@/lib/auth-helpers', () => ({
+  requireUserId: vi.fn().mockResolvedValue({ userId: 'user_test_a' }),
+}));
+
 import { createBook } from '@/lib/books/repository';
 import { GET, POST } from '@/app/api/subjects/route';
 import { PATCH, DELETE } from '@/app/api/subjects/[id]/route';
@@ -24,7 +29,7 @@ describe('subjects API', () => {
   });
 
   it('assigns a subject to a book and counts it in GET /api/subjects', async () => {
-    const book = await createBook({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const book = await createBook('user_test_a', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
     const subject = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }))).json();
     await ASSIGN(
       new Request(`http://localhost/api/books/${book.id}/subjects`, { method: 'POST', body: JSON.stringify({ subjectId: subject.id }) }),
@@ -35,7 +40,7 @@ describe('subjects API', () => {
   });
 
   it('a book can be assigned more than one subject', async () => {
-    const book = await createBook({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const book = await createBook('user_test_a', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
     const scifi = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'Science Fiction' }) }))).json();
     const fantasy = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'Fantasy' }) }))).json();
     await ASSIGN(
@@ -53,7 +58,7 @@ describe('subjects API', () => {
   });
 
   it('GET /api/books/:id/subjects returns assigned subject ids so the UI can distinguish assigned vs unassigned', async () => {
-    const book = await createBook({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const book = await createBook('user_test_a', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
     const subject = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }))).json();
     const before = await (
       await BOOK_SUBJECTS(new Request(`http://localhost/api/books/${book.id}/subjects`), { params: Promise.resolve({ id: String(book.id) }) })
@@ -71,7 +76,7 @@ describe('subjects API', () => {
   });
 
   it('removes a subject from a book', async () => {
-    const book = await createBook({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const book = await createBook('user_test_a', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
     const subject = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }))).json();
     await ASSIGN(
       new Request(`http://localhost/api/books/${book.id}/subjects`, { method: 'POST', body: JSON.stringify({ subjectId: subject.id }) }),
@@ -100,5 +105,15 @@ describe('subjects API', () => {
       params: Promise.resolve({ id: String(subject.id) }),
     });
     expect(res.status).toBe(204);
+  });
+
+  it('cannot assign another user\'s book to your own subject', async () => {
+    const otherUsersBook = await createBook('user_test_b', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const subject = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }))).json();
+    const res = await ASSIGN(
+      new Request(`http://localhost/api/books/${otherUsersBook.id}/subjects`, { method: 'POST', body: JSON.stringify({ subjectId: subject.id }) }),
+      { params: Promise.resolve({ id: String(otherUsersBook.id) }) },
+    );
+    expect(res.status).toBe(404);
   });
 });
