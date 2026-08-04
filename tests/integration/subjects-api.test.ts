@@ -116,4 +116,13 @@ describe('subjects API', () => {
     );
     expect(res.status).toBe(404);
   });
+
+  it('GET /api/books/:id/subjects for another user\'s book returns 404', async () => {
+    const otherUsersBook = await createBook('user_test_b', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const res = await BOOK_SUBJECTS(
+      new Request(`http://localhost/api/books/${otherUsersBook.id}/subjects`),
+      { params: Promise.resolve({ id: String(otherUsersBook.id) }) },
+    );
+    expect(res.status).toBe(404);
+  });
 });
