@@ -1,6 +1,11 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '@/lib/db';
 import { books, copies } from '@/lib/db/schema';
+
+vi.mock('@/lib/auth-helpers', () => ({
+  requireUserId: vi.fn().mockResolvedValue({ userId: 'user_test_a' }),
+}));
+
 import { GET, POST } from '@/app/api/books/route';
 import { GET as GET_ONE, PATCH, DELETE } from '@/app/api/books/[id]/route';
 
