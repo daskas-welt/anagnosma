@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Show, UserButton } from '@clerk/nextjs';
 
 export function Nav() {
   return (
@@ -12,6 +13,11 @@ export function Nav() {
           <Link href="/import">Import</Link>
           <Link href="/subjects">Subjects</Link>
         </nav>
+        <div className="ml-auto">
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
+        </div>
       </div>
     </header>
   );

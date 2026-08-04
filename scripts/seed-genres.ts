@@ -1,47 +1,13 @@
-import { db } from '@/lib/db';
-import { subjects } from '@/lib/db/schema';
-
-// A curated genre/category list for personal book collections, based on BISAC
-// Subject Headings (the industry-standard classification used by publishers
-// and booksellers) narrowed to the categories most useful for tagging a
-// personal library rather than the full ~4000-code BISAC list.
-const GENRES = [
-  'Romance',
-  'Action & Adventure',
-  'Contemporary Fiction',
-  'Science Fiction',
-  'Fantasy',
-  'Mystery & Thriller',
-  'Horror',
-  'Historical Fiction',
-  'Literary Fiction',
-  'Young Adult',
-  'Classic Fiction',
-  'Short Stories',
-  'Graphic Novels & Comics',
-  'Poetry',
-  'Biography & Memoir',
-  'History',
-  'Science & Nature',
-  'Self-Help',
-  'Business & Economics',
-  'True Crime',
-  'Philosophy',
-  'Religion & Spirituality',
-  'Travel',
-  'Cooking',
-  'Humor',
-];
+import { seedGenresForUser } from '@/lib/subjects/genres';
 
 async function main() {
-  const inserted = await db
-    .insert(subjects)
-    .values(GENRES.map((name) => ({ name })))
-    .onConflictDoNothing({ target: subjects.name })
-    .returning({ name: subjects.name });
-
-  const skipped = GENRES.length - inserted.length;
-  console.log(`Seeded ${inserted.length} genre subject(s).${skipped ? ` Skipped ${skipped} already present.` : ''}`);
+  const userId = process.argv[2];
+  if (!userId) {
+    console.error('Usage: tsx scripts/seed-genres.ts <clerk-user-id>');
+    process.exit(1);
+  }
+  const created = await seedGenresForUser(userId);
+  console.log(`Seeded ${created} genre subject(s) for user ${userId}.`);
   process.exit(0);
 }
 

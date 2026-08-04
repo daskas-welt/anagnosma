@@ -1,6 +1,11 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { db } from '@/lib/db';
 import { books, copies } from '@/lib/db/schema';
+
+vi.mock('@/lib/auth-helpers', () => ({
+  requireUserId: vi.fn().mockResolvedValue({ userId: 'user_test_a' }),
+}));
+
 import { POST } from '@/app/api/import/route';
 import { listBooks } from '@/lib/books/repository';
 
@@ -25,7 +30,7 @@ describe('import API', () => {
     const body = await res.json();
     expect(body.successCount).toBe(1);
     expect(body.failures).toEqual([{ row: 2, reason: 'title is required' }]);
-    const stored = await listBooks();
+    const stored = await listBooks('user_test_a');
     expect(stored).toHaveLength(1);
   });
 
@@ -52,7 +57,7 @@ describe('import API', () => {
     expect(body.duplicates).toEqual([{ row: 1, matchedId: expect.any(Number), reason: 'isbn' }]);
     expect(body.successCount).toBe(1);
 
-    const stored = await listBooks();
+    const stored = await listBooks('user_test_a');
     expect(stored).toHaveLength(1);
   });
 });

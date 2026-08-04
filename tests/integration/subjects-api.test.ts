@@ -1,11 +1,19 @@
 // tests/integration/subjects-api.test.ts
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { books, copies, subjects, bookSubjects } from '@/lib/db/schema';
+
+vi.mock('@/lib/auth-helpers', () => ({
+  requireUserId: vi.fn().mockResolvedValue({ userId: 'user_test_a' }),
+}));
+
 import { createBook } from '@/lib/books/repository';
 import { GET, POST } from '@/app/api/subjects/route';
 import { PATCH, DELETE } from '@/app/api/subjects/[id]/route';
 import { GET as BOOK_SUBJECTS, POST as ASSIGN, DELETE as UNASSIGN } from '@/app/api/books/[id]/subjects/route';
+import { GENRES } from '@/lib/subjects/genres';
+import { requireUserId } from '@/lib/auth-helpers';
 
 type SubjectWithCount = { id: number; name: string; bookCount: number };
 
@@ -17,6 +25,14 @@ beforeEach(async () => {
 });
 
 describe('subjects API', () => {
+  it('GET returns 401 when unauthenticated', async () => {
+    vi.mocked(requireUserId).mockResolvedValueOnce({
+      error: NextResponse.json({ error: 'unauthorized' }, { status: 401 }),
+    });
+    const res = await GET();
+    expect(res.status).toBe(401);
+  });
+
   it('POST creates a subject', async () => {
     const res = await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }));
     expect(res.status).toBe(201);
@@ -24,7 +40,7 @@ describe('subjects API', () => {
   });
 
   it('assigns a subject to a book and counts it in GET /api/subjects', async () => {
-    const book = await createBook({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const book = await createBook('user_test_a', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
     const subject = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }))).json();
     await ASSIGN(
       new Request(`http://localhost/api/books/${book.id}/subjects`, { method: 'POST', body: JSON.stringify({ subjectId: subject.id }) }),
@@ -35,7 +51,7 @@ describe('subjects API', () => {
   });
 
   it('a book can be assigned more than one subject', async () => {
-    const book = await createBook({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const book = await createBook('user_test_a', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
     const scifi = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'Science Fiction' }) }))).json();
     const fantasy = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'Fantasy' }) }))).json();
     await ASSIGN(
@@ -53,7 +69,7 @@ describe('subjects API', () => {
   });
 
   it('GET /api/books/:id/subjects returns assigned subject ids so the UI can distinguish assigned vs unassigned', async () => {
-    const book = await createBook({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const book = await createBook('user_test_a', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
     const subject = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }))).json();
     const before = await (
       await BOOK_SUBJECTS(new Request(`http://localhost/api/books/${book.id}/subjects`), { params: Promise.resolve({ id: String(book.id) }) })
@@ -71,7 +87,7 @@ describe('subjects API', () => {
   });
 
   it('removes a subject from a book', async () => {
-    const book = await createBook({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const book = await createBook('user_test_a', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
     const subject = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }))).json();
     await ASSIGN(
       new Request(`http://localhost/api/books/${book.id}/subjects`, { method: 'POST', body: JSON.stringify({ subjectId: subject.id }) }),
@@ -94,11 +110,60 @@ describe('subjects API', () => {
     expect((await res.json()).name).toBe('science-fiction');
   });
 
+  it('POST returns a friendly 409 (not an unhandled 500) for a duplicate subject name', async () => {
+    await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }));
+    const res = await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }));
+    expect(res.status).toBe(409);
+    const body = await res.json();
+    expect(body.error).toMatch(/already have a subject with this name/i);
+  });
+
+  it('PATCH returns a friendly 409 (not an unhandled 500) when renaming to a name that already exists', async () => {
+    await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }));
+    const other = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'fantasy' }) }))).json();
+    const res = await PATCH(
+      new Request(`http://localhost/api/subjects/${other.id}`, { method: 'PATCH', body: JSON.stringify({ name: 'sci-fi' }) }),
+      { params: Promise.resolve({ id: String(other.id) }) },
+    );
+    expect(res.status).toBe(409);
+    const body = await res.json();
+    expect(body.error).toMatch(/already have a subject with this name/i);
+  });
+
   it('deletes a subject', async () => {
     const subject = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }))).json();
     const res = await DELETE(new Request(`http://localhost/api/subjects/${subject.id}`, { method: 'DELETE' }), {
       params: Promise.resolve({ id: String(subject.id) }),
     });
     expect(res.status).toBe(204);
+  });
+
+  it('cannot assign another user\'s book to your own subject', async () => {
+    const otherUsersBook = await createBook('user_test_b', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const subject = await (await POST(new Request('http://localhost/api/subjects', { method: 'POST', body: JSON.stringify({ name: 'sci-fi' }) }))).json();
+    const res = await ASSIGN(
+      new Request(`http://localhost/api/books/${otherUsersBook.id}/subjects`, { method: 'POST', body: JSON.stringify({ subjectId: subject.id }) }),
+      { params: Promise.resolve({ id: String(otherUsersBook.id) }) },
+    );
+    expect(res.status).toBe(404);
+  });
+
+  it('GET /api/books/:id/subjects for another user\'s book returns 404', async () => {
+    const otherUsersBook = await createBook('user_test_b', { title: 'Dune', author: 'Frank Herbert', format: 'paperback' });
+    const res = await BOOK_SUBJECTS(
+      new Request(`http://localhost/api/books/${otherUsersBook.id}/subjects`),
+      { params: Promise.resolve({ id: String(otherUsersBook.id) }) },
+    );
+    expect(res.status).toBe(404);
+  });
+
+  it('GET self-heals a brand-new user with zero subjects by lazily seeding the 25 genre subjects (webhook fallback)', async () => {
+    vi.mocked(requireUserId).mockResolvedValueOnce({ userId: 'user_test_brand_new' });
+    const res = await GET();
+    expect(res.status).toBe(200);
+    const list: SubjectWithCount[] = await res.json();
+    expect(list).toHaveLength(GENRES.length);
+    expect(list.map((s) => s.name).sort()).toEqual([...GENRES].sort());
+    expect(list.every((s) => s.bookCount === 0)).toBe(true);
   });
 });
