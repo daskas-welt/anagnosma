@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { books, copies } from '@/lib/db/schema';
 
@@ -8,6 +9,7 @@ vi.mock('@/lib/auth-helpers', () => ({
 
 import { GET, POST } from '@/app/api/books/route';
 import { GET as GET_ONE, PATCH, DELETE } from '@/app/api/books/[id]/route';
+import { requireUserId } from '@/lib/auth-helpers';
 
 beforeEach(async () => {
   await db.delete(copies);
@@ -23,6 +25,14 @@ function req(body?: unknown, url = 'http://localhost/api/books') {
 }
 
 describe('books API', () => {
+  it('GET returns 401 when unauthenticated', async () => {
+    vi.mocked(requireUserId).mockResolvedValueOnce({
+      error: NextResponse.json({ error: 'unauthorized' }, { status: 401 }),
+    });
+    const res = await GET(new Request('http://localhost/api/books'));
+    expect(res.status).toBe(401);
+  });
+
   it('POST creates a book', async () => {
     const res = await POST(req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' }));
     expect(res.status).toBe(201);
@@ -61,6 +71,14 @@ describe('books API', () => {
     );
     const body = await res.json();
     expect(body.title).toBe('Dune (Deluxe)');
+  });
+
+  it('POST returns a friendly 409 (not an unhandled 500) for a duplicate ISBN for the same user', async () => {
+    await POST(req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback', isbn: '9780441013593' }));
+    const res = await POST(req({ title: 'Dune (2nd copy)', author: 'Frank Herbert', format: 'hardcover', isbn: '9780441013593' }));
+    expect(res.status).toBe(409);
+    const body = await res.json();
+    expect(body.error).toMatch(/already have a book with this isbn/i);
   });
 
   it('DELETE removes a book', async () => {

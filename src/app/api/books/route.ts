@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createBook, listBooks, type NewBookInput } from '@/lib/books/repository';
-import { parseJsonBody } from '@/lib/api-helpers';
+import { parseJsonBody, isUniqueViolation } from '@/lib/api-helpers';
 import { requireUserId } from '@/lib/auth-helpers';
 
 export async function GET(request: Request) {
@@ -25,6 +25,13 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const book = await createBook(userId, body as NewBookInput);
-  return NextResponse.json(book, { status: 201 });
+  try {
+    const book = await createBook(userId, body as NewBookInput);
+    return NextResponse.json(book, { status: 201 });
+  } catch (err) {
+    if (isUniqueViolation(err)) {
+      return NextResponse.json({ error: 'you already have a book with this ISBN' }, { status: 409 });
+    }
+    throw err;
+  }
 }

@@ -6,7 +6,11 @@ export async function POST(request: Request) {
   let event;
   try {
     event = await verifyWebhook(request as NextRequest);
-  } catch {
+  } catch (err) {
+    // Leave a log trail for a real delivery failure in production (missing
+    // CLERK_WEBHOOK_SIGNING_SECRET, invalid signature, malformed payload,
+    // etc.) instead of silently returning 400 with nothing to debug from.
+    console.error('Clerk webhook verification failed:', err);
     return NextResponse.json({ error: 'invalid signature' }, { status: 400 });
   }
 
