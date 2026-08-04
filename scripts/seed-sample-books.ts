@@ -80,7 +80,8 @@ async function findIsbn(title: string, author: string): Promise<string | null> {
 }
 
 async function main() {
-  const existingSubjects = await listSubjectsWithCounts();
+  const userId = 'seed_user';
+  const existingSubjects = await listSubjectsWithCounts(userId);
   const subjectIdByName = new Map(existingSubjects.map((s) => [s.name, s.id]));
 
   let created = 0;
@@ -93,7 +94,7 @@ async function main() {
       const meta = isbn ? await lookupByIsbn(isbn) : null;
 
       const format = FORMATS[i % FORMATS.length].value;
-      const book = await createBook({
+      const book = await createBook(userId, {
         title: entry.title,
         author: entry.author,
         format,
@@ -106,16 +107,16 @@ async function main() {
       });
 
       if (book.copies[0]) {
-        await updateCopy(book.copies[0].id, { notes: SAMPLE_NOTES[i % SAMPLE_NOTES.length] });
+        await updateCopy(userId, book.copies[0].id, { notes: SAMPLE_NOTES[i % SAMPLE_NOTES.length] });
       }
 
       let subjectId = subjectIdByName.get(entry.subject);
       if (!subjectId) {
-        const created = await createSubject(entry.subject);
+        const created = await createSubject(userId, entry.subject);
         subjectId = created.id;
         subjectIdByName.set(entry.subject, subjectId);
       }
-      await assignSubject(book.id, subjectId);
+      await assignSubject(userId, book.id, subjectId);
 
       created++;
       console.log(`[${i + 1}/${SEED_BOOKS.length}] Created "${entry.title}" (${entry.subject})`);
