@@ -5,10 +5,12 @@ import {
   integer,
   timestamp,
   primaryKey,
+  unique,
 } from 'drizzle-orm/pg-core';
 
 export const books = pgTable('books', {
   id: serial('id').primaryKey(),
+  userId: text('user_id'),
   isbn: text('isbn').unique(),
   title: text('title').notNull(),
   author: text('author').notNull(),
@@ -31,10 +33,17 @@ export const copies = pgTable('copies', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
-export const subjects = pgTable('subjects', {
-  id: serial('id').primaryKey(),
-  name: text('name').notNull().unique(),
-});
+export const subjects = pgTable(
+  'subjects',
+  {
+    id: serial('id').primaryKey(),
+    userId: text('user_id'),
+    name: text('name').notNull(),
+  },
+  (t) => ({
+    userNameUnique: unique('subjects_user_id_name_unique').on(t.userId, t.name),
+  }),
+);
 
 export const bookSubjects = pgTable(
   'book_subjects',

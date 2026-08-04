@@ -43,6 +43,13 @@
       "when": 1785786105817,
       "tag": "0005_drop_copies_condition_price_date",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1785825344865,
+      "tag": "0006_add_user_id_columns",
+      "breakpoints": true
     }
   ]
 }
