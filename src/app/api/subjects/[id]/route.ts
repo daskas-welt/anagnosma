@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { deleteSubject, renameSubject } from '@/lib/subjects/repository';
-import { parseId, parseJsonBody } from '@/lib/api-helpers';
+import { parseId, parseJsonBody, isUniqueViolation } from '@/lib/api-helpers';
 import { requireUserId } from '@/lib/auth-helpers';
 
 type Params = { params: Promise<{ id: string }> };
@@ -16,9 +16,16 @@ export async function PATCH(request: Request, { params }: Params) {
   if (!body.name || !body.name.trim()) {
     return NextResponse.json({ error: 'name is required' }, { status: 400 });
   }
-  const updated = await renameSubject(userId, subjectId, body.name);
-  if (!updated) return NextResponse.json({ error: 'not found' }, { status: 404 });
-  return NextResponse.json(updated);
+  try {
+    const updated = await renameSubject(userId, subjectId, body.name);
+    if (!updated) return NextResponse.json({ error: 'not found' }, { status: 404 });
+    return NextResponse.json(updated);
+  } catch (err) {
+    if (isUniqueViolation(err)) {
+      return NextResponse.json({ error: 'you already have a subject with this name' }, { status: 409 });
+    }
+    throw err;
+  }
 }
 
 export async function DELETE(_request: Request, { params }: Params) {

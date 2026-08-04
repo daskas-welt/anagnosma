@@ -8,19 +8,25 @@ import {
   unique,
 } from 'drizzle-orm/pg-core';
 
-export const books = pgTable('books', {
-  id: serial('id').primaryKey(),
-  userId: text('user_id').notNull(),
-  isbn: text('isbn').unique(),
-  title: text('title').notNull(),
-  author: text('author').notNull(),
-  coverUrl: text('cover_url'),
-  publisher: text('publisher'),
-  publishYear: integer('publish_year'),
-  pageCount: integer('page_count'),
-  description: text('description'),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-});
+export const books = pgTable(
+  'books',
+  {
+    id: serial('id').primaryKey(),
+    userId: text('user_id').notNull(),
+    isbn: text('isbn'),
+    title: text('title').notNull(),
+    author: text('author').notNull(),
+    coverUrl: text('cover_url'),
+    publisher: text('publisher'),
+    publishYear: integer('publish_year'),
+    pageCount: integer('page_count'),
+    description: text('description'),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (t) => ({
+    userIdIsbnUnique: unique('books_user_id_isbn_unique').on(t.userId, t.isbn),
+  }),
+);
 
 export const copies = pgTable('copies', {
   id: serial('id').primaryKey(),

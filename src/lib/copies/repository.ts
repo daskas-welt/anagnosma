@@ -29,9 +29,18 @@ async function copyBelongsToUser(userId: string, copyId: number): Promise<boolea
 
 export async function updateCopy(userId: string, id: number, input: Partial<Omit<NewCopyInput, 'bookId'>>) {
   if (!(await copyBelongsToUser(userId, id))) return undefined;
+  // Whitelist explicitly rather than spreading `input` into `.set()` —
+  // Drizzle's `.set()` writes any object key that matches a real column
+  // name, so a raw spread would let an attacker-supplied `bookId` key in the
+  // request body reassign which book this copy belongs to. Only these
+  // named, allowed fields may reach `.set()`.
+  const patch: Partial<Omit<NewCopyInput, 'bookId'>> = {};
+  if (input.format !== undefined) patch.format = input.format;
+  if (input.notes !== undefined) patch.notes = input.notes;
+
   const [updated] = await db
     .update(copies)
-    .set({ ...input, updatedAt: new Date() })
+    .set({ ...patch, updatedAt: new Date() })
     .where(eq(copies.id, id))
     .returning();
   return updated;
