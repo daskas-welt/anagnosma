@@ -10,7 +10,7 @@ import {
 
 export const books = pgTable('books', {
   id: serial('id').primaryKey(),
-  userId: text('user_id'),
+  userId: text('user_id').notNull(),
   isbn: text('isbn').unique(),
   title: text('title').notNull(),
   author: text('author').notNull(),
@@ -37,7 +37,7 @@ export const subjects = pgTable(
   'subjects',
   {
     id: serial('id').primaryKey(),
-    userId: text('user_id'),
+    userId: text('user_id').notNull(),
     name: text('name').notNull(),
   },
   (t) => ({
