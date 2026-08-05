@@ -23,7 +23,10 @@ export function CatalogCarousel({
   onSelect: (id: number) => void;
 }) {
   const subjectNamesByBook = useSubjectNamesByBook(true);
-  const sortedBooks = useMemo(() => [...books].sort((a, b) => a.title.localeCompare(b.title)), [books]);
+  const sortedBooks = useMemo(
+    () => [...books].sort((a, b) => a.title.localeCompare(b.title)),
+    [books],
+  );
 
   return (
     <Carousel opts={{ align: 'start' }} className="mx-auto max-w-5xl">
@@ -32,7 +35,10 @@ export function CatalogCarousel({
           const subjectNames = subjectNamesByBook?.[book.id] ?? [];
           return (
             <CarouselItem key={book.id}>
-              <Card className="cursor-pointer" onClick={() => onSelect(book.id)}>
+              <Card
+                className="cursor-pointer"
+                onClick={() => onSelect(book.id)}
+              >
                 <CardContent className="flex flex-col items-center gap-6 p-6 sm:flex-row sm:items-start sm:justify-center">
                   {book.coverUrl ? (
                     <Image
@@ -74,7 +80,9 @@ export function CatalogCarousel({
                       </div>
                     )}
                     {book.copies[0]?.notes && (
-                      <p className="text-sm text-muted-foreground">{book.copies[0].notes}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {book.copies[0].notes}
+                      </p>
                     )}
                   </div>
                 </CardContent>

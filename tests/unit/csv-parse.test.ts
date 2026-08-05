@@ -6,7 +6,9 @@ describe('parseCsv', () => {
     const csv = 'Title,Author,ISBN\nDune,Frank Herbert,9780441013593\n';
     const { headers, rows } = parseCsv(csv);
     expect(headers).toEqual(['Title', 'Author', 'ISBN']);
-    expect(rows).toEqual([{ Title: 'Dune', Author: 'Frank Herbert', ISBN: '9780441013593' }]);
+    expect(rows).toEqual([
+      { Title: 'Dune', Author: 'Frank Herbert', ISBN: '9780441013593' },
+    ]);
   });
 
   it('handles quoted fields with commas', () => {
@@ -18,9 +20,17 @@ describe('parseCsv', () => {
 
 describe('mapColumns', () => {
   it('remaps arbitrary headers to app field names', () => {
-    const rows = [{ Title: 'Dune', Author: 'Frank Herbert', ISBN: '9780441013593' }];
-    const mapped = mapColumns(rows, { Title: 'title', Author: 'author', ISBN: 'isbn' });
-    expect(mapped).toEqual([{ title: 'Dune', author: 'Frank Herbert', isbn: '9780441013593' }]);
+    const rows = [
+      { Title: 'Dune', Author: 'Frank Herbert', ISBN: '9780441013593' },
+    ];
+    const mapped = mapColumns(rows, {
+      Title: 'title',
+      Author: 'author',
+      ISBN: 'isbn',
+    });
+    expect(mapped).toEqual([
+      { title: 'Dune', author: 'Frank Herbert', isbn: '9780441013593' },
+    ]);
   });
 
   it('drops columns with no mapping target', () => {

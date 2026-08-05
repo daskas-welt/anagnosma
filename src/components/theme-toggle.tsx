@@ -11,7 +11,11 @@ export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   // Avoids a hydration mismatch: the server can't know the user's system
   // theme preference, so the icon only renders once mounted client-side.
-  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
+  const mounted = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
 
   return (
     <Button

@@ -1,5 +1,14 @@
-export type DuplicateCandidate = { isbn?: string; title: string; author: string };
-export type ExistingBook = { id: number; isbn: string | null; title: string; author: string };
+export type DuplicateCandidate = {
+  isbn?: string;
+  title: string;
+  author: string;
+};
+export type ExistingBook = {
+  id: number;
+  isbn: string | null;
+  title: string;
+  author: string;
+};
 export type DuplicateMatch = { id: number; reason: 'isbn' | 'title-author' };
 
 export function findDuplicate(
@@ -13,8 +22,11 @@ export function findDuplicate(
   const normalizedTitle = candidate.title.trim().toLowerCase();
   const normalizedAuthor = candidate.author.trim().toLowerCase();
   const titleAuthorMatch = existing.find(
-    (b) => b.title.trim().toLowerCase() === normalizedTitle && b.author.trim().toLowerCase() === normalizedAuthor,
+    (b) =>
+      b.title.trim().toLowerCase() === normalizedTitle &&
+      b.author.trim().toLowerCase() === normalizedAuthor,
   );
-  if (titleAuthorMatch) return { id: titleAuthorMatch.id, reason: 'title-author' };
+  if (titleAuthorMatch)
+    return { id: titleAuthorMatch.id, reason: 'title-author' };
   return null;
 }

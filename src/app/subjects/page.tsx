@@ -5,7 +5,14 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 type Subject = { id: number; name: string; bookCount: number };
 
@@ -58,7 +65,10 @@ export default function SubjectsPage() {
           <TableRow key={subject.id}>
             <TableCell>
               {editingId === subject.id ? (
-                <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
+                <Input
+                  value={editValue}
+                  onChange={(e) => setEditValue(e.target.value)}
+                />
               ) : (
                 <Link href={`/?subjectId=${subject.id}`}>{subject.name}</Link>
               )}
@@ -81,7 +91,11 @@ export default function SubjectsPage() {
                   Rename
                 </Button>
               )}
-              <Button size="sm" variant="destructive" onClick={() => remove(subject.id)}>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => remove(subject.id)}
+              >
                 Delete
               </Button>
             </TableCell>

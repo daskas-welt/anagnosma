@@ -8,7 +8,10 @@ vi.mock('@/lib/auth-helpers', () => ({
 
 import { POST } from '@/app/api/import/route';
 import { listBooks } from '@/lib/books/repository';
-import { listSubjectIdsForBook, listSubjectsWithCounts } from '@/lib/subjects/repository';
+import {
+  listSubjectIdsForBook,
+  listSubjectsWithCounts,
+} from '@/lib/subjects/repository';
 
 beforeEach(async () => {
   await db.delete(copies);
@@ -40,7 +43,14 @@ describe('import API', () => {
       new Request('http://localhost/api/import', {
         method: 'POST',
         body: JSON.stringify({
-          rows: [{ title: 'Dune', author: 'Frank Herbert', format: 'paperback', isbn: '9780441013593' }],
+          rows: [
+            {
+              title: 'Dune',
+              author: 'Frank Herbert',
+              format: 'paperback',
+              isbn: '9780441013593',
+            },
+          ],
         }),
       }),
     );
@@ -49,13 +59,22 @@ describe('import API', () => {
       new Request('http://localhost/api/import', {
         method: 'POST',
         body: JSON.stringify({
-          rows: [{ title: 'Dune', author: 'Frank Herbert', format: 'hardcover', isbn: '9780441013593' }],
+          rows: [
+            {
+              title: 'Dune',
+              author: 'Frank Herbert',
+              format: 'hardcover',
+              isbn: '9780441013593',
+            },
+          ],
         }),
       }),
     );
     const body = await res.json();
     expect(body.failures).toHaveLength(0);
-    expect(body.duplicates).toEqual([{ row: 1, matchedId: expect.any(Number), reason: 'isbn' }]);
+    expect(body.duplicates).toEqual([
+      { row: 1, matchedId: expect.any(Number), reason: 'isbn' },
+    ]);
     expect(body.successCount).toBe(1);
 
     const stored = await listBooks('user_test_a');
@@ -101,6 +120,8 @@ describe('import API', () => {
     const importedSubjectIds = subjects
       .filter((subject) => subject.name.startsWith('Imported '))
       .map((subject) => subject.id);
-    expect(await listSubjectIdsForBook('user_test_a', stored.id)).toEqual(expect.arrayContaining(importedSubjectIds));
+    expect(await listSubjectIdsForBook('user_test_a', stored.id)).toEqual(
+      expect.arrayContaining(importedSubjectIds),
+    );
   });
 });

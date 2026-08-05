@@ -10,8 +10,13 @@ export async function GET(request: Request) {
   if (query) return NextResponse.json(await searchOpenLibrary(query));
 
   const isbn = searchParams.get('isbn');
-  if (!isbn) return NextResponse.json({ error: 'isbn query param is required' }, { status: 400 });
+  if (!isbn)
+    return NextResponse.json(
+      { error: 'isbn query param is required' },
+      { status: 400 },
+    );
   const result = await lookupByIsbn(isbn);
-  if (!result) return NextResponse.json({ error: 'not found' }, { status: 404 });
+  if (!result)
+    return NextResponse.json({ error: 'not found' }, { status: 404 });
   return NextResponse.json(result);
 }

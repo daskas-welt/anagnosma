@@ -18,7 +18,10 @@ export async function createCopy(userId: string, input: NewCopyInput) {
   return copy;
 }
 
-async function copyBelongsToUser(userId: string, copyId: number): Promise<boolean> {
+async function copyBelongsToUser(
+  userId: string,
+  copyId: number,
+): Promise<boolean> {
   const [row] = await db
     .select({ copyId: copies.id })
     .from(copies)
@@ -27,7 +30,11 @@ async function copyBelongsToUser(userId: string, copyId: number): Promise<boolea
   return !!row;
 }
 
-export async function updateCopy(userId: string, id: number, input: Partial<Omit<NewCopyInput, 'bookId'>>) {
+export async function updateCopy(
+  userId: string,
+  id: number,
+  input: Partial<Omit<NewCopyInput, 'bookId'>>,
+) {
   if (!(await copyBelongsToUser(userId, id))) return undefined;
   // Whitelist explicitly rather than spreading `input` into `.set()` —
   // Drizzle's `.set()` writes any object key that matches a real column

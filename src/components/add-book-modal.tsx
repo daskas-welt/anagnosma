@@ -15,7 +15,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -55,13 +60,19 @@ const defaultValues: FormValues = {
   coverUrl: '',
 };
 
-export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) => void }) {
+export function AddBookModal({
+  onCreated,
+}: {
+  onCreated: (book: BookWithCopies) => void;
+}) {
   const [open, setOpen] = useState(false);
   const isbnRef = useRef<HTMLInputElement | null>(null);
   const [savedCount, setSavedCount] = useState(0);
   const [uploadingCover, setUploadingCover] = useState(false);
   const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
-  const [selectedSubjectIds, setSelectedSubjectIds] = useState<Set<number>>(new Set());
+  const [selectedSubjectIds, setSelectedSubjectIds] = useState<Set<number>>(
+    new Set(),
+  );
   const {
     register,
     handleSubmit,
@@ -86,7 +97,9 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
 
   useEffect(() => {
     if (!open) return;
-    fetch('/api/subjects').then((r) => r.json()).then(setAllSubjects);
+    fetch('/api/subjects')
+      .then((r) => r.json())
+      .then(setAllSubjects);
   }, [open]);
 
   function toggleSubject(subjectId: number) {
@@ -124,11 +137,15 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
     try {
       res = await fetch(`/api/lookup?isbn=${encodeURIComponent(isbn)}`);
     } catch {
-      toast.error('No match found for that ISBN — fill in the details manually.');
+      toast.error(
+        'No match found for that ISBN — fill in the details manually.',
+      );
       return;
     }
     if (!res.ok) {
-      toast.error('No match found for that ISBN — fill in the details manually.');
+      toast.error(
+        'No match found for that ISBN — fill in the details manually.',
+      );
       return;
     }
     const meta = await res.json();
@@ -145,7 +162,9 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         ...values,
-        publishYear: values.publishYear ? Number(values.publishYear) : undefined,
+        publishYear: values.publishYear
+          ? Number(values.publishYear)
+          : undefined,
       }),
     });
     if (!res.ok) {
@@ -190,7 +209,8 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
         <DialogHeader>
           <DialogTitle>Add Book</DialogTitle>
           <DialogDescription>
-            Fields marked <span className="text-destructive">*</span> are required.
+            Fields marked <span className="text-destructive">*</span> are
+            required.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -215,17 +235,37 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
             </Field>
             <Field data-invalid={!!errors.title}>
               <FieldLabel htmlFor="title">
-                Title <span aria-hidden="true" className="text-destructive">*</span>
+                Title{' '}
+                <span aria-hidden="true" className="text-destructive">
+                  *
+                </span>
               </FieldLabel>
-              <Input id="title" required aria-required="true" aria-invalid={!!errors.title} {...register('title')} />
+              <Input
+                id="title"
+                required
+                aria-required="true"
+                aria-invalid={!!errors.title}
+                {...register('title')}
+              />
               <FieldError errors={errors.title ? [errors.title] : undefined} />
             </Field>
             <Field data-invalid={!!errors.author}>
               <FieldLabel htmlFor="author">
-                Author <span aria-hidden="true" className="text-destructive">*</span>
+                Author{' '}
+                <span aria-hidden="true" className="text-destructive">
+                  *
+                </span>
               </FieldLabel>
-              <Input id="author" required aria-required="true" aria-invalid={!!errors.author} {...register('author')} />
-              <FieldError errors={errors.author ? [errors.author] : undefined} />
+              <Input
+                id="author"
+                required
+                aria-required="true"
+                aria-invalid={!!errors.author}
+                {...register('author')}
+              />
+              <FieldError
+                errors={errors.author ? [errors.author] : undefined}
+              />
             </Field>
             <Field data-invalid={!!errors.coverUrl}>
               <FieldLabel htmlFor="coverUrl">Cover</FieldLabel>
@@ -239,7 +279,11 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
                   />
                 )}
                 <div className="flex-1 space-y-2">
-                  <Input id="coverUrl" placeholder="Cover URL" {...register('coverUrl')} />
+                  <Input
+                    id="coverUrl"
+                    placeholder="Cover URL"
+                    {...register('coverUrl')}
+                  />
                   <Input
                     type="file"
                     accept="image/*"
@@ -250,15 +294,25 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
                       e.target.value = '';
                     }}
                   />
-                  {uploadingCover && <p className="text-xs text-muted-foreground">Uploading…</p>}
+                  {uploadingCover && (
+                    <p className="text-xs text-muted-foreground">Uploading…</p>
+                  )}
                 </div>
               </div>
-              <FieldError errors={errors.coverUrl ? [errors.coverUrl] : undefined} />
+              <FieldError
+                errors={errors.coverUrl ? [errors.coverUrl] : undefined}
+              />
             </Field>
             <Field data-invalid={!!errors.publisher}>
               <FieldLabel htmlFor="publisher">Publisher</FieldLabel>
-              <Input id="publisher" aria-invalid={!!errors.publisher} {...register('publisher')} />
-              <FieldError errors={errors.publisher ? [errors.publisher] : undefined} />
+              <Input
+                id="publisher"
+                aria-invalid={!!errors.publisher}
+                {...register('publisher')}
+              />
+              <FieldError
+                errors={errors.publisher ? [errors.publisher] : undefined}
+              />
             </Field>
             <Field data-invalid={!!errors.publishYear}>
               <FieldLabel htmlFor="publishYear">Year</FieldLabel>
@@ -268,19 +322,30 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
                 aria-invalid={!!errors.publishYear}
                 {...register('publishYear')}
               />
-              <FieldError errors={errors.publishYear ? [errors.publishYear] : undefined} />
+              <FieldError
+                errors={errors.publishYear ? [errors.publishYear] : undefined}
+              />
             </Field>
             <Field data-invalid={!!errors.format}>
               <FieldLabel htmlFor="format">
-                Format <span aria-hidden="true" className="text-destructive">*</span>
+                Format{' '}
+                <span aria-hidden="true" className="text-destructive">
+                  *
+                </span>
               </FieldLabel>
               <Controller
                 control={control}
                 name="format"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id="format" aria-required="true" aria-invalid={!!errors.format}>
-                      <SelectValue>{(value: string) => formatLabel(value)}</SelectValue>
+                    <SelectTrigger
+                      id="format"
+                      aria-required="true"
+                      aria-invalid={!!errors.format}
+                    >
+                      <SelectValue>
+                        {(value: string) => formatLabel(value)}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -294,7 +359,9 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
                   </Select>
                 )}
               />
-              <FieldError errors={errors.format ? [errors.format] : undefined} />
+              <FieldError
+                errors={errors.format ? [errors.format] : undefined}
+              />
             </Field>
             <Field>
               <FieldLabel>Subjects</FieldLabel>
