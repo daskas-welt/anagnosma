@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Show, UserButton } from '@clerk/nextjs';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export function Nav() {
   return (
@@ -13,7 +14,8 @@ export function Nav() {
           <Link href="/import">Import</Link>
           <Link href="/subjects">Subjects</Link>
         </nav>
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle />
           <Show when="signed-in">
             <UserButton />
           </Show>
