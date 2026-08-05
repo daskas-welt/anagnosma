@@ -59,6 +59,8 @@ export function CatalogCarousel({
                       <dd>{book.publisher ?? '—'}</dd>
                       <dt className="text-muted-foreground">Year</dt>
                       <dd>{book.publishYear ?? '—'}</dd>
+                      <dt className="text-muted-foreground">Pages</dt>
+                      <dd>{book.pageCount ?? '—'}</dd>
                       <dt className="text-muted-foreground">Format</dt>
                       <dd>{formatLabel(book.copies[0]?.format)}</dd>
                     </dl>

@@ -9,6 +9,8 @@ export type BookMetadata = {
   description?: string;
 };
 
+export type OpenLibrarySearchResult = Omit<BookMetadata, 'isbn'> & { isbn?: string };
+
 type OpenLibraryAuthor = { name: string };
 type OpenLibraryPublisher = { name: string };
 type OpenLibraryBook = {
@@ -19,6 +21,16 @@ type OpenLibraryBook = {
   number_of_pages?: number;
   cover?: { small?: string; medium?: string; large?: string };
   notes?: string | { value: string };
+};
+
+type OpenLibrarySearchDoc = {
+  title?: string;
+  author_name?: string[];
+  isbn?: string[];
+  publisher?: string[];
+  first_publish_year?: number;
+  number_of_pages_median?: number;
+  cover_i?: number;
 };
 
 export async function lookupByIsbn(
@@ -50,5 +62,39 @@ export async function lookupByIsbn(
     };
   } catch {
     return null;
+  }
+}
+
+export async function searchOpenLibrary(
+  query: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<OpenLibrarySearchResult[]> {
+  try {
+    const params = new URLSearchParams({
+      q: query,
+      limit: '8',
+      fields: 'title,author_name,isbn,publisher,first_publish_year,number_of_pages_median,cover_i',
+    });
+    const res = await fetchImpl(`https://openlibrary.org/search.json?${params.toString()}`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    const docs: OpenLibrarySearchDoc[] = data.docs ?? [];
+
+    return docs
+      .filter((doc) => doc.title)
+      .map((doc) => {
+        const isbn = (doc.isbn ?? []).find((value) => /^97\d{11}$/.test(value)) ?? doc.isbn?.[0];
+        return {
+          isbn,
+          title: doc.title!,
+          author: (doc.author_name ?? []).join(', '),
+          coverUrl: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : undefined,
+          publisher: doc.publisher?.[0],
+          publishYear: doc.first_publish_year,
+          pageCount: doc.number_of_pages_median,
+        };
+      });
+  } catch {
+    return [];
   }
 }

@@ -7,6 +7,27 @@ export async function createSubject(userId: string, name: string) {
   return subject;
 }
 
+export async function getOrCreateSubject(userId: string, name: string) {
+  const [existing] = await db
+    .select()
+    .from(subjects)
+    .where(and(eq(subjects.userId, userId), eq(subjects.name, name)));
+  if (existing) return existing;
+
+  const [created] = await db
+    .insert(subjects)
+    .values({ userId, name })
+    .onConflictDoNothing({ target: [subjects.userId, subjects.name] })
+    .returning();
+  if (created) return created;
+
+  const [afterConflict] = await db
+    .select()
+    .from(subjects)
+    .where(and(eq(subjects.userId, userId), eq(subjects.name, name)));
+  return afterConflict;
+}
+
 export async function listSubjectsWithCounts(userId: string) {
   const rows = await db
     .select({ id: subjects.id, name: subjects.name, bookCount: count(bookSubjects.bookId) })

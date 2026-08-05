@@ -31,6 +31,7 @@ export function BookTableRow({
         {book.publisher ?? '—'}
       </TableCell>
       <TableCell>{book.publishYear ?? '—'}</TableCell>
+      <TableCell>{book.pageCount ?? '—'}</TableCell>
       <TableCell>{formatLabel(book.copies[0]?.format)}</TableCell>
       {subjectNames !== undefined && (
         <TableCell className="max-w-xs">

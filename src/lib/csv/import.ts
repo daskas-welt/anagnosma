@@ -1,7 +1,19 @@
 import { findDuplicate, type ExistingBook } from '@/lib/books/duplicates';
 import { isUniqueViolation } from '@/lib/api-helpers';
 
-export type ImportRow = { title: string; author: string; format?: string; isbn?: string; [key: string]: string | undefined };
+export type ImportRow = {
+  title: string;
+  author: string;
+  format?: string;
+  isbn?: string;
+  publisher?: string;
+  publishYear?: string;
+  pageCount?: string;
+  coverUrl?: string;
+  subjects?: string;
+  notes?: string;
+  [key: string]: string | undefined;
+};
 export type ImportResult = {
   successCount: number;
   failures: { row: number; reason: string }[];

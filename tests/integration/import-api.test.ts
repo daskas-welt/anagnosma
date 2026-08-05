@@ -8,6 +8,7 @@ vi.mock('@/lib/auth-helpers', () => ({
 
 import { POST } from '@/app/api/import/route';
 import { listBooks } from '@/lib/books/repository';
+import { listSubjectIdsForBook, listSubjectsWithCounts } from '@/lib/subjects/repository';
 
 beforeEach(async () => {
   await db.delete(copies);
@@ -59,5 +60,47 @@ describe('import API', () => {
 
     const stored = await listBooks('user_test_a');
     expect(stored).toHaveLength(1);
+  });
+
+  it('round-trips Anagnosma export metadata and subjects', async () => {
+    const res = await POST(
+      new Request('http://localhost/api/import', {
+        method: 'POST',
+        body: JSON.stringify({
+          rows: [
+            {
+              title: 'Dune',
+              author: 'Frank Herbert',
+              isbn: '9780441013593',
+              publisher: 'Ace Books',
+              publishYear: '1965',
+              format: 'hardcover',
+              pageCount: '412',
+              subjects: 'Imported Science Fiction; Imported Classic',
+              notes: 'Great world-building.',
+              coverUrl: 'https://covers.openlibrary.org/b/id/12345-M.jpg',
+            },
+          ],
+        }),
+      }),
+    );
+
+    expect((await res.json()).successCount).toBe(1);
+    const [stored] = await listBooks('user_test_a');
+    expect(stored).toMatchObject({
+      title: 'Dune',
+      publisher: 'Ace Books',
+      publishYear: 1965,
+      pageCount: 412,
+      coverUrl: 'https://covers.openlibrary.org/b/id/12345-M.jpg',
+    });
+    expect(stored.copies[0]?.format).toBe('hardcover');
+    expect(stored.copies[0]?.notes).toBe('Great world-building.');
+
+    const subjects = await listSubjectsWithCounts('user_test_a');
+    const importedSubjectIds = subjects
+      .filter((subject) => subject.name.startsWith('Imported '))
+      .map((subject) => subject.id);
+    expect(await listSubjectIdsForBook('user_test_a', stored.id)).toEqual(expect.arrayContaining(importedSubjectIds));
   });
 });

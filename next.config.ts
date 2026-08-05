@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: __dirname,
+  },
   images: {
     // Book covers come from the ISBN lookup (see src/lib/isbn-lookup/client.ts), which
     // serves thumbnails from Open Library's free, keyless cover API. books.google.com

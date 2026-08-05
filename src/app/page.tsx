@@ -23,7 +23,7 @@ import {
 } from '@/lib/csv/export';
 import type { BookWithCopies } from '@/lib/books/repository';
 
-type ExportFormat = 'csv' | 'xlsx' | 'docx' | 'pdf';
+type ExportFormat = 'csv' | 'xls' | 'docx' | 'pdf';
 
 export default function CatalogPage() {
   return (
@@ -50,7 +50,7 @@ function CatalogPageInner() {
     const rows = buildExportRows(books, subjectNamesByBookId ?? {});
     const date = new Date().toISOString().slice(0, 10);
     if (exportFormat === 'csv') downloadCsv(`anagnosma-books-${date}.csv`, buildCsv(books, subjectNamesByBookId ?? {}));
-    if (exportFormat === 'xlsx') downloadExcel(`anagnosma-books-${date}.xlsx`, rows);
+    if (exportFormat === 'xls') downloadExcel(`anagnosma-books-${date}.xls`, rows);
     if (exportFormat === 'docx') await downloadWord(`anagnosma-books-${date}.docx`, rows);
     if (exportFormat === 'pdf') downloadPdf(`anagnosma-books-${date}.pdf`, rows);
   }
@@ -87,7 +87,7 @@ function CatalogPageInner() {
             className="h-9 rounded-md border bg-background px-3 text-sm"
           >
             <option value="csv">CSV</option>
-            <option value="xlsx">Excel</option>
+            <option value="xls">Excel</option>
             <option value="docx">Word</option>
             <option value="pdf">PDF</option>
           </select>

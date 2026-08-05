@@ -10,9 +10,9 @@ import { formatLabel } from '@/lib/formats';
 import { useSubjectNamesByBook } from '@/lib/use-subject-names-by-book';
 import type { BookWithCopies } from '@/lib/books/repository';
 
-type SortKey = 'title' | 'author' | 'publisher' | 'publishYear' | 'format' | 'subjects';
+type SortKey = 'title' | 'author' | 'publisher' | 'publishYear' | 'pageCount' | 'format' | 'subjects';
 type SortDir = 'asc' | 'desc';
-type FilterKey = SortKey;
+type FilterKey = Exclude<SortKey, 'pageCount'>;
 
 const PAGE_SIZE = 10;
 
@@ -21,6 +21,7 @@ const SORT_ACCESSORS: Record<Exclude<SortKey, 'subjects'>, (book: BookWithCopies
   author: (book) => book.author,
   publisher: (book) => book.publisher,
   publishYear: (book) => book.publishYear,
+  pageCount: (book) => book.pageCount,
   format: (book) => formatLabel(book.copies[0]?.format),
 };
 
@@ -179,6 +180,7 @@ export function CatalogTable({
             <TableHead className="w-[130px]">ISBN</TableHead>
             <SortableHead label="Publisher" column="publisher" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[11%]" />
             <SortableHead label="Year" column="publishYear" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[90px]" />
+            <SortableHead label="Pages" column="pageCount" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[90px]" />
             <SortableHead label="Format" column="format" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[110px]" />
             {showSubjectsColumn && (
               <SortableHead label="Subject(s)" column="subjects" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[16%]" />
@@ -192,6 +194,7 @@ export function CatalogTable({
             <TableHead></TableHead>
             <FilterHead column="publisher" value={columnFilters.publisher ?? ''} onChange={handleFilterChange} />
             <FilterHead column="publishYear" value={columnFilters.publishYear ?? ''} onChange={handleFilterChange} />
+            <TableHead></TableHead>
             <FilterHead column="format" value={columnFilters.format ?? ''} onChange={handleFilterChange} />
             {showSubjectsColumn && (
               <FilterHead column="subjects" value={columnFilters.subjects ?? ''} onChange={handleFilterChange} />

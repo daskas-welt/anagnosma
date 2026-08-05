@@ -40,6 +40,7 @@ export function CatalogGrid({ books, onSelect }: { books: BookWithCopies[]; onSe
                 <p className="text-xs text-muted-foreground">
                   {book.publishYear ?? '—'} &middot; {formatLabel(book.copies[0]?.format)}
                 </p>
+                <p className="text-xs text-muted-foreground">{book.pageCount ?? '—'} pages</p>
                 {subjectNames.length > 0 && (
                   <div className="mt-1 flex flex-wrap gap-1">
                     {subjectNames.map((name) => (
