@@ -1,0 +1,1415 @@
+
+> anagnosma@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.12 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.8.0.29:3000
+- Environments: .env.local, .env
+✓ Ready in 778ms
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\mcaib\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\mcaib\Documents\Personal\Projects\anagnosma\package-lock.json
+
+
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+Attention: Clerk collects telemetry data from its SDKs when connected to development instances.
+The data collected is used to inform Clerk's product roadmap.
+To learn more, including how to opt-out from the telemetry program, visit: https://clerk.com/docs/telemetry.
+
+○ Compiling / ...
+ GET / 200 in 6.8s (next.js: 5.8s, proxy.ts: 27ms, application-code: 1053ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+ GET /api/subjects/book-map 200 in 3.2s (next.js: 982ms, proxy.ts: 34ms, application-code: 2.2s)
+ GET /api/subjects 200 in 3.2s (next.js: 1154ms, proxy.ts: 34ms, application-code: 2.0s)
+ GET /api/books? 200 in 3.4s (next.js: 1089ms, proxy.ts: 37ms, application-code: 2.2s)
+ POST / 200 in 83ms (next.js: 9ms, proxy.ts: 25ms, application-code: 48ms)
+  └─ ƒ invalidateCacheAction() in 3ms node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 1311ms (next.js: 1245ms, proxy.ts: 15ms, application-code: 50ms)
+ GET /sign-in/SignIn_clerk_catchall_check_1785871430583 200 in 124ms (next.js: 16ms, proxy.ts: 19ms, application-code: 88ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 71ms (next.js: 11ms, proxy.ts: 16ms, application-code: 44ms)
+ GET / 200 in 107ms (next.js: 6ms, proxy.ts: 10ms, application-code: 91ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+ GET /api/subjects 200 in 140ms (next.js: 8ms, proxy.ts: 18ms, application-code: 114ms)
+ GET /api/subjects/book-map 200 in 142ms (next.js: 17ms, proxy.ts: 18ms, application-code: 106ms)
+ GET /api/books? 200 in 313ms (next.js: 26ms, proxy.ts: 18ms, application-code: 269ms)
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET / 200 in 38ms (next.js: 8ms, proxy.ts: 19ms, application-code: 11ms)
+ GET / 200 in 63ms (next.js: 7ms, proxy.ts: 22ms, application-code: 34ms)
+ GET /import 200 in 1688ms (next.js: 1616ms, proxy.ts: 28ms, application-code: 45ms)
+ GET /subjects 200 in 633ms (next.js: 580ms, proxy.ts: 23ms, application-code: 30ms)
+ GET /api/subjects 200 in 120ms (next.js: 3ms, proxy.ts: 11ms, application-code: 106ms)
+ GET /api/subjects 200 in 114ms (next.js: 4ms, proxy.ts: 17ms, application-code: 93ms)
+ GET / 200 in 56ms (next.js: 7ms, proxy.ts: 23ms, application-code: 25ms)
+ GET /api/subjects 200 in 163ms (next.js: 6ms, proxy.ts: 46ms, application-code: 111ms)
+ GET /api/subjects/book-map 200 in 165ms (next.js: 15ms, proxy.ts: 45ms, application-code: 105ms)
+ GET /api/subjects 200 in 126ms (next.js: 7ms, proxy.ts: 15ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 124ms (next.js: 11ms, proxy.ts: 12ms, application-code: 100ms)
+ GET /api/books? 200 in 296ms (next.js: 21ms, proxy.ts: 44ms, application-code: 231ms)
+ GET /api/books? 200 in 281ms (next.js: 4ms, proxy.ts: 8ms, application-code: 269ms)
+ GET /api/subjects 200 in 140ms (next.js: 8ms, proxy.ts: 19ms, application-code: 113ms)
+ GET /api/subjects/book-map 200 in 143ms (next.js: 17ms, proxy.ts: 19ms, application-code: 107ms)
+ GET /api/subjects 200 in 128ms (next.js: 8ms, proxy.ts: 16ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 138ms (next.js: 21ms, proxy.ts: 16ms, application-code: 101ms)
+ GET /api/subjects 200 in 113ms (next.js: 4ms, proxy.ts: 13ms, application-code: 96ms)
+ GET /api/subjects/book-map 200 in 123ms (next.js: 5ms, proxy.ts: 24ms, application-code: 95ms)
+ GET /api/subjects 200 in 128ms (next.js: 5ms, proxy.ts: 22ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 124ms (next.js: 6ms, proxy.ts: 24ms, application-code: 95ms)
+ GET /api/subjects 200 in 146ms (next.js: 7ms, proxy.ts: 19ms, application-code: 121ms)
+ GET /api/subjects/book-map 200 in 147ms (next.js: 16ms, proxy.ts: 19ms, application-code: 112ms)
+ GET /api/subjects 200 in 140ms (next.js: 7ms, proxy.ts: 27ms, application-code: 107ms)
+ GET /api/subjects/book-map 200 in 140ms (next.js: 14ms, proxy.ts: 25ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 140ms (next.js: 13ms, proxy.ts: 26ms, application-code: 101ms)
+ GET /api/subjects 200 in 181ms (next.js: 8ms, proxy.ts: 25ms, application-code: 148ms)
+ GET /api/subjects/book-map 200 in 122ms (next.js: 3ms, proxy.ts: 20ms, application-code: 98ms)
+ GET /api/subjects 200 in 114ms (next.js: 3ms, proxy.ts: 11ms, application-code: 99ms)
+ GET /api/subjects 200 in 123ms (next.js: 6ms, proxy.ts: 12ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 138ms (next.js: 14ms, proxy.ts: 13ms, application-code: 111ms)
+ GET /api/subjects 200 in 127ms (next.js: 6ms, proxy.ts: 21ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 4ms, proxy.ts: 24ms, application-code: 106ms)
+ GET /api/subjects 200 in 150ms (next.js: 7ms, proxy.ts: 31ms, application-code: 112ms)
+ GET /api/subjects/book-map 200 in 170ms (next.js: 18ms, proxy.ts: 31ms, application-code: 122ms)
+ GET /api/subjects 200 in 129ms (next.js: 11ms, proxy.ts: 20ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 6ms, proxy.ts: 35ms, application-code: 95ms)
+ GET /api/subjects 200 in 124ms (next.js: 7ms, proxy.ts: 14ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 127ms (next.js: 14ms, proxy.ts: 13ms, application-code: 100ms)
+ GET /api/subjects 200 in 121ms (next.js: 5ms, proxy.ts: 15ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 183ms (next.js: 4ms, proxy.ts: 27ms, application-code: 152ms)
+ GET /api/subjects 200 in 129ms (next.js: 7ms, proxy.ts: 19ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 129ms (next.js: 13ms, proxy.ts: 19ms, application-code: 97ms)
+ GET /api/subjects 200 in 128ms (next.js: 7ms, proxy.ts: 15ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 129ms (next.js: 15ms, proxy.ts: 16ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 139ms (next.js: 14ms, proxy.ts: 23ms, application-code: 102ms)
+ GET /api/subjects 200 in 143ms (next.js: 7ms, proxy.ts: 23ms, application-code: 113ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 7ms, proxy.ts: 21ms, application-code: 107ms)
+ GET /api/subjects 200 in 135ms (next.js: 14ms, proxy.ts: 20ms, application-code: 101ms)
+ GET / 200 in 22ms (next.js: 6ms, proxy.ts: 7ms, application-code: 9ms)
+ GET / 200 in 45ms (next.js: 6ms, proxy.ts: 18ms, application-code: 20ms)
+ GET /subjects 200 in 54ms (next.js: 7ms, proxy.ts: 21ms, application-code: 27ms)
+ GET /api/subjects 200 in 177ms (next.js: 7ms, proxy.ts: 21ms, application-code: 149ms)
+ GET /api/subjects 200 in 166ms (next.js: 20ms, proxy.ts: 22ms, application-code: 124ms)
+ GET /import 200 in 104ms (next.js: 20ms, proxy.ts: 23ms, application-code: 61ms)
+ GET / 200 in 58ms (next.js: 5ms, proxy.ts: 25ms, application-code: 28ms)
+ GET /api/subjects/book-map 200 in 170ms (next.js: 9ms, proxy.ts: 31ms, application-code: 130ms)
+ GET /api/subjects 200 in 179ms (next.js: 36ms, proxy.ts: 28ms, application-code: 115ms)
+ GET /api/subjects/book-map 200 in 126ms (next.js: 8ms, proxy.ts: 18ms, application-code: 101ms)
+ GET /api/books? 200 in 349ms (next.js: 18ms, proxy.ts: 26ms, application-code: 305ms)
+ GET /api/subjects 200 in 165ms (next.js: 16ms, proxy.ts: 47ms, application-code: 102ms)
+ GET /api/books? 200 in 279ms (next.js: 17ms, proxy.ts: 16ms, application-code: 247ms)
+ GET /import 200 in 51ms (next.js: 6ms, proxy.ts: 18ms, application-code: 26ms)
+ GET / 200 in 50ms (next.js: 6ms, proxy.ts: 13ms, application-code: 31ms)
+ GET /api/subjects/book-map 200 in 147ms (next.js: 14ms, proxy.ts: 32ms, application-code: 101ms)
+ GET /api/subjects 200 in 152ms (next.js: 7ms, proxy.ts: 33ms, application-code: 112ms)
+ GET /api/subjects 200 in 124ms (next.js: 14ms, proxy.ts: 19ms, application-code: 92ms)
+ GET /api/subjects/book-map 200 in 130ms (next.js: 6ms, proxy.ts: 21ms, application-code: 103ms)
+ GET /api/books? 200 in 283ms (next.js: 20ms, proxy.ts: 31ms, application-code: 231ms)
+ GET /api/books? 200 in 315ms (next.js: 4ms, proxy.ts: 24ms, application-code: 287ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 15ms, proxy.ts: 18ms, application-code: 102ms)
+ GET /api/subjects 200 in 139ms (next.js: 7ms, proxy.ts: 18ms, application-code: 114ms)
+ GET /api/subjects/book-map 200 in 121ms (next.js: 6ms, proxy.ts: 13ms, application-code: 102ms)
+ GET /api/subjects 200 in 122ms (next.js: 14ms, proxy.ts: 14ms, application-code: 94ms)
+ GET /api/subjects 200 in 167ms (next.js: 33ms, proxy.ts: 35ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 167ms (next.js: 12ms, proxy.ts: 35ms, application-code: 120ms)
+ GET /api/subjects 200 in 138ms (next.js: 7ms, proxy.ts: 32ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 140ms (next.js: 14ms, proxy.ts: 32ms, application-code: 94ms)
+ GET /api/subjects/book-map 200 in 794ms (next.js: 16ms, proxy.ts: 14ms, application-code: 764ms)
+ GET /api/subjects 200 in 798ms (next.js: 7ms, proxy.ts: 14ms, application-code: 778ms)
+ GET /api/subjects/book-map 200 in 133ms (next.js: 7ms, proxy.ts: 23ms, application-code: 104ms)
+ GET /api/subjects 200 in 134ms (next.js: 14ms, proxy.ts: 23ms, application-code: 97ms)
+ GET /api/subjects/book-map 200 in 251ms (next.js: 15ms, proxy.ts: 21ms, application-code: 214ms)
+ GET /api/subjects 200 in 256ms (next.js: 8ms, proxy.ts: 20ms, application-code: 228ms)
+ GET /api/subjects/book-map 200 in 130ms (next.js: 6ms, proxy.ts: 23ms, application-code: 101ms)
+ GET /api/subjects 200 in 131ms (next.js: 14ms, proxy.ts: 23ms, application-code: 94ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 16ms, proxy.ts: 26ms, application-code: 95ms)
+ GET /api/subjects 200 in 142ms (next.js: 7ms, proxy.ts: 26ms, application-code: 109ms)
+ GET /api/subjects/book-map 200 in 131ms (next.js: 7ms, proxy.ts: 23ms, application-code: 100ms)
+ GET /api/subjects 200 in 130ms (next.js: 16ms, proxy.ts: 20ms, application-code: 94ms)
+✓ Compiled in 287ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1594ms (next.js: 160ms, proxy.ts: 1186ms, application-code: 248ms)
+ GET / 200 in 240ms (next.js: 8ms, proxy.ts: 18ms, application-code: 214ms)
+ GET / 200 in 148ms (next.js: 12ms, proxy.ts: 22ms, application-code: 114ms)
+ GET / 200 in 147ms (next.js: 46ms, proxy.ts: 24ms, application-code: 78ms)
+ GET / 200 in 147ms (next.js: 83ms, proxy.ts: 25ms, application-code: 39ms)
+✓ Compiled in 452ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1628ms (next.js: 1314ms, proxy.ts: 18ms, application-code: 296ms)
+ GET / 200 in 793ms (next.js: 110ms, proxy.ts: 181ms, application-code: 502ms)
+ GET / 200 in 707ms (next.js: 213ms, proxy.ts: 86ms, application-code: 407ms)
+ GET /api/subjects/book-map 200 in 655ms (next.js: 139ms, proxy.ts: 18ms, application-code: 498ms)
+ GET /api/books? 200 in 823ms (next.js: 185ms, proxy.ts: 18ms, application-code: 620ms)
+ GET /api/subjects 200 in 906ms (next.js: 86ms, proxy.ts: 19ms, application-code: 801ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+✓ Compiled in 101ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1450ms (next.js: 183ms, proxy.ts: 1101ms, application-code: 166ms)
+ GET / 200 in 48ms (next.js: 7ms, proxy.ts: 28ms, application-code: 12ms)
+ GET / 200 in 56ms (next.js: 7ms, proxy.ts: 23ms, application-code: 26ms)
+ GET /import 200 in 277ms (next.js: 166ms, proxy.ts: 22ms, application-code: 89ms)
+ GET /subjects 200 in 227ms (next.js: 141ms, proxy.ts: 22ms, application-code: 65ms)
+ GET /api/subjects 200 in 625ms (next.js: 93ms, proxy.ts: 18ms, application-code: 514ms)
+ GET /api/subjects 200 in 130ms (next.js: 4ms, proxy.ts: 16ms, application-code: 110ms)
+ GET / 200 in 40ms (next.js: 6ms, proxy.ts: 11ms, application-code: 24ms)
+ GET /api/subjects 200 in 233ms (next.js: 9ms, proxy.ts: 20ms, application-code: 204ms)
+ GET /api/subjects 200 in 115ms (next.js: 5ms, proxy.ts: 16ms, application-code: 94ms)
+ GET /api/subjects/book-map 200 in 586ms (next.js: 53ms, proxy.ts: 21ms, application-code: 512ms)
+ GET /api/subjects/book-map 200 in 165ms (next.js: 4ms, proxy.ts: 24ms, application-code: 137ms)
+ GET /api/books? 200 in 757ms (next.js: 116ms, proxy.ts: 21ms, application-code: 619ms)
+ GET /api/books? 200 in 275ms (next.js: 6ms, proxy.ts: 24ms, application-code: 245ms)
+ GET /api/subjects 200 in 137ms (next.js: 7ms, proxy.ts: 22ms, application-code: 108ms)
+ GET /api/subjects/book-map 200 in 138ms (next.js: 15ms, proxy.ts: 22ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 120ms (next.js: 12ms, proxy.ts: 19ms, application-code: 89ms)
+ GET /api/subjects 200 in 127ms (next.js: 5ms, proxy.ts: 22ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 129ms (next.js: 14ms, proxy.ts: 23ms, application-code: 92ms)
+ GET /api/subjects 200 in 132ms (next.js: 6ms, proxy.ts: 23ms, application-code: 103ms)
+ GET /api/subjects 200 in 142ms (next.js: 17ms, proxy.ts: 30ms, application-code: 95ms)
+ GET /api/subjects/book-map 200 in 145ms (next.js: 9ms, proxy.ts: 29ms, application-code: 108ms)
+ GET /subjects 200 in 46ms (next.js: 5ms, proxy.ts: 12ms, application-code: 29ms)
+ GET /api/subjects 200 in 124ms (next.js: 5ms, proxy.ts: 26ms, application-code: 94ms)
+ GET /api/subjects 200 in 135ms (next.js: 5ms, proxy.ts: 25ms, application-code: 106ms)
+ GET /import 200 in 49ms (next.js: 6ms, proxy.ts: 12ms, application-code: 31ms)
+ GET / 200 in 48ms (next.js: 8ms, proxy.ts: 14ms, application-code: 26ms)
+ GET /api/subjects/book-map 200 in 145ms (next.js: 15ms, proxy.ts: 27ms, application-code: 103ms)
+ GET /api/subjects 200 in 150ms (next.js: 7ms, proxy.ts: 28ms, application-code: 114ms)
+ GET /api/subjects/book-map 200 in 138ms (next.js: 15ms, proxy.ts: 30ms, application-code: 93ms)
+ GET /api/subjects 200 in 143ms (next.js: 5ms, proxy.ts: 31ms, application-code: 107ms)
+ GET /api/books? 200 in 335ms (next.js: 22ms, proxy.ts: 27ms, application-code: 286ms)
+ GET /api/books? 200 in 301ms (next.js: 5ms, proxy.ts: 16ms, application-code: 280ms)
+ GET /import 200 in 55ms (next.js: 6ms, proxy.ts: 17ms, application-code: 32ms)
+ GET /subjects 200 in 50ms (next.js: 6ms, proxy.ts: 19ms, application-code: 24ms)
+ GET /api/subjects 200 in 115ms (next.js: 4ms, proxy.ts: 14ms, application-code: 97ms)
+ GET /api/subjects 200 in 122ms (next.js: 4ms, proxy.ts: 25ms, application-code: 92ms)
+ GET / 200 in 80ms (next.js: 22ms, proxy.ts: 19ms, application-code: 38ms)
+ GET /api/subjects/book-map 200 in 140ms (next.js: 19ms, proxy.ts: 23ms, application-code: 99ms)
+ GET /api/subjects 200 in 148ms (next.js: 12ms, proxy.ts: 25ms, application-code: 112ms)
+ GET /api/subjects 200 in 141ms (next.js: 12ms, proxy.ts: 25ms, application-code: 104ms)
+ GET /api/books? 200 in 288ms (next.js: 24ms, proxy.ts: 23ms, application-code: 241ms)
+ GET /api/subjects/book-map 200 in 147ms (next.js: 6ms, proxy.ts: 25ms, application-code: 117ms)
+ GET /api/books? 200 in 1382ms (next.js: 4ms, proxy.ts: 15ms, application-code: 1364ms)
+  Reload env: .env.local
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+✓ Compiled in 0ms
+ GET / 200 in 988ms (next.js: 252ms, proxy.ts: 467ms, application-code: 269ms)
+ GET / 200 in 93ms (next.js: 11ms, proxy.ts: 21ms, application-code: 60ms)
+✓ Compiled in 164ms
+ GET /api/subjects 200 in 667ms (next.js: 116ms, proxy.ts: 28ms, application-code: 523ms)
+ GET /api/subjects/book-map 200 in 669ms (next.js: 169ms, proxy.ts: 29ms, application-code: 471ms)
+ GET /api/subjects 200 in 143ms (next.js: 6ms, proxy.ts: 29ms, application-code: 108ms)
+ GET /api/subjects/book-map 200 in 144ms (next.js: 13ms, proxy.ts: 29ms, application-code: 102ms)
+ GET /api/subjects 200 in 125ms (next.js: 5ms, proxy.ts: 18ms, application-code: 102ms)
+ GET /api/subjects/book-map 200 in 127ms (next.js: 12ms, proxy.ts: 18ms, application-code: 97ms)
+ GET /api/subjects 200 in 124ms (next.js: 6ms, proxy.ts: 15ms, application-code: 102ms)
+ GET /api/subjects/book-map 200 in 121ms (next.js: 14ms, proxy.ts: 13ms, application-code: 94ms)
+ GET /api/subjects/book-map 200 in 191ms (next.js: 17ms, proxy.ts: 25ms, application-code: 149ms)
+ GET /api/subjects 200 in 196ms (next.js: 9ms, proxy.ts: 24ms, application-code: 163ms)
+ GET /api/subjects 200 in 201ms (next.js: 27ms, proxy.ts: 73ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 204ms (next.js: 30ms, proxy.ts: 81ms, application-code: 93ms)
+ GET /api/subjects 200 in 892ms (next.js: 12ms, proxy.ts: 42ms, application-code: 838ms)
+ GET /api/subjects/book-map 200 in 896ms (next.js: 37ms, proxy.ts: 45ms, application-code: 814ms)
+ GET /api/subjects 200 in 114ms (next.js: 5ms, proxy.ts: 14ms, application-code: 95ms)
+ GET /api/subjects/book-map 200 in 128ms (next.js: 4ms, proxy.ts: 21ms, application-code: 104ms)
+ GET /api/subjects 200 in 118ms (next.js: 6ms, proxy.ts: 17ms, application-code: 95ms)
+ GET /api/subjects/book-map 200 in 126ms (next.js: 4ms, proxy.ts: 19ms, application-code: 102ms)
+ GET /api/subjects 200 in 125ms (next.js: 4ms, proxy.ts: 25ms, application-code: 96ms)
+ GET /api/subjects/book-map 200 in 114ms (next.js: 4ms, proxy.ts: 15ms, application-code: 95ms)
+ GET /api/subjects 200 in 129ms (next.js: 6ms, proxy.ts: 13ms, application-code: 109ms)
+ GET /api/subjects/book-map 200 in 137ms (next.js: 15ms, proxy.ts: 14ms, application-code: 108ms)
+ GET /api/subjects 200 in 114ms (next.js: 7ms, proxy.ts: 13ms, application-code: 94ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 4ms, proxy.ts: 36ms, application-code: 96ms)
+ GET /api/subjects 200 in 829ms (next.js: 8ms, proxy.ts: 18ms, application-code: 803ms)
+ GET /api/subjects/book-map 200 in 833ms (next.js: 20ms, proxy.ts: 19ms, application-code: 795ms)
+ GET /api/subjects 200 in 112ms (next.js: 6ms, proxy.ts: 12ms, application-code: 94ms)
+ GET /api/subjects/book-map 200 in 117ms (next.js: 4ms, proxy.ts: 20ms, application-code: 93ms)
+ GET /api/subjects 200 in 147ms (next.js: 11ms, proxy.ts: 20ms, application-code: 115ms)
+ GET /api/subjects/book-map 200 in 148ms (next.js: 18ms, proxy.ts: 22ms, application-code: 108ms)
+ GET /api/subjects 200 in 130ms (next.js: 7ms, proxy.ts: 20ms, application-code: 102ms)
+ GET /api/subjects/book-map 200 in 176ms (next.js: 14ms, proxy.ts: 20ms, application-code: 142ms)
+✓ Compiled in 95ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1522ms (next.js: 157ms, proxy.ts: 1251ms, application-code: 115ms)
+ GET /api/subjects/book-map 200 in 723ms (next.js: 185ms, proxy.ts: 33ms, application-code: 505ms)
+ GET /api/subjects 200 in 727ms (next.js: 136ms, proxy.ts: 32ms, application-code: 559ms)
+ GET /api/subjects 200 in 133ms (next.js: 6ms, proxy.ts: 18ms, application-code: 109ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 14ms, proxy.ts: 19ms, application-code: 102ms)
+ GET /api/subjects 200 in 138ms (next.js: 7ms, proxy.ts: 24ms, application-code: 107ms)
+ GET /api/subjects/book-map 200 in 141ms (next.js: 16ms, proxy.ts: 25ms, application-code: 100ms)
+ GET /api/subjects 200 in 128ms (next.js: 7ms, proxy.ts: 16ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 137ms (next.js: 13ms, proxy.ts: 14ms, application-code: 110ms)
+ GET /api/subjects 200 in 194ms (next.js: 8ms, proxy.ts: 18ms, application-code: 168ms)
+ GET /api/subjects/book-map 200 in 196ms (next.js: 19ms, proxy.ts: 19ms, application-code: 158ms)
+ GET /api/subjects/book-map 200 in 174ms (next.js: 6ms, proxy.ts: 38ms, application-code: 129ms)
+ GET /api/subjects 200 in 178ms (next.js: 20ms, proxy.ts: 38ms, application-code: 120ms)
+ GET /api/subjects/book-map 200 in 128ms (next.js: 11ms, proxy.ts: 17ms, application-code: 100ms)
+ GET /api/subjects 200 in 132ms (next.js: 5ms, proxy.ts: 18ms, application-code: 109ms)
+ GET /api/subjects/book-map 200 in 130ms (next.js: 7ms, proxy.ts: 19ms, application-code: 105ms)
+ GET /api/subjects 200 in 132ms (next.js: 14ms, proxy.ts: 19ms, application-code: 99ms)
+ GET /api/subjects 200 in 143ms (next.js: 9ms, proxy.ts: 28ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 153ms (next.js: 18ms, proxy.ts: 28ms, application-code: 107ms)
+ GET /api/subjects 200 in 128ms (next.js: 9ms, proxy.ts: 23ms, application-code: 96ms)
+ GET /api/subjects/book-map 200 in 139ms (next.js: 4ms, proxy.ts: 27ms, application-code: 108ms)
+ GET /api/subjects 200 in 128ms (next.js: 8ms, proxy.ts: 13ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 128ms (next.js: 16ms, proxy.ts: 15ms, application-code: 97ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 16ms, proxy.ts: 23ms, application-code: 94ms)
+ GET /api/subjects 200 in 137ms (next.js: 7ms, proxy.ts: 23ms, application-code: 106ms)
+ GET /api/subjects 200 in 148ms (next.js: 6ms, proxy.ts: 26ms, application-code: 116ms)
+ GET /api/subjects/book-map 200 in 146ms (next.js: 16ms, proxy.ts: 22ms, application-code: 107ms)
+ GET /api/subjects/book-map 200 in 143ms (next.js: 14ms, proxy.ts: 31ms, application-code: 99ms)
+ GET /api/subjects 200 in 147ms (next.js: 11ms, proxy.ts: 28ms, application-code: 108ms)
+ GET /api/subjects 200 in 139ms (next.js: 5ms, proxy.ts: 24ms, application-code: 110ms)
+ GET /api/subjects/book-map 200 in 140ms (next.js: 13ms, proxy.ts: 24ms, application-code: 103ms)
+ GET /api/subjects 200 in 120ms (next.js: 7ms, proxy.ts: 12ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 124ms (next.js: 12ms, proxy.ts: 13ms, application-code: 99ms)
+ GET /api/subjects 200 in 169ms (next.js: 7ms, proxy.ts: 16ms, application-code: 147ms)
+ GET /api/subjects/book-map 200 in 174ms (next.js: 16ms, proxy.ts: 14ms, application-code: 145ms)
+ GET /api/subjects 200 in 122ms (next.js: 5ms, proxy.ts: 21ms, application-code: 96ms)
+ GET /api/subjects/book-map 200 in 126ms (next.js: 4ms, proxy.ts: 23ms, application-code: 99ms)
+ GET /api/subjects/book-map 200 in 174ms (next.js: 16ms, proxy.ts: 17ms, application-code: 142ms)
+ GET /api/subjects 200 in 178ms (next.js: 8ms, proxy.ts: 15ms, application-code: 155ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 6ms, proxy.ts: 21ms, application-code: 108ms)
+ GET /api/subjects 200 in 136ms (next.js: 14ms, proxy.ts: 22ms, application-code: 100ms)
+ GET /api/subjects 200 in 138ms (next.js: 7ms, proxy.ts: 17ms, application-code: 114ms)
+ GET /api/subjects/book-map 200 in 145ms (next.js: 15ms, proxy.ts: 17ms, application-code: 113ms)
+ GET /api/subjects 200 in 116ms (next.js: 7ms, proxy.ts: 13ms, application-code: 96ms)
+ GET /api/subjects/book-map 200 in 133ms (next.js: 4ms, proxy.ts: 20ms, application-code: 108ms)
+ GET /api/subjects 200 in 133ms (next.js: 5ms, proxy.ts: 23ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 11ms, proxy.ts: 23ms, application-code: 99ms)
+ GET /api/subjects/book-map 200 in 132ms (next.js: 14ms, proxy.ts: 25ms, application-code: 93ms)
+ GET /api/subjects 200 in 136ms (next.js: 6ms, proxy.ts: 26ms, application-code: 105ms)
+✓ Compiled in 206ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1850ms (next.js: 203ms, proxy.ts: 1240ms, application-code: 407ms)
+ GET / 200 in 143ms (next.js: 7ms, proxy.ts: 18ms, application-code: 117ms)
+ GET / 200 in 70ms (next.js: 7ms, proxy.ts: 14ms, application-code: 49ms)
+ GET /api/subjects/book-map 200 in 2.1s (next.js: 443ms, proxy.ts: 1107ms, application-code: 568ms)
+ GET /api/subjects 200 in 2.1s (next.js: 513ms, proxy.ts: 1121ms, application-code: 497ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 9ms, proxy.ts: 18ms, application-code: 108ms)
+ GET /api/subjects 200 in 136ms (next.js: 14ms, proxy.ts: 20ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 128ms (next.js: 5ms, proxy.ts: 22ms, application-code: 100ms)
+ GET /api/subjects 200 in 128ms (next.js: 12ms, proxy.ts: 21ms, application-code: 95ms)
+ GET /api/subjects 200 in 138ms (next.js: 7ms, proxy.ts: 26ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 140ms (next.js: 14ms, proxy.ts: 27ms, application-code: 99ms)
+ GET /api/subjects 200 in 168ms (next.js: 8ms, proxy.ts: 14ms, application-code: 146ms)
+ GET /api/subjects/book-map 200 in 167ms (next.js: 15ms, proxy.ts: 13ms, application-code: 138ms)
+✓ Compiled in 118ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1494ms (next.js: 168ms, proxy.ts: 1222ms, application-code: 103ms)
+ GET /api/subjects 200 in 695ms (next.js: 135ms, proxy.ts: 24ms, application-code: 536ms)
+ GET /api/subjects/book-map 200 in 693ms (next.js: 213ms, proxy.ts: 22ms, application-code: 458ms)
+ GET /api/subjects 200 in 125ms (next.js: 7ms, proxy.ts: 12ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 128ms (next.js: 16ms, proxy.ts: 14ms, application-code: 98ms)
+✓ Compiled in 107ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1531ms (next.js: 167ms, proxy.ts: 1233ms, application-code: 132ms)
+[browser] Uncaught ReferenceError: useEffect is not defined
+    at CatalogTable (src/components/catalog-table.tsx:152:3)
+    at CatalogPageInner (src/app/page.tsx:86:27)
+    at CatalogPage (src/components/book-detail-sheet.tsx:221:19)
+  150 |   // out from under the current page — reset to page 1 whenever any of them
+  151 |   // change so the user never lands on a blank out-of-range page.
+> 152 |   useEffect(() => {
+      |   ^
+  153 |     setPage(1);
+  154 |   }, [books, sortKey, sortDir, columnFilters]);
+  155 |
+✓ Compiled in 106ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+[browser] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). 
+    at Set.forEach (<anonymous>) (<anonymous>)
+ GET /api/subjects 200 in 2.2s (next.js: 811ms, proxy.ts: 1322ms, application-code: 62ms)
+ GET /api/books? 200 in 2.2s (next.js: 95ms, proxy.ts: 1300ms, application-code: 785ms)
+ GET /api/subjects/book-map 200 in 2.2s (next.js: 853ms, proxy.ts: 1306ms, application-code: 23ms)
+ GET / 200 in 2.3s (next.js: 277ms, proxy.ts: 1441ms, application-code: 609ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+ GET /api/subjects/book-map 200 in 578ms (next.js: 22ms, proxy.ts: 33ms, application-code: 522ms)
+ GET /api/subjects 200 in 582ms (next.js: 14ms, proxy.ts: 32ms, application-code: 535ms)
+ GET /api/books? 200 in 749ms (next.js: 31ms, proxy.ts: 34ms, application-code: 684ms)
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /api/subjects 200 in 133ms (next.js: 8ms, proxy.ts: 20ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 173ms (next.js: 16ms, proxy.ts: 22ms, application-code: 135ms)
+ GET /api/subjects 200 in 112ms (next.js: 5ms, proxy.ts: 9ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 128ms (next.js: 5ms, proxy.ts: 16ms, application-code: 108ms)
+ GET /api/subjects 200 in 123ms (next.js: 7ms, proxy.ts: 16ms, application-code: 99ms)
+ GET /api/subjects/book-map 200 in 124ms (next.js: 12ms, proxy.ts: 17ms, application-code: 94ms)
+ GET /api/subjects 200 in 136ms (next.js: 6ms, proxy.ts: 16ms, application-code: 114ms)
+ GET /api/subjects/book-map 200 in 145ms (next.js: 23ms, proxy.ts: 14ms, application-code: 108ms)
+ GET /api/subjects 200 in 133ms (next.js: 6ms, proxy.ts: 13ms, application-code: 113ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 15ms, proxy.ts: 14ms, application-code: 107ms)
+ GET /api/subjects 200 in 130ms (next.js: 8ms, proxy.ts: 18ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 131ms (next.js: 16ms, proxy.ts: 16ms, application-code: 98ms)
+✓ Compiled in 223ms
+✓ Compiled in 134ms
+✓ Compiled in 245ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 2.2s (next.js: 233ms, proxy.ts: 1693ms, application-code: 240ms)
+ GET / 200 in 270ms (next.js: 7ms, proxy.ts: 15ms, application-code: 248ms)
+ GET / 200 in 205ms (next.js: 16ms, proxy.ts: 50ms, application-code: 139ms)
+ GET / 200 in 204ms (next.js: 71ms, proxy.ts: 52ms, application-code: 81ms)
+ GET / 200 in 206ms (next.js: 42ms, proxy.ts: 51ms, application-code: 113ms)
+ GET / 200 in 205ms (next.js: 100ms, proxy.ts: 56ms, application-code: 48ms)
+✓ Compiled in 101ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1536ms (next.js: 165ms, proxy.ts: 1277ms, application-code: 94ms)
+✓ Compiled in 109ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1658ms (next.js: 168ms, proxy.ts: 1283ms, application-code: 208ms)
+✓ Compiled in 100ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1706ms (next.js: 214ms, proxy.ts: 1392ms, application-code: 101ms)
+ GET /api/subjects 200 in 2.8s (next.js: 104ms, proxy.ts: 1155ms, application-code: 1588ms)
+ GET /api/subjects/book-map 200 in 2.8s (next.js: 163ms, proxy.ts: 1153ms, application-code: 1530ms)
+✓ Compiled in 239ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1771ms (next.js: 351ms, proxy.ts: 1315ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 1902ms (next.js: 101ms, proxy.ts: 1014ms, application-code: 787ms)
+ GET /api/subjects 200 in 1909ms (next.js: 163ms, proxy.ts: 1022ms, application-code: 724ms)
+ GET /api/subjects/book-map 200 in 165ms (next.js: 7ms, proxy.ts: 16ms, application-code: 142ms)
+ GET /api/subjects 200 in 163ms (next.js: 16ms, proxy.ts: 15ms, application-code: 132ms)
+ GET /api/subjects/book-map 200 in 131ms (next.js: 6ms, proxy.ts: 24ms, application-code: 101ms)
+ GET /api/subjects 200 in 135ms (next.js: 15ms, proxy.ts: 23ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 112ms (next.js: 7ms, proxy.ts: 11ms, application-code: 94ms)
+ GET /api/subjects 200 in 144ms (next.js: 4ms, proxy.ts: 41ms, application-code: 99ms)
+ GET /api/subjects 200 in 215ms (next.js: 9ms, proxy.ts: 19ms, application-code: 187ms)
+ GET /api/subjects/book-map 200 in 217ms (next.js: 16ms, proxy.ts: 21ms, application-code: 179ms)
+✓ Compiled in 144ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1765ms (next.js: 175ms, proxy.ts: 1286ms, application-code: 305ms)
+ GET /api/subjects/book-map 200 in 2.2s (next.js: 375ms, proxy.ts: 1289ms, application-code: 507ms)
+ GET /api/subjects 200 in 2.2s (next.js: 50ms, proxy.ts: 1680ms, application-code: 485ms)
+ GET /api/subjects/book-map 200 in 133ms (next.js: 14ms, proxy.ts: 26ms, application-code: 93ms)
+ GET /api/subjects 200 in 136ms (next.js: 6ms, proxy.ts: 26ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 7ms, proxy.ts: 29ms, application-code: 100ms)
+ GET /api/subjects 200 in 136ms (next.js: 15ms, proxy.ts: 29ms, application-code: 92ms)
+✓ Compiled in 119ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1555ms (next.js: 180ms, proxy.ts: 1281ms, application-code: 94ms)
+✓ Compiled in 177ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1513ms (next.js: 156ms, proxy.ts: 1246ms, application-code: 111ms)
+✓ Compiled in 341ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1425ms (next.js: 174ms, proxy.ts: 993ms, application-code: 259ms)
+ GET / 200 in 179ms (next.js: 11ms, proxy.ts: 19ms, application-code: 149ms)
+ GET / 200 in 100ms (next.js: 10ms, proxy.ts: 56ms, application-code: 34ms)
+✓ Compiled in 290ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1538ms (next.js: 197ms, proxy.ts: 1221ms, application-code: 119ms)
+✓ Compiled in 104ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 866ms (next.js: 203ms, proxy.ts: 498ms, application-code: 165ms)
+✓ Compiled in 169ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 570ms (next.js: 166ms, proxy.ts: 219ms, application-code: 185ms)
+ GET / 200 in 308ms (next.js: 7ms, proxy.ts: 10ms, application-code: 292ms)
+ GET / 200 in 274ms (next.js: 17ms, proxy.ts: 38ms, application-code: 220ms)
+ GET / 200 in 274ms (next.js: 58ms, proxy.ts: 42ms, application-code: 174ms)
+ GET / 200 in 275ms (next.js: 87ms, proxy.ts: 43ms, application-code: 145ms)
+ GET / 200 in 316ms (next.js: 116ms, proxy.ts: 44ms, application-code: 157ms)
+ GET / 200 in 305ms (next.js: 48ms, proxy.ts: 131ms, application-code: 125ms)
+ GET / 200 in 167ms (next.js: 13ms, proxy.ts: 15ms, application-code: 140ms)
+ GET / 200 in 108ms (next.js: 44ms, proxy.ts: 25ms, application-code: 40ms)
+ GET / 200 in 111ms (next.js: 11ms, proxy.ts: 23ms, application-code: 78ms)
+[browser] Uncaught ReferenceError: Checkbox is not defined
+    at CatalogTable (src/components/catalog-table.tsx:237:18)
+    at CatalogPage (src/components/book-detail-sheet.tsx:250:16)
+  235 |             {selectable && (
+  236 |               <TableHead className="w-10">
+> 237 |                 <Checkbox
+      |                  ^
+  238 |                   checked={allOnPageSelected}
+  239 |                   indeterminate={!allOnPageSelected && someOnPageSelected}
+  240 |                   onCheckedChange={(checked) => handleSelectAllOnPage(checked)}
+✓ Compiled in 100ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1202ms (next.js: 180ms, proxy.ts: 206ms, application-code: 815ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+✓ Compiled in 117ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 595ms (next.js: 253ms, proxy.ts: 234ms, application-code: 108ms)
+ GET /api/subjects 200 in 9.0s (next.js: 9ms, proxy.ts: 20ms, application-code: 9.0s)
+ GET /api/subjects/book-map 200 in 9.0s (next.js: 14ms, proxy.ts: 21ms, application-code: 9.0s)
+ GET /api/books? 200 in 9.2s (next.js: 20ms, proxy.ts: 22ms, application-code: 9.2s)
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] Uncaught ReferenceError: selectable is not defined
+    at CatalogTable (src/components/catalog-table.tsx:189:14)
+    at CatalogPageInner (src/app/page.tsx:24:10)
+    at CatalogPage (src/app/page.tsx:66:39)
+  187 |           </TableRow>
+  188 |           <TableRow>
+> 189 |             {selectable && <TableHead></TableHead>}
+      |              ^
+  190 |             <TableHead></TableHead>
+  191 |             <FilterHead column="title" value={columnFilters.title ?? ''} onChange={handle...
+  192 |             <FilterHead column="author" value={columnFilters.author ?? ''} onChange={hand...
+✓ Compiled in 80ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+[browser] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). 
+    at Set.forEach (<anonymous>) (<anonymous>)
+ GET /api/books? 200 in 993ms (next.js: 386ms, proxy.ts: 101ms, application-code: 505ms)
+ GET /api/subjects 200 in 1005ms (next.js: 458ms, proxy.ts: 525ms, application-code: 23ms)
+ GET /api/subjects/book-map 200 in 995ms (next.js: 421ms, proxy.ts: 512ms, application-code: 62ms)
+ GET / 200 in 1129ms (next.js: 172ms, proxy.ts: 231ms, application-code: 726ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+ GET /api/subjects/book-map 200 in 495ms (next.js: 12ms, proxy.ts: 27ms, application-code: 456ms)
+ GET /api/subjects 200 in 499ms (next.js: 6ms, proxy.ts: 27ms, application-code: 465ms)
+ GET /api/books? 200 in 625ms (next.js: 16ms, proxy.ts: 27ms, application-code: 582ms)
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] Uncaught ReferenceError: selectable is not defined
+    at <unknown> (src/components/catalog-table.tsx:209:27)
+    at Array.map (<anonymous>)
+    at CatalogTable (src/components/catalog-table.tsx:203:22)
+    at CatalogPageInner (src/app/page.tsx:87:9)
+    at CatalogPage (src/app/page.tsx:19:7)
+  207 |               onSelect={onSelect}
+  208 |               subjectNames={showSubjectsColumn ? resolvedMap?.[book.id] ?? [] : undefined}
+> 209 |               selectable={selectable}
+      |                           ^
+  210 |               selected={selectedIds.has(book.id)}
+  211 |               onSelectedChange={handleSelectedChange}
+  212 |             />
+✓ Compiled in 113ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 772ms (next.js: 172ms, proxy.ts: 161ms, application-code: 439ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+ GET /api/subjects 200 in 739ms (next.js: 137ms, proxy.ts: 22ms, application-code: 581ms)
+ GET /api/subjects/book-map 200 in 740ms (next.js: 204ms, proxy.ts: 24ms, application-code: 512ms)
+ GET /api/books? 200 in 900ms (next.js: 242ms, proxy.ts: 26ms, application-code: 631ms)
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[browser] Uncaught ReferenceError: AlertDialog is not defined
+    at CatalogTable (src/components/catalog-table.tsx:243:8)
+    at CatalogPageInner (src/app/page.tsx:87:9)
+    at CatalogPage (src/app/page.tsx:19:7)
+  241 |         </div>
+  242 |       )}
+> 243 |       <AlertDialog open={confirmingDelete} onOpenChange={setConfirmingDelete}>
+      |        ^
+  244 |         <AlertDialogContent>
+  245 |           <AlertDialogHeader>
+  246 |             <AlertDialogTitle>Delete {selectedIds.size} book{selectedIds.size === 1 ? '' ...
+✓ Compiled in 134ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 833ms (next.js: 164ms, proxy.ts: 196ms, application-code: 473ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+ GET /api/subjects/book-map 200 in 687ms (next.js: 150ms, proxy.ts: 26ms, application-code: 511ms)
+ GET /api/subjects 200 in 691ms (next.js: 108ms, proxy.ts: 25ms, application-code: 557ms)
+ GET /api/books? 200 in 851ms (next.js: 215ms, proxy.ts: 26ms, application-code: 609ms)
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+✓ Compiled in 87ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 434ms (next.js: 161ms, proxy.ts: 159ms, application-code: 113ms)
+ GET /api/subjects/book-map 200 in 651ms (next.js: 156ms, proxy.ts: 25ms, application-code: 471ms)
+ GET /api/subjects 200 in 655ms (next.js: 111ms, proxy.ts: 24ms, application-code: 520ms)
+ GET /api/subjects/book-map 200 in 137ms (next.js: 7ms, proxy.ts: 24ms, application-code: 106ms)
+ GET /api/subjects 200 in 138ms (next.js: 16ms, proxy.ts: 24ms, application-code: 98ms)
+ GET / 200 in 28ms (next.js: 6ms, proxy.ts: 13ms, application-code: 9ms)
+ GET / 200 in 41ms (next.js: 6ms, proxy.ts: 12ms, application-code: 24ms)
+ GET /import 200 in 90ms (next.js: 21ms, proxy.ts: 26ms, application-code: 43ms)
+ GET /subjects 200 in 77ms (next.js: 20ms, proxy.ts: 24ms, application-code: 33ms)
+ GET /api/subjects 200 in 125ms (next.js: 4ms, proxy.ts: 26ms, application-code: 96ms)
+ GET /api/subjects 200 in 138ms (next.js: 4ms, proxy.ts: 25ms, application-code: 109ms)
+ GET /import 200 in 44ms (next.js: 7ms, proxy.ts: 12ms, application-code: 26ms)
+ GET /subjects 200 in 44ms (next.js: 8ms, proxy.ts: 9ms, application-code: 27ms)
+ GET /api/subjects 200 in 112ms (next.js: 3ms, proxy.ts: 11ms, application-code: 97ms)
+ GET /api/subjects 200 in 125ms (next.js: 3ms, proxy.ts: 23ms, application-code: 99ms)
+ GET / 200 in 49ms (next.js: 6ms, proxy.ts: 11ms, application-code: 32ms)
+ GET /api/subjects/book-map 200 in 229ms (next.js: 16ms, proxy.ts: 24ms, application-code: 188ms)
+ GET /api/subjects 200 in 234ms (next.js: 8ms, proxy.ts: 26ms, application-code: 200ms)
+ GET /api/subjects 200 in 121ms (next.js: 6ms, proxy.ts: 14ms, application-code: 102ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 14ms, proxy.ts: 15ms, application-code: 105ms)
+ GET /api/books? 200 in 660ms (next.js: 61ms, proxy.ts: 23ms, application-code: 576ms)
+ GET /api/books? 200 in 261ms (next.js: 4ms, proxy.ts: 10ms, application-code: 247ms)
+ GET /api/subjects 200 in 140ms (next.js: 9ms, proxy.ts: 29ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 141ms (next.js: 17ms, proxy.ts: 29ms, application-code: 95ms)
+ GET /api/subjects 200 in 131ms (next.js: 7ms, proxy.ts: 24ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 16ms, proxy.ts: 23ms, application-code: 95ms)
+ GET /api/books?format=ebook 200 in 261ms (next.js: 4ms, proxy.ts: 20ms, application-code: 237ms)
+ GET /api/books?format=paperback 200 in 250ms (next.js: 4ms, proxy.ts: 24ms, application-code: 221ms)
+ GET /api/books?format=hardcover 200 in 241ms (next.js: 5ms, proxy.ts: 14ms, application-code: 222ms)
+ GET /api/books?format=audiobook 200 in 254ms (next.js: 5ms, proxy.ts: 17ms, application-code: 233ms)
+ GET /api/subjects 200 in 142ms (next.js: 9ms, proxy.ts: 32ms, application-code: 101ms)
+ GET /api/books/37 200 in 1562ms (next.js: 1342ms, proxy.ts: 34ms, application-code: 187ms)
+ GET /api/books/37/subjects 200 in 1750ms (next.js: 1371ms, proxy.ts: 33ms, application-code: 347ms)
+✓ Compiled in 94ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 613ms (next.js: 181ms, proxy.ts: 316ms, application-code: 116ms)
+✓ Compiled in 93ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 453ms (next.js: 171ms, proxy.ts: 182ms, application-code: 100ms)
+✓ Compiled in 90ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 433ms (next.js: 170ms, proxy.ts: 164ms, application-code: 99ms)
+ GET /api/subjects 200 in 690ms (next.js: 133ms, proxy.ts: 17ms, application-code: 541ms)
+ GET /api/subjects/book-map 200 in 689ms (next.js: 211ms, proxy.ts: 16ms, application-code: 462ms)
+ GET /api/subjects/book-map 200 in 118ms (next.js: 7ms, proxy.ts: 14ms, application-code: 97ms)
+ GET /api/subjects 200 in 118ms (next.js: 13ms, proxy.ts: 15ms, application-code: 90ms)
+ GET /api/subjects 200 in 131ms (next.js: 8ms, proxy.ts: 23ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 132ms (next.js: 14ms, proxy.ts: 24ms, application-code: 94ms)
+ GET /api/subjects 200 in 134ms (next.js: 5ms, proxy.ts: 28ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 12ms, proxy.ts: 28ms, application-code: 95ms)
+ GET /api/subjects 200 in 168ms (next.js: 7ms, proxy.ts: 20ms, application-code: 142ms)
+ GET /api/subjects/book-map 200 in 179ms (next.js: 15ms, proxy.ts: 19ms, application-code: 145ms)
+ GET /api/subjects 200 in 123ms (next.js: 8ms, proxy.ts: 17ms, application-code: 99ms)
+ GET /api/subjects/book-map 200 in 138ms (next.js: 4ms, proxy.ts: 34ms, application-code: 101ms)
+ GET /api/subjects 200 in 133ms (next.js: 7ms, proxy.ts: 27ms, application-code: 99ms)
+ GET /api/subjects/book-map 200 in 139ms (next.js: 13ms, proxy.ts: 28ms, application-code: 97ms)
+ GET /api/subjects 200 in 119ms (next.js: 8ms, proxy.ts: 19ms, application-code: 91ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 16ms, proxy.ts: 16ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 121ms (next.js: 10ms, proxy.ts: 21ms, application-code: 90ms)
+ GET /api/subjects 200 in 124ms (next.js: 4ms, proxy.ts: 22ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 122ms (next.js: 6ms, proxy.ts: 15ms, application-code: 101ms)
+ GET /api/subjects 200 in 123ms (next.js: 14ms, proxy.ts: 15ms, application-code: 93ms)
+✓ Compiled in 257ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 806ms (next.js: 385ms, proxy.ts: 14ms, application-code: 407ms)
+ GET / 200 in 714ms (next.js: 273ms, proxy.ts: 192ms, application-code: 249ms)
+ GET / 200 in 144ms (next.js: 5ms, proxy.ts: 19ms, application-code: 120ms)
+ GET / 200 in 83ms (next.js: 15ms, proxy.ts: 21ms, application-code: 48ms)
+✓ Compiled in 161ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 816ms (next.js: 383ms, proxy.ts: 142ms, application-code: 291ms)
+ GET / 200 in 272ms (next.js: 5ms, proxy.ts: 187ms, application-code: 80ms)
+ GET / 200 in 94ms (next.js: 6ms, proxy.ts: 10ms, application-code: 78ms)
+ GET / 200 in 51ms (next.js: 7ms, proxy.ts: 14ms, application-code: 30ms)
+ GET /api/subjects 200 in 770ms (next.js: 175ms, proxy.ts: 27ms, application-code: 568ms)
+ GET /api/subjects/book-map 200 in 770ms (next.js: 257ms, proxy.ts: 27ms, application-code: 486ms)
+ GET /api/subjects 200 in 134ms (next.js: 8ms, proxy.ts: 22ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 17ms, proxy.ts: 22ms, application-code: 98ms)
+ GET /api/subjects 200 in 143ms (next.js: 13ms, proxy.ts: 23ms, application-code: 108ms)
+ GET /api/subjects/book-map 200 in 144ms (next.js: 19ms, proxy.ts: 26ms, application-code: 99ms)
+ GET /api/subjects 200 in 141ms (next.js: 9ms, proxy.ts: 20ms, application-code: 112ms)
+ GET /api/subjects/book-map 200 in 176ms (next.js: 15ms, proxy.ts: 18ms, application-code: 143ms)
+ GET /api/subjects/book-map 200 in 236ms (next.js: 14ms, proxy.ts: 27ms, application-code: 195ms)
+ GET /api/subjects 200 in 240ms (next.js: 6ms, proxy.ts: 27ms, application-code: 207ms)
+ GET /api/subjects/book-map 200 in 120ms (next.js: 7ms, proxy.ts: 16ms, application-code: 97ms)
+ GET /api/subjects 200 in 121ms (next.js: 15ms, proxy.ts: 16ms, application-code: 90ms)
+ GET /api/subjects 200 in 156ms (next.js: 12ms, proxy.ts: 34ms, application-code: 110ms)
+ GET /api/subjects/book-map 200 in 159ms (next.js: 26ms, proxy.ts: 33ms, application-code: 99ms)
+ GET /api/subjects 200 in 118ms (next.js: 7ms, proxy.ts: 16ms, application-code: 95ms)
+ GET /api/subjects/book-map 200 in 120ms (next.js: 4ms, proxy.ts: 27ms, application-code: 89ms)
+ GET /api/subjects 200 in 145ms (next.js: 14ms, proxy.ts: 24ms, application-code: 107ms)
+ GET /api/subjects/book-map 200 in 143ms (next.js: 20ms, proxy.ts: 23ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 125ms (next.js: 15ms, proxy.ts: 18ms, application-code: 92ms)
+ GET /api/subjects 200 in 129ms (next.js: 6ms, proxy.ts: 18ms, application-code: 105ms)
+✓ Compiled in 163ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1065ms (next.js: 257ms, proxy.ts: 607ms, application-code: 201ms)
+ GET / 200 in 54ms (next.js: 6ms, proxy.ts: 13ms, application-code: 36ms)
+[browser] Uncaught ReferenceError: CatalogFilters is not defined
+    at CatalogPageInner (src/app/page.tsx:70:10)
+    at CatalogPage (file://C:/Users/mcaib/Documents/Personal/Projects/anagnosma/.next/dev/static/chunks/Documents_Personal_Projects_anagnosma_src_1rhmvyi._.js?id=%255Bproject%255D%252FDocuments%252FPersonal%252FProjects%252Fanagnosma%252Fsrc%252Fapp%252Fpage.tsx+%255Bapp-client%255D+%2528ecmascript%2529:37:271)
+  68 |           </TabsList>
+  69 |         </Tabs>
+> 70 |         <CatalogFilters format={format} onFormatChange={setFormat} />
+     |          ^
+  71 |       </div>
+  72 |       {subjectId != null && (
+  73 |         <Badge
+✓ Compiled in 95ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+⨯ ReferenceError: format is not defined
+    at CatalogPageInner (src\app\page.tsx:48:14)
+  46 |     })();
+  47 |     // eslint-disable-next-line react-hooks/exhaustive-deps
+> 48 |   }, [query, format, subjectId]);
+     |              ^
+  49 |
+  50 |   return (
+  51 |     <div className="space-y-4"> {
+  digest: '4004129971'
+}
+ GET / 200 in 1258ms (next.js: 366ms, proxy.ts: 289ms, application-code: 603ms)
+✓ Compiled in 85ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+⨯ ReferenceError: CatalogFilters is not defined
+    at CatalogPageInner (src\app\page.tsx:68:10)
+  66 |           </TabsList>
+  67 |         </Tabs>
+> 68 |         <CatalogFilters format={format} onFormatChange={setFormat} />
+     |          ^
+  69 |       </div>
+  70 |       {subjectId != null && (
+  71 |         <Badge {
+  digest: '3623448592'
+}
+ GET / 200 in 1129ms (next.js: 276ms, proxy.ts: 293ms, application-code: 560ms)
+✓ Compiled in 106ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 1050ms (next.js: 219ms, proxy.ts: 303ms, application-code: 528ms)
+ GET /api/subjects 200 in 901ms (next.js: 146ms, proxy.ts: 36ms, application-code: 719ms)
+ GET /api/subjects/book-map 200 in 903ms (next.js: 227ms, proxy.ts: 39ms, application-code: 636ms)
+ GET /api/books? 200 in 1071ms (next.js: 313ms, proxy.ts: 39ms, application-code: 719ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /api/subjects 200 in 124ms (next.js: 7ms, proxy.ts: 13ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 129ms (next.js: 17ms, proxy.ts: 14ms, application-code: 98ms)
+ GET /api/subjects 200 in 151ms (next.js: 15ms, proxy.ts: 39ms, application-code: 97ms)
+ GET /api/subjects/book-map 200 in 161ms (next.js: 20ms, proxy.ts: 39ms, application-code: 102ms)
+ GET /api/subjects 200 in 247ms (next.js: 7ms, proxy.ts: 27ms, application-code: 212ms)
+ GET /api/books/36 200 in 346ms (next.js: 90ms, proxy.ts: 29ms, application-code: 227ms)
+ GET /api/books/36/subjects 200 in 550ms (next.js: 167ms, proxy.ts: 28ms, application-code: 356ms)
+ PATCH /api/copies/27 200 in 1319ms (next.js: 1058ms, proxy.ts: 13ms, application-code: 249ms)
+ GET /api/books? 200 in 260ms (next.js: 5ms, proxy.ts: 18ms, application-code: 237ms)
+✓ Compiled in 109ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 932ms (next.js: 226ms, proxy.ts: 564ms, application-code: 142ms)
+ POST /api/books/36/subjects 201 in 811ms (next.js: 132ms, proxy.ts: 20ms, application-code: 659ms)
+✓ Compiled in 130ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET / 200 in 718ms (next.js: 235ms, proxy.ts: 374ms, application-code: 109ms)
+ GET /api/books? 200 in 1051ms (next.js: 103ms, proxy.ts: 24ms, application-code: 924ms)
+ DELETE /api/books/36/subjects?subjectId=11 204 in 862ms (next.js: 141ms, proxy.ts: 13ms, application-code: 709ms)
+ GET /api/books? 200 in 327ms (next.js: 76ms, proxy.ts: 10ms, application-code: 240ms)
+Clerk: Refreshing the session token resulted in an infinite redirect loop. This usually means that your Clerk instance keys do not match - make sure to copy the correct publishable and secret keys from the Clerk dashboard.
+Clerk: Refreshing the session token resulted in an infinite redirect loop. This usually means that your Clerk instance keys do not match - make sure to copy the correct publishable and secret keys from the Clerk dashboard.
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 699ms (next.js: 219ms, proxy.ts: 12ms, application-code: 467ms)
+ GET /sign-in/SignIn_clerk_catchall_check_1785879605524 200 in 118ms (next.js: 18ms, proxy.ts: 9ms, application-code: 91ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 106ms (next.js: 17ms, proxy.ts: 10ms, application-code: 79ms)
+ GET /sign-in/SignIn_clerk_catchall_check_1785879607635 200 in 123ms (next.js: 16ms, proxy.ts: 18ms, application-code: 89ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+ GET / 200 in 310ms (next.js: 11ms, proxy.ts: 28ms, application-code: 271ms)
+ GET /api/subjects 200 in 260ms (next.js: 63ms, proxy.ts: 33ms, application-code: 165ms)
+ GET /api/subjects/book-map 200 in 704ms (next.js: 121ms, proxy.ts: 33ms, application-code: 550ms)
+ GET /api/books? 200 in 824ms (next.js: 129ms, proxy.ts: 33ms, application-code: 663ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /api/subjects 200 in 181ms (next.js: 6ms, proxy.ts: 23ms, application-code: 152ms)
+ GET /api/books/36 200 in 306ms (next.js: 78ms, proxy.ts: 21ms, application-code: 207ms)
+ GET /api/books/36/subjects 200 in 487ms (next.js: 103ms, proxy.ts: 20ms, application-code: 364ms)
+ GET /api/subjects 200 in 116ms (next.js: 7ms, proxy.ts: 17ms, application-code: 92ms)
+ GET /api/books/36 200 in 243ms (next.js: 29ms, proxy.ts: 17ms, application-code: 197ms)
+ GET /api/books/36/subjects 200 in 408ms (next.js: 40ms, proxy.ts: 19ms, application-code: 348ms)
+ GET /api/subjects 200 in 145ms (next.js: 28ms, proxy.ts: 19ms, application-code: 97ms)
+ GET /api/books/36 200 in 266ms (next.js: 50ms, proxy.ts: 22ms, application-code: 194ms)
+ GET /api/books/36/subjects 200 in 421ms (next.js: 64ms, proxy.ts: 21ms, application-code: 337ms)
+ GET /api/subjects 200 in 136ms (next.js: 18ms, proxy.ts: 20ms, application-code: 99ms)
+ GET /api/books/36 200 in 239ms (next.js: 39ms, proxy.ts: 20ms, application-code: 179ms)
+ GET /api/books/36/subjects 200 in 430ms (next.js: 54ms, proxy.ts: 21ms, application-code: 355ms)
+ DELETE /api/books/36 204 in 130ms (next.js: 15ms, proxy.ts: 16ms, application-code: 99ms)
+ GET /api/books? 200 in 264ms (next.js: 5ms, proxy.ts: 22ms, application-code: 237ms)
+ GET /api/subjects 200 in 136ms (next.js: 11ms, proxy.ts: 31ms, application-code: 95ms)
+ GET /api/books/62 200 in 251ms (next.js: 40ms, proxy.ts: 22ms, application-code: 189ms)
+ GET /api/books/62/subjects 200 in 425ms (next.js: 49ms, proxy.ts: 26ms, application-code: 350ms)
+✓ Compiled in 116ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 516ms (next.js: 197ms, proxy.ts: 152ms, application-code: 167ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 109ms (next.js: 16ms, proxy.ts: 15ms, application-code: 78ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 91ms (next.js: 14ms, proxy.ts: 14ms, application-code: 63ms)
+ GET / 200 in 1440ms (next.js: 222ms, proxy.ts: 1035ms, application-code: 183ms)
+ GET / 200 in 252ms (next.js: 15ms, proxy.ts: 16ms, application-code: 221ms)
+ GET / 200 in 189ms (next.js: 12ms, proxy.ts: 30ms, application-code: 147ms)
+ GET / 200 in 188ms (next.js: 42ms, proxy.ts: 29ms, application-code: 117ms)
+ GET / 200 in 188ms (next.js: 74ms, proxy.ts: 29ms, application-code: 85ms)
+ GET / 200 in 188ms (next.js: 110ms, proxy.ts: 29ms, application-code: 49ms)
+✓ Compiled in 347ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 756ms (next.js: 202ms, proxy.ts: 133ms, application-code: 421ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 545ms (next.js: 13ms, proxy.ts: 12ms, application-code: 520ms)
+ GET / 200 in 1349ms (next.js: 264ms, proxy.ts: 775ms, application-code: 310ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 723ms (next.js: 35ms, proxy.ts: 389ms, application-code: 299ms)
+ GET / 200 in 373ms (next.js: 8ms, proxy.ts: 68ms, application-code: 297ms)
+ GET / 200 in 231ms (next.js: 15ms, proxy.ts: 35ms, application-code: 180ms)
+ GET / 200 in 231ms (next.js: 59ms, proxy.ts: 35ms, application-code: 137ms)
+ GET / 200 in 233ms (next.js: 97ms, proxy.ts: 36ms, application-code: 100ms)
+ GET / 200 in 234ms (next.js: 144ms, proxy.ts: 37ms, application-code: 53ms)
+✓ Compiled in 243ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 499ms (next.js: 179ms, proxy.ts: 167ms, application-code: 153ms)
+ GET / 200 in 1498ms (next.js: 244ms, proxy.ts: 1112ms, application-code: 143ms)
+ DELETE /api/books/62 204 in 621ms (next.js: 133ms, proxy.ts: 25ms, application-code: 463ms)
+ GET /api/books? 200 in 312ms (next.js: 49ms, proxy.ts: 13ms, application-code: 250ms)
+ GET /api/subjects 200 in 357ms (next.js: 113ms, proxy.ts: 38ms, application-code: 206ms)
+ GET /api/books/39 200 in 836ms (next.js: 147ms, proxy.ts: 47ms, application-code: 642ms)
+ GET /api/books/39/subjects 200 in 977ms (next.js: 253ms, proxy.ts: 32ms, application-code: 693ms)
+ GET /api/subjects 200 in 135ms (next.js: 10ms, proxy.ts: 26ms, application-code: 99ms)
+ GET /api/books/39 200 in 264ms (next.js: 39ms, proxy.ts: 23ms, application-code: 202ms)
+ GET /api/books/39/subjects 200 in 428ms (next.js: 52ms, proxy.ts: 23ms, application-code: 352ms)
+ GET /api/subjects 200 in 131ms (next.js: 9ms, proxy.ts: 24ms, application-code: 99ms)
+ GET /api/books/39 200 in 256ms (next.js: 37ms, proxy.ts: 23ms, application-code: 195ms)
+ GET /api/books/39/subjects 200 in 423ms (next.js: 52ms, proxy.ts: 22ms, application-code: 349ms)
+✓ Compiled in 161ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 649ms (next.js: 333ms, proxy.ts: 204ms, application-code: 112ms)
+ GET / 200 in 1617ms (next.js: 250ms, proxy.ts: 1218ms, application-code: 149ms)
+✓ Compiled in 169ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 468ms (next.js: 191ms, proxy.ts: 144ms, application-code: 133ms)
+ GET / 200 in 950ms (next.js: 287ms, proxy.ts: 505ms, application-code: 157ms)
+ GET /api/subjects 200 in 806ms (next.js: 152ms, proxy.ts: 18ms, application-code: 636ms)
+ GET /api/subjects/book-map 200 in 805ms (next.js: 220ms, proxy.ts: 21ms, application-code: 564ms)
+ GET /api/subjects 200 in 124ms (next.js: 7ms, proxy.ts: 14ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 130ms (next.js: 15ms, proxy.ts: 15ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 133ms (next.js: 19ms, proxy.ts: 17ms, application-code: 98ms)
+ GET /api/subjects 200 in 138ms (next.js: 10ms, proxy.ts: 16ms, application-code: 111ms)
+ GET /api/subjects/book-map 200 in 121ms (next.js: 6ms, proxy.ts: 14ms, application-code: 101ms)
+ GET /api/subjects 200 in 122ms (next.js: 12ms, proxy.ts: 14ms, application-code: 95ms)
+ GET /api/subjects/book-map 200 in 165ms (next.js: 13ms, proxy.ts: 15ms, application-code: 137ms)
+ GET /api/subjects 200 in 170ms (next.js: 7ms, proxy.ts: 14ms, application-code: 149ms)
+ GET /api/subjects/book-map 200 in 119ms (next.js: 6ms, proxy.ts: 12ms, application-code: 101ms)
+ GET /api/subjects 200 in 128ms (next.js: 13ms, proxy.ts: 13ms, application-code: 101ms)
+ GET /api/subjects 200 in 782ms (next.js: 7ms, proxy.ts: 23ms, application-code: 751ms)
+ GET /api/books/32 200 in 1243ms (next.js: 122ms, proxy.ts: 23ms, application-code: 1098ms)
+ GET /api/books/32/subjects 200 in 1792ms (next.js: 183ms, proxy.ts: 24ms, application-code: 1585ms)
+ GET /api/subjects/book-map 200 in 126ms (next.js: 13ms, proxy.ts: 17ms, application-code: 97ms)
+ GET /api/subjects 200 in 130ms (next.js: 6ms, proxy.ts: 17ms, application-code: 107ms)
+ GET /api/subjects/book-map 200 in 143ms (next.js: 6ms, proxy.ts: 25ms, application-code: 112ms)
+ GET /api/subjects 200 in 145ms (next.js: 15ms, proxy.ts: 26ms, application-code: 104ms)
+ GET /api/subjects 200 in 128ms (next.js: 7ms, proxy.ts: 10ms, application-code: 112ms)
+ GET /api/subjects/book-map 200 in 128ms (next.js: 15ms, proxy.ts: 11ms, application-code: 102ms)
+ GET /api/subjects 200 in 141ms (next.js: 9ms, proxy.ts: 27ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 153ms (next.js: 15ms, proxy.ts: 28ms, application-code: 110ms)
+ GET /api/subjects 200 in 143ms (next.js: 9ms, proxy.ts: 24ms, application-code: 110ms)
+ GET /api/subjects/book-map 200 in 148ms (next.js: 15ms, proxy.ts: 26ms, application-code: 107ms)
+ GET /api/subjects 200 in 124ms (next.js: 8ms, proxy.ts: 18ms, application-code: 97ms)
+ GET /api/subjects/book-map 200 in 170ms (next.js: 15ms, proxy.ts: 14ms, application-code: 141ms)
+✓ Compiled in 167ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 692ms (next.js: 330ms, proxy.ts: 181ms, application-code: 181ms)
+ GET / 200 in 1499ms (next.js: 227ms, proxy.ts: 1123ms, application-code: 149ms)
+✓ Compiled in 118ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 452ms (next.js: 194ms, proxy.ts: 134ms, application-code: 124ms)
+ GET / 200 in 853ms (next.js: 244ms, proxy.ts: 500ms, application-code: 108ms)
+✓ Compiled in 94ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 965ms (next.js: 247ms, proxy.ts: 137ms, application-code: 581ms)
+ GET / 200 in 970ms (next.js: 248ms, proxy.ts: 589ms, application-code: 132ms)
+✓ Compiled in 112ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 460ms (next.js: 186ms, proxy.ts: 136ms, application-code: 138ms)
+ GET / 200 in 1410ms (next.js: 208ms, proxy.ts: 1112ms, application-code: 90ms)
+ GET /api/subjects 200 in 745ms (next.js: 151ms, proxy.ts: 13ms, application-code: 581ms)
+ GET /api/subjects/book-map 200 in 746ms (next.js: 232ms, proxy.ts: 14ms, application-code: 500ms)
+ GET /api/subjects 200 in 126ms (next.js: 6ms, proxy.ts: 16ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 127ms (next.js: 13ms, proxy.ts: 17ms, application-code: 97ms)
+ GET /api/subjects 200 in 148ms (next.js: 16ms, proxy.ts: 21ms, application-code: 111ms)
+ GET /api/subjects/book-map 200 in 148ms (next.js: 20ms, proxy.ts: 25ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 130ms (next.js: 14ms, proxy.ts: 19ms, application-code: 97ms)
+ GET /api/subjects 200 in 133ms (next.js: 7ms, proxy.ts: 18ms, application-code: 109ms)
+ GET /api/subjects 200 in 183ms (next.js: 12ms, proxy.ts: 27ms, application-code: 144ms)
+ GET /api/subjects/book-map 200 in 184ms (next.js: 18ms, proxy.ts: 28ms, application-code: 138ms)
+ GET /api/subjects 200 in 126ms (next.js: 7ms, proxy.ts: 13ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 146ms (next.js: 17ms, proxy.ts: 14ms, application-code: 115ms)
+ GET /api/subjects 200 in 135ms (next.js: 7ms, proxy.ts: 20ms, application-code: 107ms)
+ GET /api/subjects/book-map 200 in 138ms (next.js: 13ms, proxy.ts: 21ms, application-code: 104ms)
+ GET /api/subjects 200 in 124ms (next.js: 8ms, proxy.ts: 19ms, application-code: 97ms)
+ GET /api/subjects/book-map 200 in 125ms (next.js: 15ms, proxy.ts: 16ms, application-code: 94ms)
+ GET /api/subjects 200 in 779ms (next.js: 6ms, proxy.ts: 25ms, application-code: 748ms)
+ GET /api/subjects/book-map 200 in 780ms (next.js: 16ms, proxy.ts: 25ms, application-code: 739ms)
+ GET /api/subjects 200 in 131ms (next.js: 7ms, proxy.ts: 22ms, application-code: 102ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 16ms, proxy.ts: 24ms, application-code: 96ms)
+ GET /api/subjects 200 in 128ms (next.js: 5ms, proxy.ts: 22ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 12ms, proxy.ts: 22ms, application-code: 101ms)
+ GET /api/subjects 200 in 133ms (next.js: 8ms, proxy.ts: 21ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 15ms, proxy.ts: 22ms, application-code: 97ms)
+ GET /api/subjects 200 in 123ms (next.js: 5ms, proxy.ts: 15ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 123ms (next.js: 13ms, proxy.ts: 15ms, application-code: 96ms)
+ GET /api/subjects 200 in 120ms (next.js: 6ms, proxy.ts: 14ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 121ms (next.js: 13ms, proxy.ts: 14ms, application-code: 94ms)
+ GET /api/subjects 200 in 129ms (next.js: 5ms, proxy.ts: 23ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 129ms (next.js: 14ms, proxy.ts: 23ms, application-code: 93ms)
+ GET /api/subjects 200 in 122ms (next.js: 7ms, proxy.ts: 13ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 124ms (next.js: 15ms, proxy.ts: 15ms, application-code: 94ms)
+ GET /api/subjects 200 in 145ms (next.js: 7ms, proxy.ts: 26ms, application-code: 113ms)
+ GET /api/subjects/book-map 200 in 152ms (next.js: 19ms, proxy.ts: 26ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 182ms (next.js: 42ms, proxy.ts: 44ms, application-code: 96ms)
+ GET /api/subjects 200 in 227ms (next.js: 24ms, proxy.ts: 43ms, application-code: 160ms)
+ GET /api/subjects 200 in 239ms (next.js: 11ms, proxy.ts: 25ms, application-code: 203ms)
+ GET /api/books/78 200 in 369ms (next.js: 96ms, proxy.ts: 26ms, application-code: 247ms)
+ GET /api/books/78/subjects 200 in 889ms (next.js: 160ms, proxy.ts: 25ms, application-code: 704ms)
+ GET /api/subjects 200 in 842ms (next.js: 7ms, proxy.ts: 69ms, application-code: 765ms)
+ GET /api/books/64 200 in 1257ms (next.js: 38ms, proxy.ts: 23ms, application-code: 1196ms)
+ GET /api/books/64/subjects 200 in 1445ms (next.js: 62ms, proxy.ts: 23ms, application-code: 1360ms)
+✓ Compiled in 120ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 591ms (next.js: 288ms, proxy.ts: 151ms, application-code: 152ms)
+ GET / 200 in 1533ms (next.js: 223ms, proxy.ts: 1197ms, application-code: 112ms)
+✓ Compiled in 113ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 449ms (next.js: 194ms, proxy.ts: 132ms, application-code: 123ms)
+ GET / 200 in 1432ms (next.js: 233ms, proxy.ts: 1092ms, application-code: 108ms)
+✓ Compiled in 94ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 446ms (next.js: 191ms, proxy.ts: 144ms, application-code: 111ms)
+ GET / 200 in 1578ms (next.js: 224ms, proxy.ts: 1199ms, application-code: 156ms)
+✓ Compiled in 131ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 532ms (next.js: 248ms, proxy.ts: 143ms, application-code: 142ms)
+ GET / 200 in 1574ms (next.js: 289ms, proxy.ts: 1146ms, application-code: 139ms)
+ GET /api/subjects 200 in 727ms (next.js: 142ms, proxy.ts: 11ms, application-code: 573ms)
+ GET /api/subjects 200 in 198ms (next.js: 5ms, proxy.ts: 25ms, application-code: 168ms)
+✓ Compiled in 135ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 536ms (next.js: 249ms, proxy.ts: 132ms, application-code: 155ms)
+ GET / 200 in 1638ms (next.js: 244ms, proxy.ts: 1298ms, application-code: 96ms)
+ GET /api/subjects 200 in 697ms (next.js: 226ms, proxy.ts: 17ms, application-code: 454ms)
+ GET /api/subjects/book-map 200 in 703ms (next.js: 147ms, proxy.ts: 15ms, application-code: 542ms)
+ GET /api/subjects 200 in 126ms (next.js: 6ms, proxy.ts: 16ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 125ms (next.js: 15ms, proxy.ts: 14ms, application-code: 96ms)
+✓ Compiled in 112ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 542ms (next.js: 274ms, proxy.ts: 137ms, application-code: 131ms)
+ GET / 200 in 1528ms (next.js: 232ms, proxy.ts: 1187ms, application-code: 109ms)
+✓ Compiled in 107ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 633ms (next.js: 234ms, proxy.ts: 142ms, application-code: 257ms)
+ GET / 200 in 1688ms (next.js: 354ms, proxy.ts: 1178ms, application-code: 155ms)
+✓ Compiled in 120ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 497ms (next.js: 225ms, proxy.ts: 140ms, application-code: 132ms)
+ GET / 200 in 1654ms (next.js: 224ms, proxy.ts: 1304ms, application-code: 127ms)
+✓ Compiled in 141ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 682ms (next.js: 313ms, proxy.ts: 182ms, application-code: 187ms)
+ GET / 200 in 1847ms (next.js: 444ms, proxy.ts: 1261ms, application-code: 142ms)
+ GET /api/subjects/book-map 200 in 1646ms (next.js: 209ms, proxy.ts: 639ms, application-code: 798ms)
+ GET /api/subjects 200 in 1651ms (next.js: 140ms, proxy.ts: 636ms, application-code: 875ms)
+ GET /api/subjects/book-map 200 in 131ms (next.js: 6ms, proxy.ts: 23ms, application-code: 101ms)
+ GET /api/subjects 200 in 129ms (next.js: 14ms, proxy.ts: 21ms, application-code: 95ms)
+ GET /api/subjects 200 in 128ms (next.js: 12ms, proxy.ts: 26ms, application-code: 90ms)
+ GET /api/subjects/book-map 200 in 132ms (next.js: 5ms, proxy.ts: 26ms, application-code: 101ms)
+ GET /api/subjects 200 in 135ms (next.js: 6ms, proxy.ts: 16ms, application-code: 113ms)
+ GET /api/subjects/book-map 200 in 137ms (next.js: 12ms, proxy.ts: 17ms, application-code: 108ms)
+ GET /api/subjects 200 in 165ms (next.js: 6ms, proxy.ts: 12ms, application-code: 147ms)
+ GET /api/subjects/book-map 200 in 168ms (next.js: 14ms, proxy.ts: 13ms, application-code: 141ms)
+ GET /api/subjects 200 in 119ms (next.js: 6ms, proxy.ts: 12ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 118ms (next.js: 14ms, proxy.ts: 11ms, application-code: 93ms)
+ GET /api/subjects 200 in 128ms (next.js: 6ms, proxy.ts: 21ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 129ms (next.js: 13ms, proxy.ts: 21ms, application-code: 95ms)
+ GET /api/subjects 200 in 145ms (next.js: 8ms, proxy.ts: 30ms, application-code: 107ms)
+ GET /api/subjects/book-map 200 in 146ms (next.js: 18ms, proxy.ts: 30ms, application-code: 98ms)
+ GET /api/subjects 200 in 243ms (next.js: 11ms, proxy.ts: 25ms, application-code: 208ms)
+ GET /api/books/39 200 in 408ms (next.js: 118ms, proxy.ts: 25ms, application-code: 264ms)
+ GET /api/books/39/subjects 200 in 907ms (next.js: 200ms, proxy.ts: 25ms, application-code: 682ms)
+ GET /api/subjects 200 in 136ms (next.js: 7ms, proxy.ts: 34ms, application-code: 96ms)
+ GET /api/books/44 200 in 258ms (next.js: 29ms, proxy.ts: 34ms, application-code: 195ms)
+ GET /api/books/44/subjects 200 in 420ms (next.js: 49ms, proxy.ts: 33ms, application-code: 338ms)
+ GET /api/subjects 200 in 154ms (next.js: 8ms, proxy.ts: 12ms, application-code: 134ms)
+ GET /api/subjects/book-map 200 in 154ms (next.js: 15ms, proxy.ts: 13ms, application-code: 126ms)
+ GET /api/subjects 200 in 125ms (next.js: 5ms, proxy.ts: 20ms, application-code: 99ms)
+ GET /api/subjects/book-map 200 in 123ms (next.js: 12ms, proxy.ts: 17ms, application-code: 93ms)
+ GET /api/subjects 200 in 139ms (next.js: 5ms, proxy.ts: 26ms, application-code: 108ms)
+ GET /api/subjects/book-map 200 in 140ms (next.js: 11ms, proxy.ts: 26ms, application-code: 102ms)
+ GET /api/subjects 200 in 133ms (next.js: 6ms, proxy.ts: 26ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 15ms, proxy.ts: 26ms, application-code: 93ms)
+✓ Compiled in 111ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 486ms (next.js: 207ms, proxy.ts: 143ms, application-code: 136ms)
+ GET / 200 in 1517ms (next.js: 209ms, proxy.ts: 1216ms, application-code: 92ms)
+[browser] Uncaught ReferenceError: watch is not defined
+    at AddBookModal (src/components/add-book-modal.tsx:225:18)
+    at CatalogPageInner (src/components/book-detail-sheet.tsx:331:29)
+    at CatalogPage (src/components/book-detail-sheet.tsx:310:51)
+  223 |               <FieldLabel htmlFor="coverUrl">Cover</FieldLabel>
+  224 |               <div className="flex items-start gap-3">
+> 225 |                 {watch('coverUrl') && (
+      |                  ^
+  226 |                   // eslint-disable-next-line @next/next/no-img-element
+  227 |                   <img
+  228 |                     src={watch('coverUrl')}
+✓ Compiled in 85ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+[browser] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). 
+    at Set.forEach (<anonymous>) (<anonymous>)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 542ms (next.js: 221ms, proxy.ts: 192ms, application-code: 130ms)
+ GET /api/subjects/book-map 200 in 2.4s (next.js: 515ms, proxy.ts: 976ms, application-code: 931ms)
+ GET /api/books? 200 in 2.4s (next.js: 420ms, proxy.ts: 973ms, application-code: 1029ms)
+ GET /api/subjects 200 in 2.4s (next.js: 140ms, proxy.ts: 982ms, application-code: 1314ms)
+ GET / 200 in 2.6s (next.js: 759ms, proxy.ts: 1318ms, application-code: 498ms)
+ GET /api/subjects 200 in 129ms (next.js: 7ms, proxy.ts: 21ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 500ms (next.js: 14ms, proxy.ts: 21ms, application-code: 465ms)
+ GET /api/books? 200 in 613ms (next.js: 22ms, proxy.ts: 22ms, application-code: 569ms)
+✓ Compiled in 234ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 637ms (next.js: 293ms, proxy.ts: 142ms, application-code: 202ms)
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET / 200 in 1470ms (next.js: 287ms, proxy.ts: 1038ms, application-code: 146ms)
+ GET /api/subjects 200 in 806ms (next.js: 210ms, proxy.ts: 20ms, application-code: 576ms)
+ GET /api/subjects/book-map 200 in 807ms (next.js: 289ms, proxy.ts: 26ms, application-code: 492ms)
+ GET /api/subjects 200 in 119ms (next.js: 8ms, proxy.ts: 15ms, application-code: 96ms)
+ GET /api/subjects/book-map 200 in 120ms (next.js: 12ms, proxy.ts: 16ms, application-code: 92ms)
+✓ Compiled in 264ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 690ms (next.js: 265ms, proxy.ts: 284ms, application-code: 141ms)
+ GET / 200 in 1386ms (next.js: 310ms, proxy.ts: 927ms, application-code: 149ms)
+ GET /api/subjects 200 in 718ms (next.js: 170ms, proxy.ts: 27ms, application-code: 521ms)
+ GET /api/subjects/book-map 200 in 727ms (next.js: 246ms, proxy.ts: 28ms, application-code: 453ms)
+ GET /api/subjects 200 in 126ms (next.js: 13ms, proxy.ts: 18ms, application-code: 96ms)
+ GET /api/subjects/book-map 200 in 154ms (next.js: 5ms, proxy.ts: 44ms, application-code: 105ms)
+ GET /api/subjects 200 in 119ms (next.js: 4ms, proxy.ts: 20ms, application-code: 94ms)
+ GET /api/subjects/book-map 200 in 114ms (next.js: 4ms, proxy.ts: 9ms, application-code: 101ms)
+ GET /api/subjects 200 in 130ms (next.js: 4ms, proxy.ts: 24ms, application-code: 102ms)
+ GET /api/subjects/book-map 200 in 116ms (next.js: 5ms, proxy.ts: 18ms, application-code: 94ms)
+ GET /api/subjects 200 in 187ms (next.js: 6ms, proxy.ts: 18ms, application-code: 162ms)
+ GET /api/subjects/book-map 200 in 190ms (next.js: 20ms, proxy.ts: 20ms, application-code: 150ms)
+ GET /api/subjects 200 in 124ms (next.js: 7ms, proxy.ts: 16ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 123ms (next.js: 13ms, proxy.ts: 15ms, application-code: 95ms)
+ GET /api/subjects 200 in 132ms (next.js: 5ms, proxy.ts: 28ms, application-code: 99ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 11ms, proxy.ts: 28ms, application-code: 94ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 14ms, proxy.ts: 30ms, application-code: 90ms)
+ GET /api/subjects 200 in 137ms (next.js: 6ms, proxy.ts: 30ms, application-code: 101ms)
+ GET /api/subjects 200 in 119ms (next.js: 6ms, proxy.ts: 10ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 127ms (next.js: 14ms, proxy.ts: 12ms, application-code: 101ms)
+ GET /api/subjects 200 in 118ms (next.js: 7ms, proxy.ts: 16ms, application-code: 95ms)
+ GET /api/subjects/book-map 200 in 122ms (next.js: 4ms, proxy.ts: 24ms, application-code: 94ms)
+ GET /api/subjects/book-map 200 in 137ms (next.js: 16ms, proxy.ts: 19ms, application-code: 102ms)
+ GET /api/subjects 200 in 140ms (next.js: 7ms, proxy.ts: 19ms, application-code: 115ms)
+ GET /api/subjects/book-map 200 in 141ms (next.js: 9ms, proxy.ts: 29ms, application-code: 103ms)
+ GET /api/subjects 200 in 147ms (next.js: 15ms, proxy.ts: 29ms, application-code: 103ms)
+✓ Compiled in 148ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 511ms (next.js: 212ms, proxy.ts: 130ms, application-code: 168ms)
+ GET / 200 in 1628ms (next.js: 244ms, proxy.ts: 1262ms, application-code: 123ms)
+✓ Compiled in 188ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 477ms (next.js: 192ms, proxy.ts: 158ms, application-code: 127ms)
+ GET / 200 in 1010ms (next.js: 376ms, proxy.ts: 537ms, application-code: 97ms)
+ GET /api/subjects/book-map 200 in 677ms (next.js: 204ms, proxy.ts: 22ms, application-code: 451ms)
+ GET /api/subjects 200 in 681ms (next.js: 140ms, proxy.ts: 20ms, application-code: 522ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 8ms, proxy.ts: 28ms, application-code: 100ms)
+ GET /api/subjects 200 in 133ms (next.js: 16ms, proxy.ts: 25ms, application-code: 92ms)
+ GET /api/subjects 200 in 137ms (next.js: 7ms, proxy.ts: 25ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 141ms (next.js: 16ms, proxy.ts: 25ms, application-code: 100ms)
+ GET /api/subjects 200 in 148ms (next.js: 9ms, proxy.ts: 37ms, application-code: 102ms)
+ GET /api/subjects/book-map 200 in 152ms (next.js: 14ms, proxy.ts: 35ms, application-code: 104ms)
+ GET /api/subjects 200 in 158ms (next.js: 5ms, proxy.ts: 16ms, application-code: 137ms)
+ GET /api/subjects/book-map 200 in 160ms (next.js: 7ms, proxy.ts: 16ms, application-code: 138ms)
+ GET /api/subjects 200 in 117ms (next.js: 5ms, proxy.ts: 20ms, application-code: 91ms)
+ GET /api/subjects/book-map 200 in 115ms (next.js: 6ms, proxy.ts: 16ms, application-code: 93ms)
+✓ Compiled in 152ms
+✓ Compiled in 123ms
+✓ Compiled in 190ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 658ms (next.js: 334ms, proxy.ts: 133ms, application-code: 191ms)
+ GET / 200 in 1580ms (next.js: 277ms, proxy.ts: 1175ms, application-code: 128ms)
+✓ Compiled in 92ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 423ms (next.js: 198ms, proxy.ts: 96ms, application-code: 130ms)
+ GET / 200 in 1695ms (next.js: 314ms, proxy.ts: 1223ms, application-code: 157ms)
+✓ Compiled in 92ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 441ms (next.js: 205ms, proxy.ts: 110ms, application-code: 127ms)
+ GET / 200 in 1654ms (next.js: 243ms, proxy.ts: 1313ms, application-code: 98ms)
+✓ Compiled in 256ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 918ms (next.js: 217ms, proxy.ts: 582ms, application-code: 120ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 91ms (next.js: 12ms, proxy.ts: 9ms, application-code: 71ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 119ms (next.js: 11ms, proxy.ts: 10ms, application-code: 98ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 86ms (next.js: 9ms, proxy.ts: 9ms, application-code: 67ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 718ms (next.js: 16ms, proxy.ts: 14ms, application-code: 688ms)
+ GET / 200 in 1886ms (next.js: 444ms, proxy.ts: 1195ms, application-code: 247ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 796ms (next.js: 24ms, proxy.ts: 568ms, application-code: 204ms)
+ GET / 200 in 296ms (next.js: 12ms, proxy.ts: 65ms, application-code: 218ms)
+ GET / 200 in 196ms (next.js: 14ms, proxy.ts: 26ms, application-code: 157ms)
+ GET / 200 in 196ms (next.js: 48ms, proxy.ts: 26ms, application-code: 122ms)
+ GET / 200 in 220ms (next.js: 7ms, proxy.ts: 105ms, application-code: 108ms)
+ GET / 200 in 61ms (next.js: 9ms, proxy.ts: 12ms, application-code: 40ms)
+ GET /api/subjects 200 in 1782ms (next.js: 138ms, proxy.ts: 626ms, application-code: 1018ms)
+ GET /api/subjects/book-map 200 in 1784ms (next.js: 184ms, proxy.ts: 626ms, application-code: 973ms)
+ GET /api/subjects 200 in 109ms (next.js: 7ms, proxy.ts: 12ms, application-code: 90ms)
+ GET /api/subjects/book-map 200 in 118ms (next.js: 14ms, proxy.ts: 13ms, application-code: 90ms)
+✓ Compiled in 95ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 536ms (next.js: 243ms, proxy.ts: 125ms, application-code: 169ms)
+ GET / 200 in 1661ms (next.js: 292ms, proxy.ts: 1262ms, application-code: 107ms)
+✓ Compiled in 132ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+[browser] Image with src "https://covers.openlibrary.org/b/id/1469805-M.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://covers.openlibrary.org/b/id/14578697-M.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://covers.openlibrary.org/b/id/12794171-M.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://covers.openlibrary.org/b/id/14856017-M.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://covers.openlibrary.org/b/id/10117930-M.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://covers.openlibrary.org/b/id/9300825-M.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://covers.openlibrary.org/b/id/12454819-M.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://covers.openlibrary.org/b/id/13333686-M.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[browser] Image with src "https://covers.openlibrary.org/b/id/11556577-M.jpg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 466ms (next.js: 218ms, proxy.ts: 111ms, application-code: 137ms)
+ GET / 200 in 1520ms (next.js: 256ms, proxy.ts: 1143ms, application-code: 121ms)
+ GET /api/subjects 200 in 749ms (next.js: 136ms, proxy.ts: 32ms, application-code: 581ms)
+ GET /api/books/73 200 in 877ms (next.js: 247ms, proxy.ts: 36ms, application-code: 594ms)
+ GET /api/books/73/subjects 200 in 1044ms (next.js: 314ms, proxy.ts: 36ms, application-code: 695ms)
+✓ Compiled in 238ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 632ms (next.js: 314ms, proxy.ts: 196ms, application-code: 122ms)
+ GET / 200 in 1915ms (next.js: 264ms, proxy.ts: 1217ms, application-code: 434ms)
+ GET /api/subjects/book-map 200 in 2.2s (next.js: 661ms, proxy.ts: 1055ms, application-code: 449ms)
+ GET /api/subjects 200 in 2.2s (next.js: 568ms, proxy.ts: 1055ms, application-code: 547ms)
+ GET / 200 in 551ms (next.js: 8ms, proxy.ts: 17ms, application-code: 526ms)
+ GET /api/subjects 200 in 920ms (next.js: 8ms, proxy.ts: 19ms, application-code: 893ms)
+ GET /api/subjects/book-map 200 in 921ms (next.js: 14ms, proxy.ts: 19ms, application-code: 888ms)
+ GET /api/books? 200 in 1622ms (next.js: 85ms, proxy.ts: 20ms, application-code: 1517ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (https://darling-yeti-87.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js:12:6133)
+ GET /api/subjects 200 in 129ms (next.js: 7ms, proxy.ts: 16ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 131ms (next.js: 18ms, proxy.ts: 16ms, application-code: 98ms)
+ GET /api/subjects 200 in 123ms (next.js: 8ms, proxy.ts: 15ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 119ms (next.js: 13ms, proxy.ts: 13ms, application-code: 93ms)
+ GET /api/subjects 200 in 124ms (next.js: 7ms, proxy.ts: 11ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 125ms (next.js: 16ms, proxy.ts: 12ms, application-code: 97ms)
+ GET /api/subjects/book-map 200 in 132ms (next.js: 15ms, proxy.ts: 22ms, application-code: 95ms)
+ GET /api/subjects 200 in 173ms (next.js: 7ms, proxy.ts: 23ms, application-code: 143ms)
+ GET /api/subjects 200 in 128ms (next.js: 7ms, proxy.ts: 11ms, application-code: 111ms)
+ GET /api/subjects/book-map 200 in 129ms (next.js: 14ms, proxy.ts: 12ms, application-code: 103ms)
+ GET /api/subjects 200 in 124ms (next.js: 6ms, proxy.ts: 19ms, application-code: 99ms)
+ GET /api/subjects/book-map 200 in 125ms (next.js: 14ms, proxy.ts: 18ms, application-code: 93ms)
+ GET /api/subjects 200 in 133ms (next.js: 8ms, proxy.ts: 25ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 17ms, proxy.ts: 25ms, application-code: 93ms)
+ GET /api/subjects 200 in 123ms (next.js: 7ms, proxy.ts: 14ms, application-code: 102ms)
+ GET /api/subjects/book-map 200 in 137ms (next.js: 18ms, proxy.ts: 11ms, application-code: 109ms)
+ GET /api/subjects 200 in 209ms (next.js: 10ms, proxy.ts: 28ms, application-code: 171ms)
+ GET /api/books/39 200 in 377ms (next.js: 83ms, proxy.ts: 28ms, application-code: 267ms)
+ GET /api/books/39/subjects 200 in 542ms (next.js: 164ms, proxy.ts: 28ms, application-code: 349ms)
+✓ Compiled in 129ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 557ms (next.js: 238ms, proxy.ts: 153ms, application-code: 166ms)
+ GET / 200 in 1836ms (next.js: 282ms, proxy.ts: 1377ms, application-code: 177ms)
+ GET / 200 in 62ms (next.js: 8ms, proxy.ts: 18ms, application-code: 36ms)
+✓ Compiled in 133ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 490ms (next.js: 211ms, proxy.ts: 111ms, application-code: 168ms)
+ GET / 200 in 1659ms (next.js: 230ms, proxy.ts: 1280ms, application-code: 149ms)
+ GET / 200 in 51ms (next.js: 8ms, proxy.ts: 10ms, application-code: 33ms)
+✓ Compiled in 145ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 523ms (next.js: 270ms, proxy.ts: 137ms, application-code: 116ms)
+ GET / 200 in 1617ms (next.js: 230ms, proxy.ts: 1237ms, application-code: 150ms)
+ GET / 200 in 51ms (next.js: 6ms, proxy.ts: 10ms, application-code: 34ms)
+✓ Compiled in 200ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 787ms (next.js: 413ms, proxy.ts: 193ms, application-code: 182ms)
+ GET / 200 in 1700ms (next.js: 277ms, proxy.ts: 1280ms, application-code: 143ms)
+ GET / 200 in 54ms (next.js: 6ms, proxy.ts: 12ms, application-code: 35ms)
+✓ Compiled in 187ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 606ms (next.js: 350ms, proxy.ts: 128ms, application-code: 129ms)
+ GET / 200 in 1779ms (next.js: 289ms, proxy.ts: 1264ms, application-code: 227ms)
+ GET / 200 in 53ms (next.js: 6ms, proxy.ts: 9ms, application-code: 38ms)
+✓ Compiled in 156ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 746ms (next.js: 382ms, proxy.ts: 221ms, application-code: 143ms)
+ GET / 200 in 1699ms (next.js: 300ms, proxy.ts: 1238ms, application-code: 162ms)
+ GET / 200 in 55ms (next.js: 6ms, proxy.ts: 11ms, application-code: 38ms)
+ GET /api/subjects/book-map 200 in 755ms (next.js: 230ms, proxy.ts: 33ms, application-code: 492ms)
+ GET /api/subjects 200 in 762ms (next.js: 178ms, proxy.ts: 34ms, application-code: 550ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 7ms, proxy.ts: 21ms, application-code: 106ms)
+ GET /api/subjects 200 in 135ms (next.js: 15ms, proxy.ts: 21ms, application-code: 99ms)
+ GET /api/subjects 200 in 136ms (next.js: 8ms, proxy.ts: 15ms, application-code: 113ms)
+ GET /api/subjects/book-map 200 in 156ms (next.js: 22ms, proxy.ts: 16ms, application-code: 117ms)
+ GET /api/subjects 200 in 140ms (next.js: 10ms, proxy.ts: 27ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 154ms (next.js: 5ms, proxy.ts: 42ms, application-code: 107ms)
+ GET /api/subjects 200 in 169ms (next.js: 6ms, proxy.ts: 14ms, application-code: 149ms)
+ GET /api/subjects/book-map 200 in 172ms (next.js: 14ms, proxy.ts: 14ms, application-code: 144ms)
+ GET /api/subjects 200 in 144ms (next.js: 8ms, proxy.ts: 17ms, application-code: 119ms)
+ GET /api/subjects/book-map 200 in 142ms (next.js: 28ms, proxy.ts: 15ms, application-code: 99ms)
+ GET /api/subjects 200 in 142ms (next.js: 6ms, proxy.ts: 27ms, application-code: 109ms)
+ GET /api/subjects/book-map 200 in 146ms (next.js: 14ms, proxy.ts: 27ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 142ms (next.js: 16ms, proxy.ts: 31ms, application-code: 96ms)
+ GET /api/subjects 200 in 149ms (next.js: 6ms, proxy.ts: 33ms, application-code: 109ms)
+ GET /api/subjects/book-map 200 in 143ms (next.js: 14ms, proxy.ts: 29ms, application-code: 100ms)
+ GET /api/subjects 200 in 149ms (next.js: 6ms, proxy.ts: 30ms, application-code: 113ms)
+ GET /api/subjects/book-map 200 in 126ms (next.js: 7ms, proxy.ts: 19ms, application-code: 101ms)
+ GET /api/subjects 200 in 123ms (next.js: 13ms, proxy.ts: 15ms, application-code: 95ms)
+ GET /api/books?q=I 200 in 348ms (next.js: 79ms, proxy.ts: 20ms, application-code: 249ms)
+ GET /api/books?q=Is 200 in 226ms (next.js: 5ms, proxy.ts: 29ms, application-code: 193ms)
+ GET /api/subjects 200 in 136ms (next.js: 12ms, proxy.ts: 23ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 17ms, proxy.ts: 23ms, application-code: 95ms)
+ GET /api/subjects 200 in 130ms (next.js: 5ms, proxy.ts: 25ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 131ms (next.js: 11ms, proxy.ts: 25ms, application-code: 94ms)
+ GET / 200 in 36ms (next.js: 5ms, proxy.ts: 23ms, application-code: 8ms)
+ GET / 200 in 44ms (next.js: 6ms, proxy.ts: 14ms, application-code: 24ms)
+ GET /api/subjects 200 in 143ms (next.js: 5ms, proxy.ts: 24ms, application-code: 114ms)
+ GET /api/books/79 200 in 447ms (next.js: 81ms, proxy.ts: 24ms, application-code: 342ms)
+ GET /api/books/79/subjects 200 in 645ms (next.js: 154ms, proxy.ts: 23ms, application-code: 468ms)
+ GET /api/subjects 200 in 856ms (next.js: 191ms, proxy.ts: 24ms, application-code: 641ms)
+⨯ Error: Vercel Blob: OIDC is enabled for this project, but not for the "development" environment.
+    at async POST (src\app\api\upload\route.ts:25:16)
+  23 |   const pathname = `covers/${crypto.randomUUID()}.${extension}`;
+  24 |
+> 25 |   const blob = await put(pathname, request.body, {
+     |                ^
+  26 |     access: 'public',
+  27 |     contentType,
+  28 |   });
+ POST /api/upload 500 in 4.9s (next.js: 879ms, proxy.ts: 28ms, application-code: 3.9s)
+ GET /api/subjects 200 in 136ms (next.js: 10ms, proxy.ts: 23ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 133ms (next.js: 15ms, proxy.ts: 21ms, application-code: 97ms)
+ GET /api/subjects 200 in 122ms (next.js: 6ms, proxy.ts: 12ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 129ms (next.js: 13ms, proxy.ts: 12ms, application-code: 104ms)
+ GET /api/subjects 200 in 147ms (next.js: 14ms, proxy.ts: 30ms, application-code: 104ms)
+ GET /api/books/79 200 in 273ms (next.js: 40ms, proxy.ts: 25ms, application-code: 208ms)
+ GET /api/books/79/subjects 200 in 446ms (next.js: 55ms, proxy.ts: 32ms, application-code: 359ms)
+ GET /api/subjects 200 in 145ms (next.js: 10ms, proxy.ts: 31ms, application-code: 104ms)
+ GET /api/books/33 200 in 278ms (next.js: 34ms, proxy.ts: 30ms, application-code: 214ms)
+ GET /api/books/33/subjects 200 in 455ms (next.js: 49ms, proxy.ts: 32ms, application-code: 374ms)
+ GET /api/subjects 200 in 150ms (next.js: 9ms, proxy.ts: 37ms, application-code: 104ms)
+ GET /api/books/33 200 in 272ms (next.js: 34ms, proxy.ts: 35ms, application-code: 203ms)
+ GET /api/books/33/subjects 200 in 448ms (next.js: 46ms, proxy.ts: 39ms, application-code: 363ms)
+ GET /api/subjects 200 in 138ms (next.js: 8ms, proxy.ts: 23ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 141ms (next.js: 16ms, proxy.ts: 23ms, application-code: 102ms)
+ GET /api/subjects 200 in 129ms (next.js: 7ms, proxy.ts: 20ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 127ms (next.js: 15ms, proxy.ts: 17ms, application-code: 95ms)
+ GET /api/subjects 200 in 143ms (next.js: 14ms, proxy.ts: 31ms, application-code: 98ms)
+ GET /api/books/33 200 in 275ms (next.js: 36ms, proxy.ts: 34ms, application-code: 205ms)
+ GET /api/books/33/subjects 200 in 444ms (next.js: 50ms, proxy.ts: 36ms, application-code: 357ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 21ms, proxy.ts: 19ms, application-code: 94ms)
+ GET /api/subjects 200 in 138ms (next.js: 10ms, proxy.ts: 19ms, application-code: 109ms)
+ GET /api/subjects/book-map 200 in 121ms (next.js: 5ms, proxy.ts: 13ms, application-code: 102ms)
+ GET /api/subjects 200 in 121ms (next.js: 11ms, proxy.ts: 13ms, application-code: 97ms)
+ GET /api/subjects 200 in 133ms (next.js: 11ms, proxy.ts: 21ms, application-code: 102ms)
+ GET /api/books/33 200 in 262ms (next.js: 32ms, proxy.ts: 20ms, application-code: 210ms)
+ GET /api/books/33/subjects 200 in 435ms (next.js: 48ms, proxy.ts: 22ms, application-code: 365ms)
+ GET /api/subjects 200 in 134ms (next.js: 4ms, proxy.ts: 26ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 179ms (next.js: 12ms, proxy.ts: 26ms, application-code: 141ms)
+ GET /api/subjects 200 in 116ms (next.js: 4ms, proxy.ts: 12ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 126ms (next.js: 5ms, proxy.ts: 14ms, application-code: 106ms)
+ GET /api/subjects 200 in 149ms (next.js: 22ms, proxy.ts: 28ms, application-code: 99ms)
+ GET /api/books/33 200 in 269ms (next.js: 45ms, proxy.ts: 28ms, application-code: 196ms)
+ GET /api/books/33/subjects 200 in 440ms (next.js: 46ms, proxy.ts: 41ms, application-code: 352ms)
+ GET /api/subjects 200 in 134ms (next.js: 5ms, proxy.ts: 24ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 11ms, proxy.ts: 23ms, application-code: 102ms)
+ GET /api/subjects/book-map 200 in 130ms (next.js: 14ms, proxy.ts: 23ms, application-code: 93ms)
+ GET /api/subjects 200 in 135ms (next.js: 5ms, proxy.ts: 26ms, application-code: 105ms)
+ GET /api/books? 200 in 250ms (next.js: 4ms, proxy.ts: 16ms, application-code: 229ms)
+ GET /api/subjects 200 in 140ms (next.js: 6ms, proxy.ts: 21ms, application-code: 113ms)
+ GET /api/subjects/book-map 200 in 141ms (next.js: 14ms, proxy.ts: 21ms, application-code: 106ms)
+ GET /api/subjects 200 in 138ms (next.js: 5ms, proxy.ts: 30ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 139ms (next.js: 13ms, proxy.ts: 29ms, application-code: 96ms)
+ GET /api/subjects 200 in 127ms (next.js: 7ms, proxy.ts: 17ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 166ms (next.js: 13ms, proxy.ts: 18ms, application-code: 136ms)
+ GET /api/subjects 200 in 124ms (next.js: 4ms, proxy.ts: 22ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 114ms (next.js: 5ms, proxy.ts: 14ms, application-code: 95ms)
+ GET /api/subjects/book-map 200 in 122ms (next.js: 13ms, proxy.ts: 15ms, application-code: 95ms)
+ GET /api/subjects 200 in 125ms (next.js: 6ms, proxy.ts: 15ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 120ms (next.js: 5ms, proxy.ts: 13ms, application-code: 102ms)
+ GET /api/subjects 200 in 121ms (next.js: 13ms, proxy.ts: 13ms, application-code: 95ms)
+ GET /api/subjects 200 in 140ms (next.js: 5ms, proxy.ts: 29ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 141ms (next.js: 13ms, proxy.ts: 29ms, application-code: 99ms)
+ GET /api/subjects/book-map 200 in 139ms (next.js: 18ms, proxy.ts: 25ms, application-code: 95ms)
+ GET /api/subjects 200 in 183ms (next.js: 10ms, proxy.ts: 25ms, application-code: 147ms)
+ GET /api/subjects/book-map 200 in 124ms (next.js: 15ms, proxy.ts: 14ms, application-code: 95ms)
+ GET /api/subjects 200 in 127ms (next.js: 6ms, proxy.ts: 14ms, application-code: 108ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 6ms, proxy.ts: 28ms, application-code: 103ms)
+ GET /api/subjects 200 in 138ms (next.js: 13ms, proxy.ts: 27ms, application-code: 97ms)
+ GET / 200 in 42ms (next.js: 7ms, proxy.ts: 11ms, application-code: 24ms)
+ GET /api/subjects/book-map 200 in 145ms (next.js: 19ms, proxy.ts: 26ms, application-code: 100ms)
+ GET /api/subjects 200 in 185ms (next.js: 7ms, proxy.ts: 25ms, application-code: 152ms)
+ GET /api/subjects/book-map 200 in 115ms (next.js: 6ms, proxy.ts: 14ms, application-code: 95ms)
+ GET /api/subjects 200 in 115ms (next.js: 4ms, proxy.ts: 13ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 360ms (next.js: 6ms, proxy.ts: 250ms, application-code: 104ms)
+ GET /api/subjects 200 in 363ms (next.js: 13ms, proxy.ts: 252ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 127ms (next.js: 5ms, proxy.ts: 19ms, application-code: 103ms)
+ GET /api/subjects 200 in 136ms (next.js: 13ms, proxy.ts: 19ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 151ms (next.js: 19ms, proxy.ts: 24ms, application-code: 108ms)
+ GET /api/subjects 200 in 154ms (next.js: 9ms, proxy.ts: 24ms, application-code: 121ms)
+ GET /api/subjects 200 in 132ms (next.js: 15ms, proxy.ts: 23ms, application-code: 95ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 6ms, proxy.ts: 23ms, application-code: 107ms)
+ GET /api/subjects/book-map 200 in 124ms (next.js: 13ms, proxy.ts: 16ms, application-code: 95ms)
+ GET /api/subjects 200 in 128ms (next.js: 6ms, proxy.ts: 16ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 119ms (next.js: 6ms, proxy.ts: 11ms, application-code: 102ms)
+ GET /api/subjects 200 in 121ms (next.js: 13ms, proxy.ts: 11ms, application-code: 96ms)
+ GET /import 200 in 80ms (next.js: 26ms, proxy.ts: 10ms, application-code: 44ms)
+ GET / 200 in 54ms (next.js: 7ms, proxy.ts: 9ms, application-code: 38ms)
+ GET /api/subjects 200 in 137ms (next.js: 10ms, proxy.ts: 23ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 139ms (next.js: 15ms, proxy.ts: 19ms, application-code: 105ms)
+ GET /api/subjects/book-map 200 in 127ms (next.js: 3ms, proxy.ts: 29ms, application-code: 96ms)
+ GET /api/subjects 200 in 148ms (next.js: 8ms, proxy.ts: 19ms, application-code: 121ms)
+ GET /api/books? 200 in 405ms (next.js: 22ms, proxy.ts: 18ms, application-code: 364ms)
+ GET /api/books? 200 in 407ms (next.js: 5ms, proxy.ts: 23ms, application-code: 379ms)
+ GET /api/subjects 200 in 135ms (next.js: 6ms, proxy.ts: 17ms, application-code: 111ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 14ms, proxy.ts: 17ms, application-code: 105ms)
+ GET /api/subjects 200 in 118ms (next.js: 6ms, proxy.ts: 11ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 128ms (next.js: 13ms, proxy.ts: 12ms, application-code: 103ms)
+ GET /api/subjects 200 in 133ms (next.js: 5ms, proxy.ts: 27ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 134ms (next.js: 12ms, proxy.ts: 27ms, application-code: 95ms)
+ GET /api/subjects 200 in 141ms (next.js: 6ms, proxy.ts: 28ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 156ms (next.js: 21ms, proxy.ts: 28ms, application-code: 107ms)
+ GET /api/subjects 200 in 136ms (next.js: 6ms, proxy.ts: 24ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 138ms (next.js: 12ms, proxy.ts: 24ms, application-code: 102ms)
+ GET /api/subjects 200 in 127ms (next.js: 7ms, proxy.ts: 17ms, application-code: 102ms)
+ GET /api/subjects/book-map 200 in 135ms (next.js: 15ms, proxy.ts: 14ms, application-code: 106ms)
+ GET /api/subjects/book-map 200 in 138ms (next.js: 14ms, proxy.ts: 21ms, application-code: 103ms)
+ GET /api/subjects 200 in 141ms (next.js: 5ms, proxy.ts: 21ms, application-code: 115ms)
+ GET /api/subjects/book-map 200 in 117ms (next.js: 6ms, proxy.ts: 11ms, application-code: 99ms)
+ GET /api/subjects 200 in 158ms (next.js: 13ms, proxy.ts: 11ms, application-code: 134ms)
+ GET /api/subjects/book-map 200 in 144ms (next.js: 14ms, proxy.ts: 25ms, application-code: 105ms)
+ GET /api/subjects 200 in 147ms (next.js: 9ms, proxy.ts: 23ms, application-code: 116ms)
+ GET /api/subjects/book-map 200 in 136ms (next.js: 6ms, proxy.ts: 28ms, application-code: 102ms)
+ GET /api/subjects 200 in 138ms (next.js: 14ms, proxy.ts: 28ms, application-code: 97ms)
+ GET /api/subjects/book-map 200 in 122ms (next.js: 15ms, proxy.ts: 15ms, application-code: 92ms)
+ GET /api/subjects 200 in 125ms (next.js: 6ms, proxy.ts: 14ms, application-code: 104ms)
+ GET /api/subjects/book-map 200 in 132ms (next.js: 15ms, proxy.ts: 18ms, application-code: 98ms)
+ GET /api/subjects 200 in 132ms (next.js: 21ms, proxy.ts: 17ms, application-code: 93ms)
+ GET /api/subjects 200 in 128ms (next.js: 6ms, proxy.ts: 23ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 172ms (next.js: 13ms, proxy.ts: 24ms, application-code: 135ms)
+ GET /api/subjects 200 in 129ms (next.js: 4ms, proxy.ts: 28ms, application-code: 98ms)
+ GET /api/subjects/book-map 200 in 115ms (next.js: 5ms, proxy.ts: 16ms, application-code: 94ms)
+ GET /api/subjects/book-map 200 in 451ms (next.js: 15ms, proxy.ts: 13ms, application-code: 423ms)
+ GET /api/subjects 200 in 454ms (next.js: 6ms, proxy.ts: 14ms, application-code: 435ms)
+ GET /api/subjects/book-map 200 in 130ms (next.js: 5ms, proxy.ts: 24ms, application-code: 101ms)
+ GET /api/subjects 200 in 131ms (next.js: 13ms, proxy.ts: 24ms, application-code: 94ms)
+ GET /api/subjects 200 in 130ms (next.js: 6ms, proxy.ts: 21ms, application-code: 103ms)
+ GET /api/subjects/book-map 200 in 139ms (next.js: 14ms, proxy.ts: 21ms, application-code: 104ms)
+ GET /api/subjects 200 in 115ms (next.js: 6ms, proxy.ts: 13ms, application-code: 96ms)
+ GET /api/subjects/book-map 200 in 131ms (next.js: 4ms, proxy.ts: 29ms, application-code: 98ms)
+ GET /subjects 200 in 75ms (next.js: 25ms, proxy.ts: 21ms, application-code: 30ms)
+ GET /api/subjects 200 in 169ms (next.js: 4ms, proxy.ts: 14ms, application-code: 150ms)
+ GET /api/subjects 200 in 132ms (next.js: 5ms, proxy.ts: 19ms, application-code: 107ms)
+ GET /import 200 in 62ms (next.js: 7ms, proxy.ts: 18ms, application-code: 37ms)
+ GET / 200 in 111ms (next.js: 12ms, proxy.ts: 33ms, application-code: 66ms)
+ GET /api/subjects 200 in 161ms (next.js: 10ms, proxy.ts: 27ms, application-code: 124ms)
+ GET /api/subjects/book-map 200 in 168ms (next.js: 22ms, proxy.ts: 27ms, application-code: 120ms)
+ GET /api/subjects/book-map 200 in 256ms (next.js: 16ms, proxy.ts: 19ms, application-code: 221ms)
+ GET /api/subjects 200 in 269ms (next.js: 10ms, proxy.ts: 24ms, application-code: 236ms)
+ GET /api/books? 200 in 434ms (next.js: 36ms, proxy.ts: 27ms, application-code: 371ms)
+ GET /api/books? 200 in 255ms (next.js: 3ms, proxy.ts: 24ms, application-code: 227ms)
+✓ Compiled in 89ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 476ms (next.js: 248ms, proxy.ts: 101ms, application-code: 127ms)
+ GET / 200 in 2.2s (next.js: 252ms, proxy.ts: 1871ms, application-code: 119ms)
+✓ Compiled in 158ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 951ms (next.js: 549ms, proxy.ts: 171ms, application-code: 231ms)
+ GET / 200 in 954ms (next.js: 286ms, proxy.ts: 251ms, application-code: 417ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 154ms (next.js: 10ms, proxy.ts: 43ms, application-code: 100ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 78ms (next.js: 9ms, proxy.ts: 13ms, application-code: 56ms)
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 62ms (next.js: 11ms, proxy.ts: 10ms, application-code: 41ms)
+ GET / 200 in 1156ms (next.js: 130ms, proxy.ts: 924ms, application-code: 102ms)
+ GET / 200 in 102ms (next.js: 6ms, proxy.ts: 10ms, application-code: 86ms)
+ GET / 200 in 55ms (next.js: 6ms, proxy.ts: 11ms, application-code: 38ms)
+ GET /api/subjects 200 in 1568ms (next.js: 80ms, proxy.ts: 924ms, application-code: 563ms)
+ GET /api/subjects/book-map 200 in 1569ms (next.js: 120ms, proxy.ts: 926ms, application-code: 523ms)
+ GET /api/subjects/book-map 200 in 133ms (next.js: 13ms, proxy.ts: 27ms, application-code: 94ms)
+ GET /api/subjects 200 in 137ms (next.js: 6ms, proxy.ts: 27ms, application-code: 105ms)
+ GET /api/books? 200 in 1747ms (next.js: 134ms, proxy.ts: 755ms, application-code: 859ms)
+✓ Compiled in 163ms
+Clerk - DEPRECATION WARNING: "createRouteMatcher" is deprecated and will be removed in the next major release.
+Use resource-based auth checks instead. Move auth checks into each page, layout, API route, or Server Function that accesses protected data. Middleware-based auth checks rely on path matching, which can diverge from how Next.js routes requests and leave protected resources reachable. For a migration guide, see: https://clerk.com/docs/guides/development/upgrading/upgrade-guides/migrate-from-create-route-matcher
+ GET /sign-in?redirect_url=http%3A%2F%2Flocalhost%3A3000%2F 200 in 565ms (next.js: 296ms, proxy.ts: 134ms, application-code: 135ms)
+ GET / 200 in 1865ms (next.js: 264ms, proxy.ts: 1504ms, application-code: 97ms)
+ GET /import 200 in 78ms (next.js: 27ms, proxy.ts: 20ms, application-code: 32ms)
+ POST /api/import 200 in 946ms (next.js: 326ms, proxy.ts: 14ms, application-code: 606ms)
+ GET / 200 in 50ms (next.js: 7ms, proxy.ts: 22ms, application-code: 22ms)
+ GET /api/subjects 200 in 390ms (next.js: 103ms, proxy.ts: 28ms, application-code: 259ms)
+ GET /api/subjects 200 in 318ms (next.js: 29ms, proxy.ts: 77ms, application-code: 213ms)
+ GET /api/subjects/book-map 200 in 811ms (next.js: 137ms, proxy.ts: 24ms, application-code: 650ms)
+ GET /api/subjects 200 in 122ms (next.js: 4ms, proxy.ts: 17ms, application-code: 101ms)
+ GET /api/subjects/book-map 200 in 130ms (next.js: 4ms, proxy.ts: 27ms, application-code: 99ms)
+ GET /api/subjects 200 in 120ms (next.js: 4ms, proxy.ts: 14ms, application-code: 102ms)
+ GET /api/books? 200 in 980ms (next.js: 195ms, proxy.ts: 24ms, application-code: 761ms)
+ GET /api/subjects/book-map 200 in 121ms (next.js: 5ms, proxy.ts: 20ms, application-code: 97ms)
+ GET /api/books? 200 in 202ms (next.js: 4ms, proxy.ts: 10ms, application-code: 188ms)
+ GET /api/subjects/book-map 200 in 129ms (next.js: 9ms, proxy.ts: 19ms, application-code: 101ms)
+ GET /subjects 200 in 74ms (next.js: 27ms, proxy.ts: 12ms, application-code: 35ms)
+ GET /api/subjects 200 in 126ms (next.js: 3ms, proxy.ts: 27ms, application-code: 96ms)
+ GET /api/subjects 200 in 124ms (next.js: 5ms, proxy.ts: 23ms, application-code: 97ms)
+ GET /import 200 in 46ms (next.js: 6ms, proxy.ts: 16ms, application-code: 24ms)
+ GET / 200 in 53ms (next.js: 6ms, proxy.ts: 23ms, application-code: 23ms)
+ GET /api/subjects/book-map 200 in 142ms (next.js: 17ms, proxy.ts: 22ms, application-code: 102ms)
+ GET /api/subjects 200 in 146ms (next.js: 8ms, proxy.ts: 23ms, application-code: 115ms)
+ GET /api/subjects/book-map 200 in 132ms (next.js: 6ms, proxy.ts: 24ms, application-code: 101ms)
+ GET /api/subjects 200 in 133ms (next.js: 13ms, proxy.ts: 24ms, application-code: 95ms)
+ GET /api/books? 200 in 343ms (next.js: 25ms, proxy.ts: 22ms, application-code: 295ms)
+ GET /api/subjects/book-map 200 in 128ms (next.js: 6ms, proxy.ts: 19ms, application-code: 102ms)
+ GET /api/subjects 200 in 131ms (next.js: 12ms, proxy.ts: 19ms, application-code: 100ms)
+ GET /api/subjects/book-map 200 in 131ms (next.js: 9ms, proxy.ts: 19ms, application-code: 103ms)
+ GET /api/subjects 200 in 147ms (next.js: 34ms, proxy.ts: 15ms, application-code: 97ms)
+ GET /api/books? 200 in 266ms (next.js: 4ms, proxy.ts: 12ms, application-code: 251ms)

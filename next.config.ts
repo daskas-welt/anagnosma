@@ -5,8 +5,9 @@ const nextConfig: NextConfig = {
     // Book covers come from the ISBN lookup (see src/lib/isbn-lookup/client.ts), which
     // serves thumbnails from Open Library's free, keyless cover API. books.google.com
     // stays allowlisted for any pre-existing records with a Google-hosted cover URL.
-    // next/image hard-errors on unconfigured remote hosts, so this must stay in sync
-    // with any future cover sources.
+    // *.public.blob.vercel-storage.com serves user-uploaded covers (see
+    // src/app/api/upload/route.ts). next/image hard-errors on unconfigured remote
+    // hosts, so this must stay in sync with any future cover sources.
     remotePatterns: [
       {
         protocol: 'https',
@@ -19,6 +20,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'covers.openlibrary.org',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
       },
     ],
   },

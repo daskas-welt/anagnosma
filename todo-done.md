@@ -1,0 +1,1 @@
+- [x] [DONE: 2026-08-05] Create or update `AGENTS.md` with verified repository guidance

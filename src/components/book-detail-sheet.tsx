@@ -1,13 +1,25 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FORMATS } from '@/lib/formats';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { FORMATS, formatLabel } from '@/lib/formats';
 import type { BookWithCopies } from '@/lib/books/repository';
 
 type Subject = { id: number; name: string; bookCount: number };
@@ -22,6 +34,9 @@ export function BookDetailSheet({
   onChanged: () => void;
 }) {
   const [book, setBook] = useState<BookWithCopies | null>(null);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
   const [assignedSubjectIds, setAssignedSubjectIds] = useState<Set<number>>(new Set());
   // Tracks which bookId `assignedSubjectIds` was fetched for, so a response
@@ -82,6 +97,44 @@ export function BookDetailSheet({
       prev ? { ...prev, copies: prev.copies.map((c) => (c.id === copyId ? updated : c)) } : prev,
     );
     onChanged();
+  }
+
+  async function handleConfirmDelete() {
+    if (!displayedBook) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/books/${displayedBook.id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        toast.error('Could not delete book.');
+        return;
+      }
+      toast.success(`Deleted "${displayedBook.title}".`);
+      setConfirmingDelete(false);
+      onChanged();
+      onClose();
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  async function uploadCover(file: File) {
+    setUploadingCover(true);
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': file.type, 'X-Filename': file.name },
+        body: file,
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        toast.error(body.error ?? 'Could not upload cover image.');
+        return;
+      }
+      const { url } = await res.json();
+      await updateBookField({ coverUrl: url });
+    } finally {
+      setUploadingCover(false);
+    }
   }
 
   async function toggleSubject(subjectId: number, assigned: boolean) {
@@ -159,18 +212,41 @@ export function BookDetailSheet({
                     }}
                   />
                 </div>
-                <div>
-                  <h3 className="mb-2 text-sm font-medium">Cover URL</h3>
-                  <Input
-                    key={displayedBook.id}
-                    defaultValue={displayedBook.coverUrl ?? ''}
-                    placeholder="Cover URL"
-                    onBlur={(e) => {
-                      if (e.target.value !== (displayedBook.coverUrl ?? '')) {
-                        updateBookField({ coverUrl: e.target.value });
-                      }
-                    }}
-                  />
+                <div className="col-span-2">
+                  <h3 className="mb-2 text-sm font-medium">Cover</h3>
+                  <div className="flex items-start gap-3">
+                    {displayedBook.coverUrl && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={displayedBook.coverUrl}
+                        alt={displayedBook.title}
+                        className="h-24 w-16 shrink-0 rounded object-cover"
+                      />
+                    )}
+                    <div className="flex-1 space-y-2">
+                      <Input
+                        key={`${displayedBook.id}-${displayedBook.coverUrl ?? ''}`}
+                        defaultValue={displayedBook.coverUrl ?? ''}
+                        placeholder="Cover URL"
+                        onBlur={(e) => {
+                          if (e.target.value !== (displayedBook.coverUrl ?? '')) {
+                            updateBookField({ coverUrl: e.target.value });
+                          }
+                        }}
+                      />
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        disabled={uploadingCover}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) uploadCover(file);
+                          e.target.value = '';
+                        }}
+                      />
+                      {uploadingCover && <p className="text-xs text-muted-foreground">Uploading…</p>}
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <h3 className="mb-2 text-sm font-medium">Publisher</h3>
@@ -186,7 +262,7 @@ export function BookDetailSheet({
                   />
                 </div>
                 <div>
-                  <h3 className="mb-2 text-sm font-medium">Publication Year</h3>
+                  <h3 className="mb-2 text-sm font-medium">Year</h3>
                   <Input
                     key={displayedBook.id}
                     inputMode="numeric"
@@ -227,7 +303,7 @@ export function BookDetailSheet({
                   <div key={copy.id} className="space-y-2 rounded border p-3">
                     <Select value={copy.format} onValueChange={(v) => v != null && updateCopy(copy.id, { format: v })}>
                       <SelectTrigger className="w-full">
-                        <SelectValue />
+                        <SelectValue>{(value: string) => formatLabel(value)}</SelectValue>
                       </SelectTrigger>
                       <SelectContent>
                         {FORMATS.map((f) => (
@@ -245,10 +321,36 @@ export function BookDetailSheet({
                   </div>
                 ))}
               </div>
+              <div className="space-y-2 border-t pt-4">
+                <h3 className="text-sm font-medium">Danger zone</h3>
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={() => setConfirmingDelete(true)}
+                >
+                  <Trash2 /> Delete Book
+                </Button>
+              </div>
             </div>
           </>
         )}
       </SheetContent>
+      <AlertDialog open={confirmingDelete} onOpenChange={setConfirmingDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete &ldquo;{displayedBook?.title}&rdquo;?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This removes the book and all of its copies. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" disabled={deleting} onClick={handleConfirmDelete}>
+              {deleting ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Sheet>
   );
 }
