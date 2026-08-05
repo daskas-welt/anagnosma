@@ -2,7 +2,6 @@ import Papa from 'papaparse';
 import { Document, HeadingLevel, Packer, Paragraph, Table, TableCell, TableRow, WidthType } from 'docx';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import * as XLSX from 'xlsx';
 import type { BookWithCopies } from '@/lib/books/repository';
 
 export const exportColumns = [
@@ -57,11 +56,18 @@ export function downloadCsv(filename: string, csv: string) {
 }
 
 export function downloadExcel(filename: string, rows: ExportRow[]) {
-  const worksheet = XLSX.utils.json_to_sheet(rows, { header: [...exportColumns] });
-  worksheet['!cols'] = exportColumns.map((column) => ({ wch: Math.min(40, Math.max(column.length + 2, 14)) }));
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Books');
-  XLSX.writeFile(workbook, filename);
+  const escapeXml = (value: string) =>
+    value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+  const cell = (value: string | number) =>
+    `<Cell><Data ss:Type="String">${escapeXml(String(value))}</Data></Cell>`;
+  const header = `<Row>${exportColumns.map(cell).join('')}</Row>`;
+  const body = rows.map((row) => `<Row>${exportColumns.map((column) => cell(row[column])).join('')}</Row>`).join('');
+  const workbook = `<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+  <Worksheet ss:Name="Books"><Table>${header}${body}</Table></Worksheet>
+</Workbook>`;
+  downloadBlob(filename, new Blob([workbook], { type: 'application/vnd.ms-excel;charset=utf-8' }));
 }
 
 export async function downloadWord(filename: string, rows: ExportRow[]) {

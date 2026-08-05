@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -188,6 +189,9 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Book</DialogTitle>
+          <DialogDescription>
+            Fields marked <span className="text-destructive">*</span> are required.
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FieldGroup>
@@ -210,13 +214,17 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
               <FieldError errors={errors.isbn ? [errors.isbn] : undefined} />
             </Field>
             <Field data-invalid={!!errors.title}>
-              <FieldLabel htmlFor="title">Title</FieldLabel>
-              <Input id="title" aria-invalid={!!errors.title} {...register('title')} />
+              <FieldLabel htmlFor="title">
+                Title <span aria-hidden="true" className="text-destructive">*</span>
+              </FieldLabel>
+              <Input id="title" required aria-required="true" aria-invalid={!!errors.title} {...register('title')} />
               <FieldError errors={errors.title ? [errors.title] : undefined} />
             </Field>
             <Field data-invalid={!!errors.author}>
-              <FieldLabel htmlFor="author">Author</FieldLabel>
-              <Input id="author" aria-invalid={!!errors.author} {...register('author')} />
+              <FieldLabel htmlFor="author">
+                Author <span aria-hidden="true" className="text-destructive">*</span>
+              </FieldLabel>
+              <Input id="author" required aria-required="true" aria-invalid={!!errors.author} {...register('author')} />
               <FieldError errors={errors.author ? [errors.author] : undefined} />
             </Field>
             <Field data-invalid={!!errors.coverUrl}>
@@ -263,13 +271,15 @@ export function AddBookModal({ onCreated }: { onCreated: (book: BookWithCopies) 
               <FieldError errors={errors.publishYear ? [errors.publishYear] : undefined} />
             </Field>
             <Field data-invalid={!!errors.format}>
-              <FieldLabel htmlFor="format">Format</FieldLabel>
+              <FieldLabel htmlFor="format">
+                Format <span aria-hidden="true" className="text-destructive">*</span>
+              </FieldLabel>
               <Controller
                 control={control}
                 name="format"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id="format" aria-invalid={!!errors.format}>
+                    <SelectTrigger id="format" aria-required="true" aria-invalid={!!errors.format}>
                       <SelectValue>{(value: string) => formatLabel(value)}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>

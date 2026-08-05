@@ -20,6 +20,18 @@ export function mapColumns(
 }
 
 export const HEADER_PRESETS: Record<string, Record<string, string>> = {
+  anagnosma: {
+    Title: 'title',
+    Author: 'author',
+    ISBN: 'isbn',
+    Publisher: 'publisher',
+    Year: 'publishYear',
+    Format: 'format',
+    Pages: 'pageCount',
+    Subjects: 'subjects',
+    Notes: 'notes',
+    'Cover URL': 'coverUrl',
+  },
   goodreads: {
     Title: 'title',
     Author: 'author',

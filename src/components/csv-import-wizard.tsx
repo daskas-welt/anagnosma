@@ -10,7 +10,19 @@ import { Progress } from '@/components/ui/progress';
 import { parseCsv, mapColumns, HEADER_PRESETS } from '@/lib/csv/parse';
 import type { ImportResult } from '@/lib/csv/import';
 
-const TARGET_FIELDS = ['title', 'author', 'isbn', 'format', 'notes', 'publisher', 'pageCount'];
+const TARGET_FIELDS = ['title', 'author', 'isbn', 'format', 'notes', 'publisher', 'publishYear', 'pageCount', 'subjects', 'coverUrl'];
+const TARGET_FIELD_LABELS: Record<string, string> = {
+  title: 'Title',
+  author: 'Author(s)',
+  isbn: 'ISBN',
+  format: 'Format',
+  notes: 'Notes',
+  publisher: 'Publisher',
+  publishYear: 'Year',
+  pageCount: 'Pages',
+  subjects: 'Subjects',
+  coverUrl: 'Cover URL',
+};
 
 export function CsvImportWizard() {
   const [headers, setHeaders] = useState<string[]>([]);
@@ -30,7 +42,7 @@ export function CsvImportWizard() {
     // real exports have many more columns than any preset covers.
     const preset: Record<string, string> = {};
     for (const h of parsedHeaders) {
-      const target = HEADER_PRESETS.goodreads[h] ?? HEADER_PRESETS.librarything[h];
+      const target = HEADER_PRESETS.anagnosma[h] ?? HEADER_PRESETS.goodreads[h] ?? HEADER_PRESETS.librarything[h];
       if (target) preset[h] = target;
     }
     setMapping(preset);
@@ -81,7 +93,7 @@ export function CsvImportWizard() {
                       <SelectItem value="__skip">Skip</SelectItem>
                       {TARGET_FIELDS.map((f) => (
                         <SelectItem key={f} value={f}>
-                          {f}
+                          {TARGET_FIELD_LABELS[f]}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -93,13 +105,13 @@ export function CsvImportWizard() {
 
           <div>
             <h3 className="mb-2 text-sm font-medium">Preview (first 5 rows)</h3>
-            <Table>
+            <Table className="w-max min-w-0">
               <TableHeader>
                 <TableRow>
                   {Object.values(mapping)
                     .filter(Boolean)
                     .map((field) => (
-                      <TableHead key={field}>{field}</TableHead>
+                      <TableHead key={field}>{TARGET_FIELD_LABELS[field] ?? field}</TableHead>
                     ))}
                 </TableRow>
               </TableHeader>

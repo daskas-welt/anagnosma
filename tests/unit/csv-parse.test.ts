@@ -31,6 +31,21 @@ describe('mapColumns', () => {
 });
 
 describe('HEADER_PRESETS', () => {
+  it('maps Anagnosma export headers for round-trip imports', () => {
+    expect(HEADER_PRESETS.anagnosma).toEqual({
+      Title: 'title',
+      Author: 'author',
+      ISBN: 'isbn',
+      Publisher: 'publisher',
+      Year: 'publishYear',
+      Format: 'format',
+      Pages: 'pageCount',
+      Subjects: 'subjects',
+      Notes: 'notes',
+      'Cover URL': 'coverUrl',
+    });
+  });
+
   it('has a goodreads preset mapping common export headers', () => {
     expect(HEADER_PRESETS.goodreads).toMatchObject({
       Title: 'title',

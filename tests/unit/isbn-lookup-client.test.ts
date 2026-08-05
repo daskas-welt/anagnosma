@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { lookupByIsbn } from '@/lib/isbn-lookup/client';
+import { lookupByIsbn, searchOpenLibrary } from '@/lib/isbn-lookup/client';
 
 const sampleResponse = {
   'ISBN:9780441013593': {
@@ -62,5 +62,39 @@ describe('lookupByIsbn', () => {
     const fetchImpl = vi.fn().mockRejectedValue(new Error('network error'));
     const result = await lookupByIsbn('9780441013593', fetchImpl as unknown as typeof fetch);
     expect(result).toBeNull();
+  });
+});
+
+describe('searchOpenLibrary', () => {
+  it('maps search results into editable book metadata', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        docs: [
+          {
+            title: 'Dune',
+            author_name: ['Frank Herbert'],
+            isbn: ['9780441013593'],
+            publisher: ['Ace Books'],
+            first_publish_year: 1965,
+            number_of_pages_median: 412,
+            cover_i: 12345,
+          },
+        ],
+      }),
+    });
+
+    await expect(searchOpenLibrary('Dune', fetchImpl as unknown as typeof fetch)).resolves.toEqual([
+      {
+        isbn: '9780441013593',
+        title: 'Dune',
+        author: 'Frank Herbert',
+        coverUrl: 'https://covers.openlibrary.org/b/id/12345-M.jpg',
+        publisher: 'Ace Books',
+        publishYear: 1965,
+        pageCount: 412,
+      },
+    ]);
+    expect(fetchImpl).toHaveBeenCalledWith(expect.stringContaining('https://openlibrary.org/search.json?'));
   });
 });

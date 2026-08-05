@@ -1,1 +1,13 @@
 - [x] [DONE: 2026-08-05] Create or update `AGENTS.md` with verified repository guidance
+- [x] [DONE: 2026-08-05] Fix Next.js workspace warning and dependency vulnerabilities
+- [x] [DONE: 2026-08-05] Show mandatory Add Book fields in the form
+- [x] [DONE: 2026-08-05] Add Open Library search to the Edit Book form
+- [x] [DONE: 2026-08-05] Widen the Edit Book drawer
+- [x] [DONE: 2026-08-05] Support round-trip imports of Anagnosma CSV exports
+- [x] [DONE: 2026-08-05] Explain supported CSV imports to users
+- [x] [DONE: 2026-08-05] Add page counts to all catalog views
+- [x] [DONE: 2026-08-05] Add greater-than and less-than page filters
+- [x] [DONE: 2026-08-05] Remove the page-count filter
+- [x] [DONE: 2026-08-05] Show friendly CSV import field labels
+- [x] [DONE: 2026-08-05] Size the import preview table to its contents
+- [x] [DONE: 2026-08-05] Override the Sheet side-specific width for the Edit Book drawer

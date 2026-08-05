@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Search, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { FORMATS, formatLabel } from '@/lib/formats';
+import type { OpenLibrarySearchResult } from '@/lib/isbn-lookup/client';
 import type { BookWithCopies } from '@/lib/books/repository';
 
 type Subject = { id: number; name: string; bookCount: number };
@@ -44,10 +45,17 @@ export function BookDetailSheet({
   // be recognized as stale (see `displayedAssignedSubjectIds` below) instead
   // of being shown — and toggled — against the wrong book.
   const [assignedSubjectIdsBookId, setAssignedSubjectIdsBookId] = useState<number | null>(null);
+  const [openLibraryQuery, setOpenLibraryQuery] = useState('');
+  const [openLibraryResults, setOpenLibraryResults] = useState<OpenLibrarySearchResult[]>([]);
+  const [searchingOpenLibrary, setSearchingOpenLibrary] = useState(false);
 
   useEffect(() => {
     if (bookId == null) return;
-    fetch(`/api/books/${bookId}`).then((r) => r.json()).then(setBook);
+    fetch(`/api/books/${bookId}`).then((r) => r.json()).then((nextBook: BookWithCopies) => {
+      setBook(nextBook);
+      setOpenLibraryQuery(nextBook.title);
+      setOpenLibraryResults([]);
+    });
     fetch('/api/subjects').then((r) => r.json()).then(setAllSubjects);
     fetch(`/api/books/${bookId}/subjects`)
       .then((r) => r.json())
@@ -56,6 +64,44 @@ export function BookDetailSheet({
         setAssignedSubjectIdsBookId(bookId);
       });
   }, [bookId]);
+
+  async function handleOpenLibrarySearch() {
+    const query = openLibraryQuery.trim();
+    if (!query) return;
+    setSearchingOpenLibrary(true);
+    try {
+      const res = await fetch(`/api/lookup?query=${encodeURIComponent(query)}`);
+      if (!res.ok) {
+        toast.error('Could not search Open Library.');
+        return;
+      }
+      const results = await res.json();
+      setOpenLibraryResults(results);
+      if (results.length === 0) toast.error('No matching books found.');
+    } catch {
+      toast.error('Could not search Open Library.');
+    } finally {
+      setSearchingOpenLibrary(false);
+    }
+  }
+
+  async function applyOpenLibraryResult(result: OpenLibrarySearchResult) {
+    const patch: Record<string, unknown> = {
+      title: result.title,
+      author: result.author,
+    };
+    if (result.isbn) patch.isbn = result.isbn;
+    if (result.coverUrl) patch.coverUrl = result.coverUrl;
+    if (result.publisher) patch.publisher = result.publisher;
+    if (result.publishYear) patch.publishYear = result.publishYear;
+    if (result.pageCount) patch.pageCount = result.pageCount;
+    if (result.description) patch.description = result.description;
+
+    const updated = await updateBookField(patch);
+    if (!updated) return;
+    setOpenLibraryResults([]);
+    toast.success(`Updated metadata for "${result.title}".`);
+  }
 
   // Guard against showing stale data from a previously selected book while the
   // fetch for the newly selected `bookId` is still in flight.
@@ -66,8 +112,8 @@ export function BookDetailSheet({
   // toggle (DELETE instead of POST) when clicked.
   const displayedAssignedSubjectIds = assignedSubjectIdsBookId === bookId ? assignedSubjectIds : new Set<number>();
 
-  async function updateBookField(patch: Record<string, unknown>) {
-    if (!displayedBook) return;
+  async function updateBookField(patch: Record<string, unknown>): Promise<boolean> {
+    if (!displayedBook) return false;
     const res = await fetch(`/api/books/${displayedBook.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -75,11 +121,12 @@ export function BookDetailSheet({
     });
     if (!res.ok) {
       toast.error('Could not update book.');
-      return;
+      return false;
     }
     const updated = await res.json();
     setBook(updated);
     onChanged();
+    return true;
   }
 
   async function updateCopy(copyId: number, patch: Record<string, unknown>) {
@@ -164,7 +211,7 @@ export function BookDetailSheet({
 
   return (
     <Sheet open={bookId != null} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent className="overflow-y-auto sm:max-w-lg">
+      <SheetContent className="overflow-y-auto sm:max-w-2xl data-[side=right]:sm:max-w-2xl">
         {displayedBook && (
           <>
             <SheetHeader>
@@ -172,6 +219,57 @@ export function BookDetailSheet({
               <p className="text-sm text-muted-foreground">{displayedBook.author}</p>
             </SheetHeader>
             <div className="space-y-6 px-4 pb-4">
+              <div className="space-y-3 rounded-lg border p-3">
+                <div>
+                  <h3 className="text-sm font-medium">Search Open Library</h3>
+                  <p className="text-xs text-muted-foreground">Find a matching book to update its metadata.</p>
+                </div>
+                <div className="flex gap-2">
+                  <Input
+                    value={openLibraryQuery}
+                    onChange={(event) => setOpenLibraryQuery(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        event.preventDefault();
+                        handleOpenLibrarySearch();
+                      }
+                    }}
+                    placeholder="Search by title or author"
+                    aria-label="Search Open Library"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={handleOpenLibrarySearch}
+                    disabled={searchingOpenLibrary || !openLibraryQuery.trim()}
+                    aria-label="Search Open Library"
+                  >
+                    <Search />
+                  </Button>
+                </div>
+                {openLibraryResults.length > 0 && (
+                  <div className="space-y-2" aria-label="Open Library results">
+                    {openLibraryResults.map((result, index) => (
+                      <div key={`${result.isbn ?? result.title}-${index}`} className="flex items-center gap-3 rounded border p-2">
+                        {result.coverUrl && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={result.coverUrl} alt="" className="h-12 w-8 shrink-0 rounded object-cover" />
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium">{result.title}</p>
+                          <p className="truncate text-xs text-muted-foreground">
+                            {result.author || 'Unknown author'}{result.publishYear ? ` · ${result.publishYear}` : ''}
+                          </p>
+                        </div>
+                        <Button type="button" size="sm" onClick={() => applyOpenLibraryResult(result)}>
+                          Apply
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <h3 className="mb-2 text-sm font-medium">Title</h3>
