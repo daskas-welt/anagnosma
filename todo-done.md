@@ -12,3 +12,8 @@
 - [x] [DONE: 2026-08-05] Size the import preview table to its contents
 - [x] [DONE: 2026-08-05] Override the Sheet side-specific width for the Edit Book drawer
 - [x] [DONE: 2026-08-05] Install and configure Biome formatting
+- [x] [DONE: 2026-08-05] Add environment templates for production, development, and testing
+- [x] [DONE: 2026-08-05] Recreate the required environment files from scratch
+- [x] [DONE: 2026-08-05] Apply the pending database migrations to the production database
+- [x] [DONE: 2026-08-05] Apply the pending database migrations to the development database
+- [x] [DONE: 2026-08-05] Apply the pending database migrations to the test database
