@@ -17,7 +17,13 @@ export function BookTableRow({
     <TableRow className="cursor-pointer" onClick={() => onSelect(book.id)}>
       <TableCell>
         {book.coverUrl ? (
-          <Image src={book.coverUrl} alt={book.title} width={48} height={72} className="h-[72px] w-[48px] object-cover" />
+          <Image
+            src={book.coverUrl}
+            alt={book.title}
+            width={48}
+            height={72}
+            className="h-[72px] w-[48px] object-cover"
+          />
         ) : (
           <div className="flex h-[72px] w-[48px] items-center justify-center bg-muted text-xs text-muted-foreground">
             —
@@ -27,7 +33,10 @@ export function BookTableRow({
       <TableCell>{book.title}</TableCell>
       <TableCell>{book.author}</TableCell>
       <TableCell>{book.isbn ?? '—'}</TableCell>
-      <TableCell className="max-w-[160px] truncate" title={book.publisher ?? undefined}>
+      <TableCell
+        className="max-w-[160px] truncate"
+        title={book.publisher ?? undefined}
+      >
         {book.publisher ?? '—'}
       </TableCell>
       <TableCell>{book.publishYear ?? '—'}</TableCell>
@@ -48,7 +57,9 @@ export function BookTableRow({
           )}
         </TableCell>
       )}
-      <TableCell className="max-w-xs truncate text-muted-foreground">{book.copies[0]?.notes ?? '—'}</TableCell>
+      <TableCell className="max-w-xs truncate text-muted-foreground">
+        {book.copies[0]?.notes ?? '—'}
+      </TableCell>
     </TableRow>
   );
 }

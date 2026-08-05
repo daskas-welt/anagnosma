@@ -1,5 +1,14 @@
 import Papa from 'papaparse';
-import { Document, HeadingLevel, Packer, Paragraph, Table, TableCell, TableRow, WidthType } from 'docx';
+import {
+  Document,
+  HeadingLevel,
+  Packer,
+  Paragraph,
+  Table,
+  TableCell,
+  TableRow,
+  WidthType,
+} from 'docx';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import type { BookWithCopies } from '@/lib/books/repository';
@@ -37,7 +46,10 @@ export function buildExportRows(
   }));
 }
 
-export function buildCsv(books: BookWithCopies[], subjectNamesByBookId: Record<number, string[]>): string {
+export function buildCsv(
+  books: BookWithCopies[],
+  subjectNamesByBookId: Record<number, string[]>,
+): string {
   const rows = buildExportRows(books, subjectNamesByBookId);
   return Papa.unparse(rows);
 }
@@ -57,17 +69,30 @@ export function downloadCsv(filename: string, csv: string) {
 
 export function downloadExcel(filename: string, rows: ExportRow[]) {
   const escapeXml = (value: string) =>
-    value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+    value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
   const cell = (value: string | number) =>
     `<Cell><Data ss:Type="String">${escapeXml(String(value))}</Data></Cell>`;
   const header = `<Row>${exportColumns.map(cell).join('')}</Row>`;
-  const body = rows.map((row) => `<Row>${exportColumns.map((column) => cell(row[column])).join('')}</Row>`).join('');
+  const body = rows
+    .map(
+      (row) =>
+        `<Row>${exportColumns.map((column) => cell(row[column])).join('')}</Row>`,
+    )
+    .join('');
   const workbook = `<?xml version="1.0" encoding="UTF-8"?>
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
   <Worksheet ss:Name="Books"><Table>${header}${body}</Table></Worksheet>
 </Workbook>`;
-  downloadBlob(filename, new Blob([workbook], { type: 'application/vnd.ms-excel;charset=utf-8' }));
+  downloadBlob(
+    filename,
+    new Blob([workbook], { type: 'application/vnd.ms-excel;charset=utf-8' }),
+  );
 }
 
 export async function downloadWord(filename: string, rows: ExportRow[]) {
@@ -76,26 +101,53 @@ export async function downloadWord(filename: string, rows: ExportRow[]) {
     rows: [
       new TableRow({
         tableHeader: true,
-        children: exportColumns.map((column) =>
-          new TableCell({ children: [new Paragraph({ text: column, heading: HeadingLevel.HEADING_3 })] }),
+        children: exportColumns.map(
+          (column) =>
+            new TableCell({
+              children: [
+                new Paragraph({
+                  text: column,
+                  heading: HeadingLevel.HEADING_3,
+                }),
+              ],
+            }),
         ),
       }),
       ...rows.map(
         (row) =>
           new TableRow({
-            children: exportColumns.map((column) => new TableCell({ children: [new Paragraph(String(row[column]))] })),
+            children: exportColumns.map(
+              (column) =>
+                new TableCell({
+                  children: [new Paragraph(String(row[column]))],
+                }),
+            ),
           }),
       ),
     ],
   });
   const document = new Document({
-    sections: [{ children: [new Paragraph({ text: 'Anagnosma Book Catalog', heading: HeadingLevel.HEADING_1 }), table] }],
+    sections: [
+      {
+        children: [
+          new Paragraph({
+            text: 'Anagnosma Book Catalog',
+            heading: HeadingLevel.HEADING_1,
+          }),
+          table,
+        ],
+      },
+    ],
   });
   downloadBlob(filename, await Packer.toBlob(document));
 }
 
 export function downloadPdf(filename: string, rows: ExportRow[]) {
-  const document = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
+  const document = new jsPDF({
+    orientation: 'landscape',
+    unit: 'pt',
+    format: 'a4',
+  });
   autoTable(document, {
     head: [[...exportColumns]],
     body: rows.map((row) => exportColumns.map((column) => String(row[column]))),

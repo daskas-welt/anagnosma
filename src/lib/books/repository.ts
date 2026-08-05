@@ -18,11 +18,17 @@ export type BookWithCopies = typeof books.$inferSelect & {
   copies: (typeof copies.$inferSelect)[];
 };
 
-export async function createBook(userId: string, input: NewBookInput): Promise<BookWithCopies> {
+export async function createBook(
+  userId: string,
+  input: NewBookInput,
+): Promise<BookWithCopies> {
   const { format, ...bookFields } = input;
   const isbn = input.isbn?.trim() || undefined;
   return db.transaction(async (tx) => {
-    const [book] = await tx.insert(books).values({ ...bookFields, isbn, userId }).returning();
+    const [book] = await tx
+      .insert(books)
+      .values({ ...bookFields, isbn, userId })
+      .returning();
     const [copy] = await tx
       .insert(copies)
       .values({ bookId: book.id, format })
@@ -31,10 +37,19 @@ export async function createBook(userId: string, input: NewBookInput): Promise<B
   });
 }
 
-export async function getBook(userId: string, id: number): Promise<BookWithCopies | undefined> {
-  const [book] = await db.select().from(books).where(and(eq(books.id, id), eq(books.userId, userId)));
+export async function getBook(
+  userId: string,
+  id: number,
+): Promise<BookWithCopies | undefined> {
+  const [book] = await db
+    .select()
+    .from(books)
+    .where(and(eq(books.id, id), eq(books.userId, userId)));
   if (!book) return undefined;
-  const bookCopies = await db.select().from(copies).where(eq(copies.bookId, id));
+  const bookCopies = await db
+    .select()
+    .from(copies)
+    .where(eq(copies.bookId, id));
   return { ...book, copies: bookCopies };
 }
 
@@ -44,7 +59,10 @@ export type BookFilters = {
   subjectId?: number;
 };
 
-export async function listBooks(userId: string, filters: BookFilters = {}): Promise<BookWithCopies[]> {
+export async function listBooks(
+  userId: string,
+  filters: BookFilters = {},
+): Promise<BookWithCopies[]> {
   let bookIds: number[] | undefined;
 
   if (filters.subjectId) {
@@ -55,13 +73,23 @@ export async function listBooks(userId: string, filters: BookFilters = {}): Prom
       .select({ bookId: bookSubjects.bookId })
       .from(bookSubjects)
       .innerJoin(books, eq(books.id, bookSubjects.bookId))
-      .where(and(eq(bookSubjects.subjectId, filters.subjectId), eq(books.userId, userId)));
+      .where(
+        and(
+          eq(bookSubjects.subjectId, filters.subjectId),
+          eq(books.userId, userId),
+        ),
+      );
     bookIds = rows.map((r) => r.bookId);
   }
 
   const bookConditions = [
     eq(books.userId, userId),
-    filters.q ? or(ilike(books.title, `%${filters.q}%`), ilike(books.author, `%${filters.q}%`)) : undefined,
+    filters.q
+      ? or(
+          ilike(books.title, `%${filters.q}%`),
+          ilike(books.author, `%${filters.q}%`),
+        )
+      : undefined,
     bookIds ? inArray(books.id, bookIds.length ? bookIds : [-1]) : undefined,
   ].filter((c): c is NonNullable<typeof c> => c !== undefined);
 
@@ -90,7 +118,10 @@ export async function listBooks(userId: string, filters: BookFilters = {}): Prom
 
   const copiesByBook = new Map<number, (typeof copies.$inferSelect)[]>();
   for (const copy of allCopies) {
-    copiesByBook.set(copy.bookId, [...(copiesByBook.get(copy.bookId) ?? []), copy]);
+    copiesByBook.set(copy.bookId, [
+      ...(copiesByBook.get(copy.bookId) ?? []),
+      copy,
+    ]);
   }
 
   return allBooks
@@ -108,7 +139,9 @@ export async function updateBook(
   // matches a real column name, so a raw spread would let an attacker-
   // supplied `userId`/`id`/`createdAt` key in the request body reassign
   // ownership of the row. Only these named, allowed fields may reach `.set()`.
-  const patch: Omit<Partial<Omit<NewBookInput, 'format'>>, 'isbn'> & { isbn?: string | null } = {};
+  const patch: Omit<Partial<Omit<NewBookInput, 'format'>>, 'isbn'> & {
+    isbn?: string | null;
+  } = {};
   if (input.title !== undefined) patch.title = input.title;
   if (input.author !== undefined) patch.author = input.author;
   if (input.coverUrl !== undefined) patch.coverUrl = input.coverUrl;

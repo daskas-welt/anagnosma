@@ -34,7 +34,9 @@ describe('books API', () => {
   });
 
   it('POST creates a book', async () => {
-    const res = await POST(req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' }));
+    const res = await POST(
+      req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' }),
+    );
     expect(res.status).toBe(201);
     const body = await res.json();
     expect(body.title).toBe('Dune');
@@ -42,26 +44,37 @@ describe('books API', () => {
   });
 
   it('POST rejects a missing title', async () => {
-    const res = await POST(req({ author: 'Frank Herbert', format: 'paperback' }));
+    const res = await POST(
+      req({ author: 'Frank Herbert', format: 'paperback' }),
+    );
     expect(res.status).toBe(400);
   });
 
   it('GET lists books', async () => {
-    await POST(req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' }));
+    await POST(
+      req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' }),
+    );
     const res = await GET(new Request('http://localhost/api/books'));
     const body = await res.json();
     expect(body).toHaveLength(1);
   });
 
   it('GET one returns 404 for missing book', async () => {
-    const res = await GET_ONE(new Request('http://localhost/api/books/999999'), {
-      params: Promise.resolve({ id: '999999' }),
-    });
+    const res = await GET_ONE(
+      new Request('http://localhost/api/books/999999'),
+      {
+        params: Promise.resolve({ id: '999999' }),
+      },
+    );
     expect(res.status).toBe(404);
   });
 
   it('PATCH updates a book', async () => {
-    const created = await (await POST(req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' }))).json();
+    const created = await (
+      await POST(
+        req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' }),
+      )
+    ).json();
     const res = await PATCH(
       new Request(`http://localhost/api/books/${created.id}`, {
         method: 'PATCH',
@@ -74,18 +87,41 @@ describe('books API', () => {
   });
 
   it('POST returns a friendly 409 (not an unhandled 500) for a duplicate ISBN for the same user', async () => {
-    await POST(req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback', isbn: '9780441013593' }));
-    const res = await POST(req({ title: 'Dune (2nd copy)', author: 'Frank Herbert', format: 'hardcover', isbn: '9780441013593' }));
+    await POST(
+      req({
+        title: 'Dune',
+        author: 'Frank Herbert',
+        format: 'paperback',
+        isbn: '9780441013593',
+      }),
+    );
+    const res = await POST(
+      req({
+        title: 'Dune (2nd copy)',
+        author: 'Frank Herbert',
+        format: 'hardcover',
+        isbn: '9780441013593',
+      }),
+    );
     expect(res.status).toBe(409);
     const body = await res.json();
     expect(body.error).toMatch(/already have a book with this isbn/i);
   });
 
   it('DELETE removes a book', async () => {
-    const created = await (await POST(req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' }))).json();
-    const res = await DELETE(new Request(`http://localhost/api/books/${created.id}`, { method: 'DELETE' }), {
-      params: Promise.resolve({ id: String(created.id) }),
-    });
+    const created = await (
+      await POST(
+        req({ title: 'Dune', author: 'Frank Herbert', format: 'paperback' }),
+      )
+    ).json();
+    const res = await DELETE(
+      new Request(`http://localhost/api/books/${created.id}`, {
+        method: 'DELETE',
+      }),
+      {
+        params: Promise.resolve({ id: String(created.id) }),
+      },
+    );
     expect(res.status).toBe(204);
   });
 });

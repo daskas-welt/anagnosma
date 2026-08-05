@@ -6,11 +6,14 @@ import { NextResponse } from 'next/server';
  * letting an unauthenticated request reach repository/database code.
  */
 export async function requireUserId(): Promise<
-  { userId: string; error?: undefined } | { userId?: undefined; error: NextResponse }
+  | { userId: string; error?: undefined }
+  | { userId?: undefined; error: NextResponse }
 > {
   const { userId } = await auth();
   if (!userId) {
-    return { error: NextResponse.json({ error: 'unauthorized' }, { status: 401 }) };
+    return {
+      error: NextResponse.json({ error: 'unauthorized' }, { status: 401 }),
+    };
   }
   return { userId };
 }

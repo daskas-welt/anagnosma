@@ -3,7 +3,10 @@ import { db } from '@/lib/db';
 import { books, subjects, bookSubjects } from '@/lib/db/schema';
 
 export async function createSubject(userId: string, name: string) {
-  const [subject] = await db.insert(subjects).values({ userId, name }).returning();
+  const [subject] = await db
+    .insert(subjects)
+    .values({ userId, name })
+    .returning();
   return subject;
 }
 
@@ -30,7 +33,11 @@ export async function getOrCreateSubject(userId: string, name: string) {
 
 export async function listSubjectsWithCounts(userId: string) {
   const rows = await db
-    .select({ id: subjects.id, name: subjects.name, bookCount: count(bookSubjects.bookId) })
+    .select({
+      id: subjects.id,
+      name: subjects.name,
+      bookCount: count(bookSubjects.bookId),
+    })
     .from(subjects)
     .leftJoin(bookSubjects, eq(bookSubjects.subjectId, subjects.id))
     .where(eq(subjects.userId, userId))
@@ -47,7 +54,10 @@ export async function renameSubject(userId: string, id: number, name: string) {
   return updated;
 }
 
-export async function deleteSubject(userId: string, id: number): Promise<boolean> {
+export async function deleteSubject(
+  userId: string,
+  id: number,
+): Promise<boolean> {
   const deleted = await db
     .delete(subjects)
     .where(and(eq(subjects.id, id), eq(subjects.userId, userId)))
@@ -55,29 +65,68 @@ export async function deleteSubject(userId: string, id: number): Promise<boolean
   return deleted.length > 0;
 }
 
-async function bookAndSubjectBelongToUser(userId: string, bookId: number, subjectId: number): Promise<boolean> {
-  const [book] = await db.select({ id: books.id }).from(books).where(and(eq(books.id, bookId), eq(books.userId, userId)));
+async function bookAndSubjectBelongToUser(
+  userId: string,
+  bookId: number,
+  subjectId: number,
+): Promise<boolean> {
+  const [book] = await db
+    .select({ id: books.id })
+    .from(books)
+    .where(and(eq(books.id, bookId), eq(books.userId, userId)));
   if (!book) return false;
-  const [subject] = await db.select({ id: subjects.id }).from(subjects).where(and(eq(subjects.id, subjectId), eq(subjects.userId, userId)));
+  const [subject] = await db
+    .select({ id: subjects.id })
+    .from(subjects)
+    .where(and(eq(subjects.id, subjectId), eq(subjects.userId, userId)));
   return !!subject;
 }
 
-export async function assignSubject(userId: string, bookId: number, subjectId: number): Promise<boolean> {
-  if (!(await bookAndSubjectBelongToUser(userId, bookId, subjectId))) return false;
-  await db.insert(bookSubjects).values({ bookId, subjectId }).onConflictDoNothing();
+export async function assignSubject(
+  userId: string,
+  bookId: number,
+  subjectId: number,
+): Promise<boolean> {
+  if (!(await bookAndSubjectBelongToUser(userId, bookId, subjectId)))
+    return false;
+  await db
+    .insert(bookSubjects)
+    .values({ bookId, subjectId })
+    .onConflictDoNothing();
   return true;
 }
 
-export async function removeSubject(userId: string, bookId: number, subjectId: number): Promise<boolean> {
-  if (!(await bookAndSubjectBelongToUser(userId, bookId, subjectId))) return false;
-  await db.delete(bookSubjects).where(and(eq(bookSubjects.bookId, bookId), eq(bookSubjects.subjectId, subjectId)));
+export async function removeSubject(
+  userId: string,
+  bookId: number,
+  subjectId: number,
+): Promise<boolean> {
+  if (!(await bookAndSubjectBelongToUser(userId, bookId, subjectId)))
+    return false;
+  await db
+    .delete(bookSubjects)
+    .where(
+      and(
+        eq(bookSubjects.bookId, bookId),
+        eq(bookSubjects.subjectId, subjectId),
+      ),
+    );
   return true;
 }
 
-export async function listSubjectIdsForBook(userId: string, bookId: number): Promise<number[]> {
-  const [book] = await db.select({ id: books.id }).from(books).where(and(eq(books.id, bookId), eq(books.userId, userId)));
+export async function listSubjectIdsForBook(
+  userId: string,
+  bookId: number,
+): Promise<number[]> {
+  const [book] = await db
+    .select({ id: books.id })
+    .from(books)
+    .where(and(eq(books.id, bookId), eq(books.userId, userId)));
   if (!book) return [];
-  const rows = await db.select({ subjectId: bookSubjects.subjectId }).from(bookSubjects).where(eq(bookSubjects.bookId, bookId));
+  const rows = await db
+    .select({ subjectId: bookSubjects.subjectId })
+    .from(bookSubjects)
+    .where(eq(bookSubjects.bookId, bookId));
   return rows.map((r) => r.subjectId);
 }
 
@@ -85,7 +134,9 @@ export async function listSubjectIdsForBook(userId: string, bookId: number): Pro
 // association for this user's books in one flat query so a "grouped by
 // subject" view can section an already-loaded book list client-side
 // without an N+1 fetch per subject.
-export async function listAllBookSubjectIds(userId: string): Promise<Record<number, number[]>> {
+export async function listAllBookSubjectIds(
+  userId: string,
+): Promise<Record<number, number[]>> {
   const rows = await db
     .select({ bookId: bookSubjects.bookId, subjectId: bookSubjects.subjectId })
     .from(bookSubjects)

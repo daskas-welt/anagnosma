@@ -3,12 +3,23 @@
 import { useEffect, useState } from 'react';
 import { Search, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,24 +50,34 @@ export function BookDetailSheet({
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
-  const [assignedSubjectIds, setAssignedSubjectIds] = useState<Set<number>>(new Set());
+  const [assignedSubjectIds, setAssignedSubjectIds] = useState<Set<number>>(
+    new Set(),
+  );
   // Tracks which bookId `assignedSubjectIds` was fetched for, so a response
   // that resolves after the user has already switched to a different book can
   // be recognized as stale (see `displayedAssignedSubjectIds` below) instead
   // of being shown — and toggled — against the wrong book.
-  const [assignedSubjectIdsBookId, setAssignedSubjectIdsBookId] = useState<number | null>(null);
+  const [assignedSubjectIdsBookId, setAssignedSubjectIdsBookId] = useState<
+    number | null
+  >(null);
   const [openLibraryQuery, setOpenLibraryQuery] = useState('');
-  const [openLibraryResults, setOpenLibraryResults] = useState<OpenLibrarySearchResult[]>([]);
+  const [openLibraryResults, setOpenLibraryResults] = useState<
+    OpenLibrarySearchResult[]
+  >([]);
   const [searchingOpenLibrary, setSearchingOpenLibrary] = useState(false);
 
   useEffect(() => {
     if (bookId == null) return;
-    fetch(`/api/books/${bookId}`).then((r) => r.json()).then((nextBook: BookWithCopies) => {
-      setBook(nextBook);
-      setOpenLibraryQuery(nextBook.title);
-      setOpenLibraryResults([]);
-    });
-    fetch('/api/subjects').then((r) => r.json()).then(setAllSubjects);
+    fetch(`/api/books/${bookId}`)
+      .then((r) => r.json())
+      .then((nextBook: BookWithCopies) => {
+        setBook(nextBook);
+        setOpenLibraryQuery(nextBook.title);
+        setOpenLibraryResults([]);
+      });
+    fetch('/api/subjects')
+      .then((r) => r.json())
+      .then(setAllSubjects);
     fetch(`/api/books/${bookId}/subjects`)
       .then((r) => r.json())
       .then((ids: number[]) => {
@@ -110,9 +131,14 @@ export function BookDetailSheet({
   // was fetched for the currently selected book. Otherwise a badge that's
   // actually from the previous book could read as "assigned" and invert the
   // toggle (DELETE instead of POST) when clicked.
-  const displayedAssignedSubjectIds = assignedSubjectIdsBookId === bookId ? assignedSubjectIds : new Set<number>();
+  const displayedAssignedSubjectIds =
+    assignedSubjectIdsBookId === bookId
+      ? assignedSubjectIds
+      : new Set<number>();
 
-  async function updateBookField(patch: Record<string, unknown>): Promise<boolean> {
+  async function updateBookField(
+    patch: Record<string, unknown>,
+  ): Promise<boolean> {
     if (!displayedBook) return false;
     const res = await fetch(`/api/books/${displayedBook.id}`, {
       method: 'PATCH',
@@ -141,7 +167,12 @@ export function BookDetailSheet({
     }
     const updated = await res.json();
     setBook((prev) =>
-      prev ? { ...prev, copies: prev.copies.map((c) => (c.id === copyId ? updated : c)) } : prev,
+      prev
+        ? {
+            ...prev,
+            copies: prev.copies.map((c) => (c.id === copyId ? updated : c)),
+          }
+        : prev,
     );
     onChanged();
   }
@@ -150,7 +181,9 @@ export function BookDetailSheet({
     if (!displayedBook) return;
     setDeleting(true);
     try {
-      const res = await fetch(`/api/books/${displayedBook.id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/books/${displayedBook.id}`, {
+        method: 'DELETE',
+      });
       if (!res.ok) {
         toast.error('Could not delete book.');
         return;
@@ -187,7 +220,10 @@ export function BookDetailSheet({
   async function toggleSubject(subjectId: number, assigned: boolean) {
     if (!displayedBook) return;
     if (assigned) {
-      await fetch(`/api/books/${displayedBook.id}/subjects?subjectId=${subjectId}`, { method: 'DELETE' });
+      await fetch(
+        `/api/books/${displayedBook.id}/subjects?subjectId=${subjectId}`,
+        { method: 'DELETE' },
+      );
     } else {
       await fetch(`/api/books/${displayedBook.id}/subjects`, {
         method: 'POST',
@@ -216,18 +252,24 @@ export function BookDetailSheet({
           <>
             <SheetHeader>
               <SheetTitle>{displayedBook.title}</SheetTitle>
-              <p className="text-sm text-muted-foreground">{displayedBook.author}</p>
+              <p className="text-sm text-muted-foreground">
+                {displayedBook.author}
+              </p>
             </SheetHeader>
             <div className="space-y-6 px-4 pb-4">
               <div className="space-y-3 rounded-lg border p-3">
                 <div>
                   <h3 className="text-sm font-medium">Search Open Library</h3>
-                  <p className="text-xs text-muted-foreground">Find a matching book to update its metadata.</p>
+                  <p className="text-xs text-muted-foreground">
+                    Find a matching book to update its metadata.
+                  </p>
                 </div>
                 <div className="flex gap-2">
                   <Input
                     value={openLibraryQuery}
-                    onChange={(event) => setOpenLibraryQuery(event.target.value)}
+                    onChange={(event) =>
+                      setOpenLibraryQuery(event.target.value)
+                    }
                     onKeyDown={(event) => {
                       if (event.key === 'Enter') {
                         event.preventDefault();
@@ -251,18 +293,34 @@ export function BookDetailSheet({
                 {openLibraryResults.length > 0 && (
                   <div className="space-y-2" aria-label="Open Library results">
                     {openLibraryResults.map((result, index) => (
-                      <div key={`${result.isbn ?? result.title}-${index}`} className="flex items-center gap-3 rounded border p-2">
+                      <div
+                        key={`${result.isbn ?? result.title}-${index}`}
+                        className="flex items-center gap-3 rounded border p-2"
+                      >
                         {result.coverUrl && (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={result.coverUrl} alt="" className="h-12 w-8 shrink-0 rounded object-cover" />
+                          <img
+                            src={result.coverUrl}
+                            alt=""
+                            className="h-12 w-8 shrink-0 rounded object-cover"
+                          />
                         )}
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium">{result.title}</p>
+                          <p className="truncate text-sm font-medium">
+                            {result.title}
+                          </p>
                           <p className="truncate text-xs text-muted-foreground">
-                            {result.author || 'Unknown author'}{result.publishYear ? ` · ${result.publishYear}` : ''}
+                            {result.author || 'Unknown author'}
+                            {result.publishYear
+                              ? ` · ${result.publishYear}`
+                              : ''}
                           </p>
                         </div>
-                        <Button type="button" size="sm" onClick={() => applyOpenLibraryResult(result)}>
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => applyOpenLibraryResult(result)}
+                        >
                           Apply
                         </Button>
                       </div>
@@ -278,7 +336,10 @@ export function BookDetailSheet({
                     defaultValue={displayedBook.title}
                     placeholder="Title"
                     onBlur={(e) => {
-                      if (e.target.value && e.target.value !== displayedBook.title) {
+                      if (
+                        e.target.value &&
+                        e.target.value !== displayedBook.title
+                      ) {
                         updateBookField({ title: e.target.value });
                       }
                     }}
@@ -291,7 +352,10 @@ export function BookDetailSheet({
                     defaultValue={displayedBook.author}
                     placeholder="Author"
                     onBlur={(e) => {
-                      if (e.target.value && e.target.value !== displayedBook.author) {
+                      if (
+                        e.target.value &&
+                        e.target.value !== displayedBook.author
+                      ) {
                         updateBookField({ author: e.target.value });
                       }
                     }}
@@ -327,7 +391,9 @@ export function BookDetailSheet({
                         defaultValue={displayedBook.coverUrl ?? ''}
                         placeholder="Cover URL"
                         onBlur={(e) => {
-                          if (e.target.value !== (displayedBook.coverUrl ?? '')) {
+                          if (
+                            e.target.value !== (displayedBook.coverUrl ?? '')
+                          ) {
                             updateBookField({ coverUrl: e.target.value });
                           }
                         }}
@@ -342,7 +408,11 @@ export function BookDetailSheet({
                           e.target.value = '';
                         }}
                       />
-                      {uploadingCover && <p className="text-xs text-muted-foreground">Uploading…</p>}
+                      {uploadingCover && (
+                        <p className="text-xs text-muted-foreground">
+                          Uploading…
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -370,7 +440,10 @@ export function BookDetailSheet({
                       const raw = e.target.value.trim();
                       if (!raw) return;
                       const value = Number(raw);
-                      if (!Number.isNaN(value) && value !== displayedBook.publishYear) {
+                      if (
+                        !Number.isNaN(value) &&
+                        value !== displayedBook.publishYear
+                      ) {
                         updateBookField({ publishYear: value });
                       }
                     }}
@@ -381,7 +454,9 @@ export function BookDetailSheet({
                 <h3 className="mb-2 text-sm font-medium">Subjects</h3>
                 <div className="flex flex-wrap gap-2">
                   {allSubjects.map((subject) => {
-                    const assigned = displayedAssignedSubjectIds.has(subject.id);
+                    const assigned = displayedAssignedSubjectIds.has(
+                      subject.id,
+                    );
                     return (
                       <Badge
                         key={subject.id}
@@ -399,9 +474,16 @@ export function BookDetailSheet({
                 <h3 className="text-sm font-medium">Copies</h3>
                 {displayedBook.copies.map((copy) => (
                   <div key={copy.id} className="space-y-2 rounded border p-3">
-                    <Select value={copy.format} onValueChange={(v) => v != null && updateCopy(copy.id, { format: v })}>
+                    <Select
+                      value={copy.format}
+                      onValueChange={(v) =>
+                        v != null && updateCopy(copy.id, { format: v })
+                      }
+                    >
                       <SelectTrigger className="w-full">
-                        <SelectValue>{(value: string) => formatLabel(value)}</SelectValue>
+                        <SelectValue>
+                          {(value: string) => formatLabel(value)}
+                        </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
                         {FORMATS.map((f) => (
@@ -414,7 +496,9 @@ export function BookDetailSheet({
                     <Textarea
                       defaultValue={copy.notes ?? ''}
                       placeholder="Notes"
-                      onBlur={(e) => updateCopy(copy.id, { notes: e.target.value })}
+                      onBlur={(e) =>
+                        updateCopy(copy.id, { notes: e.target.value })
+                      }
                     />
                   </div>
                 ))}
@@ -436,14 +520,21 @@ export function BookDetailSheet({
       <AlertDialog open={confirmingDelete} onOpenChange={setConfirmingDelete}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete &ldquo;{displayedBook?.title}&rdquo;?</AlertDialogTitle>
+            <AlertDialogTitle>
+              Delete &ldquo;{displayedBook?.title}&rdquo;?
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This removes the book and all of its copies. This cannot be undone.
+              This removes the book and all of its copies. This cannot be
+              undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction variant="destructive" disabled={deleting} onClick={handleConfirmDelete}>
+            <AlertDialogAction
+              variant="destructive"
+              disabled={deleting}
+              onClick={handleConfirmDelete}
+            >
               {deleting ? 'Deleting...' : 'Delete'}
             </AlertDialogAction>
           </AlertDialogFooter>

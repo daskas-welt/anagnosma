@@ -5,6 +5,7 @@
 - Install with `npm install`; `package-lock.json` is the repository lockfile.
 - Run the app with `npm run dev` and open `http://localhost:3000`.
 - Run lint with `npm run lint`.
+- Format with `npm run format`; verify formatting with `npm run format:check`.
 - Run type checking with `npx tsc --noEmit`; there is no package-script alias.
 - Run all tests with `npm test`; this loads `.env.test` and uses the configured test database.
 - Run one test file with `npx dotenv -e .env.test -- vitest run tests/unit/isbn-lookup-client.test.ts` (replace the path as needed).

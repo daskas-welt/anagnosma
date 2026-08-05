@@ -9,7 +9,9 @@ export type BookMetadata = {
   description?: string;
 };
 
-export type OpenLibrarySearchResult = Omit<BookMetadata, 'isbn'> & { isbn?: string };
+export type OpenLibrarySearchResult = Omit<BookMetadata, 'isbn'> & {
+  isbn?: string;
+};
 
 type OpenLibraryAuthor = { name: string };
 type OpenLibraryPublisher = { name: string };
@@ -47,8 +49,11 @@ export async function lookupByIsbn(
     if (!info) return null;
 
     const publishYearMatch = info.publish_date?.match(/\d{4}/);
-    const publishYear = publishYearMatch ? Number(publishYearMatch[0]) : undefined;
-    const notes = typeof info.notes === 'string' ? info.notes : info.notes?.value;
+    const publishYear = publishYearMatch
+      ? Number(publishYearMatch[0])
+      : undefined;
+    const notes =
+      typeof info.notes === 'string' ? info.notes : info.notes?.value;
 
     return {
       isbn,
@@ -73,9 +78,12 @@ export async function searchOpenLibrary(
     const params = new URLSearchParams({
       q: query,
       limit: '8',
-      fields: 'title,author_name,isbn,publisher,first_publish_year,number_of_pages_median,cover_i',
+      fields:
+        'title,author_name,isbn,publisher,first_publish_year,number_of_pages_median,cover_i',
     });
-    const res = await fetchImpl(`https://openlibrary.org/search.json?${params.toString()}`);
+    const res = await fetchImpl(
+      `https://openlibrary.org/search.json?${params.toString()}`,
+    );
     if (!res.ok) return [];
     const data = await res.json();
     const docs: OpenLibrarySearchDoc[] = data.docs ?? [];
@@ -83,12 +91,16 @@ export async function searchOpenLibrary(
     return docs
       .filter((doc) => doc.title)
       .map((doc) => {
-        const isbn = (doc.isbn ?? []).find((value) => /^97\d{11}$/.test(value)) ?? doc.isbn?.[0];
+        const isbn =
+          (doc.isbn ?? []).find((value) => /^97\d{11}$/.test(value)) ??
+          doc.isbn?.[0];
         return {
           isbn,
           title: doc.title!,
           author: (doc.author_name ?? []).join(', '),
-          coverUrl: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : undefined,
+          coverUrl: doc.cover_i
+            ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`
+            : undefined,
           publisher: doc.publisher?.[0],
           publishYear: doc.first_publish_year,
           pageCount: doc.number_of_pages_median,

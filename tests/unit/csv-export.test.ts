@@ -34,18 +34,32 @@ describe('buildCsv', () => {
     const csv = buildCsv([book()], {});
     const lines = csv.trim().split('\r\n');
     expect(lines).toHaveLength(2);
-    expect(lines[0]).toBe('Title,Author,ISBN,Publisher,Year,Format,Pages,Subjects,Notes,Cover URL');
-    expect(lines[1]).toBe('Dune,Frank Herbert,9780441013593,Ace Books,1965,paperback,412,,Great world-building.,');
+    expect(lines[0]).toBe(
+      'Title,Author,ISBN,Publisher,Year,Format,Pages,Subjects,Notes,Cover URL',
+    );
+    expect(lines[1]).toBe(
+      'Dune,Frank Herbert,9780441013593,Ace Books,1965,paperback,412,,Great world-building.,',
+    );
   });
 
   it('joins subject names with a semicolon', () => {
-    const csv = buildCsv([book({ id: 42 })], { 42: ['Science Fiction', 'Classic Fiction'] });
+    const csv = buildCsv([book({ id: 42 })], {
+      42: ['Science Fiction', 'Classic Fiction'],
+    });
     expect(csv).toContain('Science Fiction; Classic Fiction');
   });
 
   it('falls back to empty strings for missing optional fields', () => {
     const csv = buildCsv(
-      [book({ isbn: null, publisher: null, publishYear: null, pageCount: null, copies: [] })],
+      [
+        book({
+          isbn: null,
+          publisher: null,
+          publishYear: null,
+          pageCount: null,
+          copies: [],
+        }),
+      ],
       {},
     );
     const lines = csv.trim().split('\r\n');

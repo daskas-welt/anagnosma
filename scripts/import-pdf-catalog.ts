@@ -225,17 +225,26 @@ RPG|Advanced Dungeons & Dragons Player’s Handbook|TSR|1989|TSR
 
 const entries = CATALOG.split('\n').map((line) => {
   const [subject, title, author, year, publisher] = line.split('|');
-  return { subject, title, author, publishYear: year ? Number(year) : undefined, publisher: publisher || undefined };
+  return {
+    subject,
+    title,
+    author,
+    publishYear: year ? Number(year) : undefined,
+    publisher: publisher || undefined,
+  };
 });
 
 async function main() {
   const userId = process.argv[2];
-  if (!userId) throw new Error('Usage: tsx scripts/import-pdf-catalog.ts <user-id>');
+  if (!userId)
+    throw new Error('Usage: tsx scripts/import-pdf-catalog.ts <user-id>');
 
   const subjectIds = new Map<string, number>();
   let created = 0;
   for (const entry of entries) {
-    const subject = subjectIds.get(entry.subject) ?? (await getOrCreateSubject(userId, entry.subject)).id;
+    const subject =
+      subjectIds.get(entry.subject) ??
+      (await getOrCreateSubject(userId, entry.subject)).id;
     subjectIds.set(entry.subject, subject);
     const book = await createBook(userId, {
       title: entry.title,
@@ -247,11 +256,16 @@ async function main() {
     await assignSubject(userId, book.id, subject);
     created++;
   }
-  console.log(`Imported ${created} books for ${userId} across ${subjectIds.size} subjects.`);
+  console.log(
+    `Imported ${created} books for ${userId} across ${subjectIds.size} subjects.`,
+  );
   process.exit(0);
 }
 
 main().catch((error) => {
-  console.error('Catalog import failed:', error instanceof Error ? error.message : error);
+  console.error(
+    'Catalog import failed:',
+    error instanceof Error ? error.message : error,
+  );
   process.exit(1);
 });

@@ -3,14 +3,38 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import { parseCsv, mapColumns, HEADER_PRESETS } from '@/lib/csv/parse';
 import type { ImportResult } from '@/lib/csv/import';
 
-const TARGET_FIELDS = ['title', 'author', 'isbn', 'format', 'notes', 'publisher', 'publishYear', 'pageCount', 'subjects', 'coverUrl'];
+const TARGET_FIELDS = [
+  'title',
+  'author',
+  'isbn',
+  'format',
+  'notes',
+  'publisher',
+  'publishYear',
+  'pageCount',
+  'subjects',
+  'coverUrl',
+];
 const TARGET_FIELD_LABELS: Record<string, string> = {
   title: 'Title',
   author: 'Author(s)',
@@ -42,7 +66,10 @@ export function CsvImportWizard() {
     // real exports have many more columns than any preset covers.
     const preset: Record<string, string> = {};
     for (const h of parsedHeaders) {
-      const target = HEADER_PRESETS.anagnosma[h] ?? HEADER_PRESETS.goodreads[h] ?? HEADER_PRESETS.librarything[h];
+      const target =
+        HEADER_PRESETS.anagnosma[h] ??
+        HEADER_PRESETS.goodreads[h] ??
+        HEADER_PRESETS.librarything[h];
       if (target) preset[h] = target;
     }
     setMapping(preset);
@@ -84,7 +111,12 @@ export function CsvImportWizard() {
                   <span className="w-40 truncate text-sm">{header}</span>
                   <Select
                     value={mapping[header] ?? '__skip'}
-                    onValueChange={(v) => setMapping((m) => ({ ...m, [header]: v === '__skip' || v == null ? '' : v }))}
+                    onValueChange={(v) =>
+                      setMapping((m) => ({
+                        ...m,
+                        [header]: v === '__skip' || v == null ? '' : v,
+                      }))
+                    }
                   >
                     <SelectTrigger className="w-[160px]">
                       <SelectValue placeholder="Skip" />
@@ -111,7 +143,9 @@ export function CsvImportWizard() {
                   {Object.values(mapping)
                     .filter(Boolean)
                     .map((field) => (
-                      <TableHead key={field}>{TARGET_FIELD_LABELS[field] ?? field}</TableHead>
+                      <TableHead key={field}>
+                        {TARGET_FIELD_LABELS[field] ?? field}
+                      </TableHead>
                     ))}
                 </TableRow>
               </TableHeader>

@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
-import { createSubject, listSubjectsWithCounts } from '@/lib/subjects/repository';
+import {
+  createSubject,
+  listSubjectsWithCounts,
+} from '@/lib/subjects/repository';
 import { parseJsonBody, isUniqueViolation } from '@/lib/api-helpers';
 import { requireUserId } from '@/lib/auth-helpers';
 import { seedGenresForUser } from '@/lib/subjects/genres';
@@ -33,7 +36,10 @@ export async function POST(request: Request) {
     return NextResponse.json(subject, { status: 201 });
   } catch (err) {
     if (isUniqueViolation(err)) {
-      return NextResponse.json({ error: 'you already have a subject with this name' }, { status: 409 });
+      return NextResponse.json(
+        { error: 'you already have a subject with this name' },
+        { status: 409 },
+      );
     }
     throw err;
   }

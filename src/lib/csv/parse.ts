@@ -1,7 +1,13 @@
 import Papa from 'papaparse';
 
-export function parseCsv(fileContents: string): { headers: string[]; rows: Record<string, string>[] } {
-  const result = Papa.parse<Record<string, string>>(fileContents, { header: true, skipEmptyLines: true });
+export function parseCsv(fileContents: string): {
+  headers: string[];
+  rows: Record<string, string>[];
+} {
+  const result = Papa.parse<Record<string, string>>(fileContents, {
+    header: true,
+    skipEmptyLines: true,
+  });
   const headers = result.meta.fields ?? [];
   return { headers, rows: result.data };
 }
@@ -13,7 +19,8 @@ export function mapColumns(
   return rows.map((row) => {
     const mapped: Record<string, string> = {};
     for (const [sourceHeader, targetField] of Object.entries(mapping)) {
-      if (row[sourceHeader] !== undefined) mapped[targetField] = row[sourceHeader];
+      if (row[sourceHeader] !== undefined)
+        mapped[targetField] = row[sourceHeader];
     }
     return mapped;
   });

@@ -15,8 +15,13 @@ const sampleResponse = {
 
 describe('lookupByIsbn', () => {
   it('parses a successful Open Library response', async () => {
-    const fetchImpl = vi.fn().mockResolvedValue({ ok: true, json: async () => sampleResponse });
-    const result = await lookupByIsbn('9780441013593', fetchImpl as unknown as typeof fetch);
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValue({ ok: true, json: async () => sampleResponse });
+    const result = await lookupByIsbn(
+      '9780441013593',
+      fetchImpl as unknown as typeof fetch,
+    );
     expect(result).toEqual({
       isbn: '9780441013593',
       title: 'Dune',
@@ -33,14 +38,24 @@ describe('lookupByIsbn', () => {
   });
 
   it('returns null when the ISBN key is absent from the response', async () => {
-    const fetchImpl = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
-    const result = await lookupByIsbn('0000000000', fetchImpl as unknown as typeof fetch);
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValue({ ok: true, json: async () => ({}) });
+    const result = await lookupByIsbn(
+      '0000000000',
+      fetchImpl as unknown as typeof fetch,
+    );
     expect(result).toBeNull();
   });
 
   it('returns null on a non-ok response', async () => {
-    const fetchImpl = vi.fn().mockResolvedValue({ ok: false, json: async () => ({}) });
-    const result = await lookupByIsbn('9780441013593', fetchImpl as unknown as typeof fetch);
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValue({ ok: false, json: async () => ({}) });
+    const result = await lookupByIsbn(
+      '9780441013593',
+      fetchImpl as unknown as typeof fetch,
+    );
     expect(result).toBeNull();
   });
 
@@ -54,13 +69,19 @@ describe('lookupByIsbn', () => {
         },
       }),
     });
-    const result = await lookupByIsbn('9780060853976', fetchImpl as unknown as typeof fetch);
+    const result = await lookupByIsbn(
+      '9780060853976',
+      fetchImpl as unknown as typeof fetch,
+    );
     expect(result?.author).toBe('Terry Pratchett, Neil Gaiman');
   });
 
   it('returns null on a network error', async () => {
     const fetchImpl = vi.fn().mockRejectedValue(new Error('network error'));
-    const result = await lookupByIsbn('9780441013593', fetchImpl as unknown as typeof fetch);
+    const result = await lookupByIsbn(
+      '9780441013593',
+      fetchImpl as unknown as typeof fetch,
+    );
     expect(result).toBeNull();
   });
 });
@@ -84,7 +105,9 @@ describe('searchOpenLibrary', () => {
       }),
     });
 
-    await expect(searchOpenLibrary('Dune', fetchImpl as unknown as typeof fetch)).resolves.toEqual([
+    await expect(
+      searchOpenLibrary('Dune', fetchImpl as unknown as typeof fetch),
+    ).resolves.toEqual([
       {
         isbn: '9780441013593',
         title: 'Dune',
@@ -95,6 +118,8 @@ describe('searchOpenLibrary', () => {
         pageCount: 412,
       },
     ]);
-    expect(fetchImpl).toHaveBeenCalledWith(expect.stringContaining('https://openlibrary.org/search.json?'));
+    expect(fetchImpl).toHaveBeenCalledWith(
+      expect.stringContaining('https://openlibrary.org/search.json?'),
+    );
   });
 });

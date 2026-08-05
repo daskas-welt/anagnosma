@@ -10,7 +10,9 @@ import { requireUserId } from '@/lib/auth-helpers';
 export async function POST(request: Request) {
   const { userId, error: authError } = await requireUserId();
   if (authError) return authError;
-  const { data: body, error } = await parseJsonBody<{ rows?: ImportRow[] }>(request);
+  const { data: body, error } = await parseJsonBody<{ rows?: ImportRow[] }>(
+    request,
+  );
   if (error) return error;
   const rows: ImportRow[] = body.rows ?? [];
   const existingBooks = await listBooks(userId);
@@ -30,8 +32,12 @@ export async function POST(request: Request) {
       isbn: row.isbn,
       publisher: row.publisher || undefined,
       coverUrl: row.coverUrl || undefined,
-      publishYear: publishYear != null && !Number.isNaN(publishYear) ? publishYear : undefined,
-      pageCount: pageCount != null && !Number.isNaN(pageCount) ? pageCount : undefined,
+      publishYear:
+        publishYear != null && !Number.isNaN(publishYear)
+          ? publishYear
+          : undefined,
+      pageCount:
+        pageCount != null && !Number.isNaN(pageCount) ? pageCount : undefined,
     });
 
     if (row.notes && book.copies[0]) {

@@ -24,8 +24,14 @@ describe('backfillOwner', () => {
     expect(result.books).toBe(0);
     expect(result.subjects).toBe(0);
 
-    const orphanBooks = await db.select().from(books).where(isNull(books.userId));
-    const orphanSubjects = await db.select().from(subjects).where(isNull(subjects.userId));
+    const orphanBooks = await db
+      .select()
+      .from(books)
+      .where(isNull(books.userId));
+    const orphanSubjects = await db
+      .select()
+      .from(subjects)
+      .where(isNull(subjects.userId));
     expect(orphanBooks).toHaveLength(0);
     expect(orphanSubjects).toHaveLength(0);
   });

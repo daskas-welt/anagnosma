@@ -11,3 +11,4 @@
 - [x] [DONE: 2026-08-05] Show friendly CSV import field labels
 - [x] [DONE: 2026-08-05] Size the import preview table to its contents
 - [x] [DONE: 2026-08-05] Override the Sheet side-specific width for the Edit Book drawer
+- [x] [DONE: 2026-08-05] Install and configure Biome formatting

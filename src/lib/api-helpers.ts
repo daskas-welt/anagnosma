@@ -6,12 +6,16 @@ import { NextResponse } from 'next/server';
  */
 export async function parseJsonBody<T = unknown>(
   request: Request,
-): Promise<{ data: T; error?: undefined } | { data?: undefined; error: NextResponse }> {
+): Promise<
+  { data: T; error?: undefined } | { data?: undefined; error: NextResponse }
+> {
   try {
     const data = (await request.json()) as T;
     return { data };
   } catch {
-    return { error: NextResponse.json({ error: 'invalid JSON body' }, { status: 400 }) };
+    return {
+      error: NextResponse.json({ error: 'invalid JSON body' }, { status: 400 }),
+    };
   }
 }
 
@@ -36,7 +40,10 @@ export function parseId(idParam: string): number | null {
  */
 export function isUniqueViolation(err: unknown): boolean {
   const hasCode23505 = (e: unknown): boolean =>
-    typeof e === 'object' && e !== null && 'code' in e && (e as { code?: unknown }).code === '23505';
+    typeof e === 'object' &&
+    e !== null &&
+    'code' in e &&
+    (e as { code?: unknown }).code === '23505';
   if (hasCode23505(err)) return true;
   const cause = err instanceof Error ? err.cause : undefined;
   return hasCode23505(cause);

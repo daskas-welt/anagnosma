@@ -14,7 +14,10 @@ describe('seedGenresForUser', () => {
   it('creates all 25 curated genres for a new user', async () => {
     const created = await seedGenresForUser(USER_ID);
     expect(created).toBe(GENRES.length);
-    const rows = await db.select().from(subjects).where(eq(subjects.userId, USER_ID));
+    const rows = await db
+      .select()
+      .from(subjects)
+      .where(eq(subjects.userId, USER_ID));
     expect(rows.map((r) => r.name).sort()).toEqual([...GENRES].sort());
   });
 
@@ -22,7 +25,10 @@ describe('seedGenresForUser', () => {
     await seedGenresForUser(USER_ID);
     const createdSecondTime = await seedGenresForUser(USER_ID);
     expect(createdSecondTime).toBe(0);
-    const rows = await db.select().from(subjects).where(eq(subjects.userId, USER_ID));
+    const rows = await db
+      .select()
+      .from(subjects)
+      .where(eq(subjects.userId, USER_ID));
     expect(rows).toHaveLength(GENRES.length);
   });
 });

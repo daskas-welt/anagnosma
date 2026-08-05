@@ -37,10 +37,14 @@ function CatalogPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [books, setBooks] = useState<BookWithCopies[]>([]);
-  const [view, setView] = useState<'grid' | 'carousel' | 'list' | 'subject'>('grid');
+  const [view, setView] = useState<'grid' | 'carousel' | 'list' | 'subject'>(
+    'grid',
+  );
   const [query, setQuery] = useState('');
   const [subjectId, setSubjectId] = useState<number | null>(
-    searchParams.get('subjectId') ? Number(searchParams.get('subjectId')) : null,
+    searchParams.get('subjectId')
+      ? Number(searchParams.get('subjectId'))
+      : null,
   );
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [exportFormat, setExportFormat] = useState<ExportFormat>('csv');
@@ -49,10 +53,17 @@ function CatalogPageInner() {
   async function handleExport() {
     const rows = buildExportRows(books, subjectNamesByBookId ?? {});
     const date = new Date().toISOString().slice(0, 10);
-    if (exportFormat === 'csv') downloadCsv(`anagnosma-books-${date}.csv`, buildCsv(books, subjectNamesByBookId ?? {}));
-    if (exportFormat === 'xls') downloadExcel(`anagnosma-books-${date}.xls`, rows);
-    if (exportFormat === 'docx') await downloadWord(`anagnosma-books-${date}.docx`, rows);
-    if (exportFormat === 'pdf') downloadPdf(`anagnosma-books-${date}.pdf`, rows);
+    if (exportFormat === 'csv')
+      downloadCsv(
+        `anagnosma-books-${date}.csv`,
+        buildCsv(books, subjectNamesByBookId ?? {}),
+      );
+    if (exportFormat === 'xls')
+      downloadExcel(`anagnosma-books-${date}.xls`, rows);
+    if (exportFormat === 'docx')
+      await downloadWord(`anagnosma-books-${date}.docx`, rows);
+    if (exportFormat === 'pdf')
+      downloadPdf(`anagnosma-books-${date}.pdf`, rows);
   }
 
   async function refresh() {
@@ -83,7 +94,9 @@ function CatalogPageInner() {
           <select
             aria-label="Export format"
             value={exportFormat}
-            onChange={(event) => setExportFormat(event.target.value as ExportFormat)}
+            onChange={(event) =>
+              setExportFormat(event.target.value as ExportFormat)
+            }
             className="h-9 rounded-md border bg-background px-3 text-sm"
           >
             <option value="csv">CSV</option>
@@ -91,13 +104,24 @@ function CatalogPageInner() {
             <option value="docx">Word</option>
             <option value="pdf">PDF</option>
           </select>
-          <Button variant="outline" onClick={handleExport} disabled={books.length === 0}>
+          <Button
+            variant="outline"
+            onClick={handleExport}
+            disabled={books.length === 0}
+          >
             Export
           </Button>
-          <AddBookModal onCreated={(book) => setBooks((prev) => [book, ...prev])} />
+          <AddBookModal
+            onCreated={(book) => setBooks((prev) => [book, ...prev])}
+          />
         </div>
       </div>
-      <Tabs value={view} onValueChange={(v) => setView(v as 'grid' | 'carousel' | 'list' | 'subject')}>
+      <Tabs
+        value={view}
+        onValueChange={(v) =>
+          setView(v as 'grid' | 'carousel' | 'list' | 'subject')
+        }
+      >
         <TabsList>
           <TabsTrigger value="grid">Grid</TabsTrigger>
           <TabsTrigger value="carousel">Carousel</TabsTrigger>
@@ -117,13 +141,23 @@ function CatalogPageInner() {
           Filtering by subject &times;
         </Badge>
       )}
-      {view === 'grid' && <CatalogGrid books={books} onSelect={setSelectedId} />}
-      {view === 'carousel' && <CatalogCarousel books={books} onSelect={setSelectedId} />}
+      {view === 'grid' && (
+        <CatalogGrid books={books} onSelect={setSelectedId} />
+      )}
+      {view === 'carousel' && (
+        <CatalogCarousel books={books} onSelect={setSelectedId} />
+      )}
       {view === 'list' && (
         <CatalogTable books={books} onSelect={setSelectedId} paginate />
       )}
-      {view === 'subject' && <CatalogBySubject books={books} onSelect={setSelectedId} />}
-      <BookDetailSheet bookId={selectedId} onClose={() => setSelectedId(null)} onChanged={refresh} />
+      {view === 'subject' && (
+        <CatalogBySubject books={books} onSelect={setSelectedId} />
+      )}
+      <BookDetailSheet
+        bookId={selectedId}
+        onClose={() => setSelectedId(null)}
+        onChanged={refresh}
+      />
     </div>
   );
 }
