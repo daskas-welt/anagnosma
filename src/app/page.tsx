@@ -185,8 +185,12 @@ function CatalogPageInner() {
         <TabsList className="max-w-full overflow-x-auto overflow-y-hidden sm:max-w-none sm:overflow-visible">
           <TabsTrigger value="grid">Grid</TabsTrigger>
           <TabsTrigger value="carousel">Carousel</TabsTrigger>
-          <TabsTrigger value="list">Table</TabsTrigger>
-          <TabsTrigger value="subject">By Subject</TabsTrigger>
+          <TabsTrigger className="hidden sm:inline-flex" value="list">
+            Table
+          </TabsTrigger>
+          <TabsTrigger className="hidden sm:inline-flex" value="subject">
+            By Subject
+          </TabsTrigger>
         </TabsList>
       </Tabs>
       {subjectId != null && (
