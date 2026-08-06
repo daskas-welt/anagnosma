@@ -172,7 +172,9 @@ function CatalogPageInner() {
             Export
           </Button>
           <AddBookModal
+            books={books}
             onCreated={(book) => setBooks((prev) => [book, ...prev])}
+            onChanged={refresh}
           />
         </div>
       </div>

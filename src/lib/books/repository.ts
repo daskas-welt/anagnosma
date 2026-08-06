@@ -17,6 +17,7 @@ export type NewBookInput = {
   pageCount?: number;
   description?: string;
   format: string;
+  notes?: string;
 };
 
 export type BookWithCopies = typeof books.$inferSelect & {
@@ -28,7 +29,7 @@ export async function createBook(
   input: NewBookInput,
   options: { isSample?: boolean } = {},
 ): Promise<BookWithCopies> {
-  const { format, ...bookFields } = input;
+  const { format, notes, ...bookFields } = input;
   const isbn = input.isbn?.trim() || undefined;
   return db.transaction(async (tx) => {
     const [book] = await tx
@@ -42,7 +43,7 @@ export async function createBook(
       .returning();
     const [copy] = await tx
       .insert(copies)
-      .values({ bookId: book.id, format })
+      .values({ bookId: book.id, format, notes })
       .returning();
     return { ...book, copies: [copy] };
   });
