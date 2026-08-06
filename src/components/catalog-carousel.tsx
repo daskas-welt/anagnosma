@@ -39,17 +39,17 @@ export function CatalogCarousel({
                 className="cursor-pointer"
                 onClick={() => onSelect(book.id)}
               >
-                <CardContent className="flex flex-col items-center gap-6 p-6 sm:flex-row sm:items-start sm:justify-center">
+                <CardContent className="flex flex-col items-center gap-4 p-4 sm:gap-6 sm:p-6 sm:flex-row sm:items-start sm:justify-center">
                   {book.coverUrl ? (
                     <Image
                       src={book.coverUrl}
                       alt={book.title}
                       width={420}
                       height={630}
-                      className="aspect-[2/3] h-auto max-h-[630px] w-full max-w-[420px] shrink-0 object-cover"
+                      className="h-[240px] w-[160px] shrink-0 object-cover sm:aspect-[2/3] sm:h-auto sm:max-h-[630px] sm:w-full sm:max-w-[420px]"
                     />
                   ) : (
-                    <div className="flex aspect-[2/3] h-auto max-h-[630px] w-full max-w-[420px] shrink-0 items-center justify-center bg-muted text-sm text-muted-foreground">
+                    <div className="flex h-[240px] w-[160px] shrink-0 items-center justify-center bg-muted text-sm text-muted-foreground sm:aspect-[2/3] sm:h-auto sm:max-h-[630px] sm:w-full sm:max-w-[420px]">
                       No cover
                     </div>
                   )}
@@ -91,8 +91,8 @@ export function CatalogCarousel({
           );
         })}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="left-2 size-11 sm:-left-12 sm:size-7" />
+      <CarouselNext className="right-2 size-11 sm:-right-12 sm:size-7" />
     </Carousel>
   );
 }
