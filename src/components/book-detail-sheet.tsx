@@ -50,6 +50,34 @@ type BookDraft = {
   pageCount: string;
 };
 
+function CopyFormatSelect({
+  copyId,
+  value,
+  onChange,
+}: {
+  copyId: number;
+  value: string;
+  onChange: (format: string) => void;
+}) {
+  return (
+    <div className="space-y-2">
+      <FieldLabel htmlFor={`copy-format-${copyId}`}>Format</FieldLabel>
+      <Select value={value} onValueChange={(v) => v != null && onChange(v)}>
+        <SelectTrigger id={`copy-format-${copyId}`} className="w-full">
+          <SelectValue>{(v: string) => formatLabel(v)}</SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {FORMATS.map((f) => (
+            <SelectItem key={f.value} value={f.value}>
+              {f.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
+
 export function BookDetailSheet({
   bookId,
   onClose,
@@ -89,6 +117,7 @@ export function BookDetailSheet({
     publishYear: '',
     pageCount: '',
   });
+  const [savingChanges, setSavingChanges] = useState(false);
   const [copyNotes, setCopyNotes] = useState<Record<number, string>>({});
   const [copyFormats, setCopyFormats] = useState<Record<number, string>>({});
   const [draftSubjectIds, setDraftSubjectIds] = useState<Set<number>>(
@@ -212,6 +241,13 @@ export function BookDetailSheet({
   // Guard against showing stale data from a previously selected book while the
   // fetch for the newly selected `bookId` is still in flight.
   const displayedBook = book && book.id === bookId ? book : null;
+  const singleCopy =
+    displayedBook?.copies.length === 1 ? displayedBook.copies[0] : null;
+
+  function setCopyFormat(copyId: number, format: string) {
+    setCopyFormats((formats) => ({ ...formats, [copyId]: format }));
+  }
+
   // Same guard for assigned subjects: only trust `assignedSubjectIds` once it
   // was fetched for the currently selected book. Otherwise a badge that's
   // actually from the previous book could read as "assigned" and invert the
@@ -238,17 +274,48 @@ export function BookDetailSheet({
     return true;
   }
 
+  // Blank clears the column; a non-numeric entry aborts the save rather than
+  // silently wiping whatever was there before.
+  function parseOptionalCount(value: string): number | null | 'invalid' {
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+    const parsed = Number(trimmed);
+    return Number.isInteger(parsed) && parsed >= 0 ? parsed : 'invalid';
+  }
+
   async function handleSaveChanges() {
-    const publishYear = bookDraft.publishYear.trim();
+    if (savingChanges) return;
+    const publishYear = parseOptionalCount(bookDraft.publishYear);
+    const pageCount = parseOptionalCount(bookDraft.pageCount);
+    if (publishYear === 'invalid' || pageCount === 'invalid') {
+      toast.error('Year and Pages must be whole numbers.');
+      return;
+    }
+    setSavingChanges(true);
+    try {
+      await saveChanges(publishYear, pageCount);
+    } finally {
+      setSavingChanges(false);
+    }
+  }
+
+  async function saveChanges(
+    publishYear: number | null,
+    pageCount: number | null,
+  ) {
+    // Send null rather than omitting empty values, so clearing a field in the
+    // form actually clears the column instead of leaving the old value behind.
     const updated = await updateBookField({
-      ...bookDraft,
-      publishYear: publishYear ? Number(publishYear) : undefined,
-      pageCount: bookDraft.pageCount.trim()
-        ? Number(bookDraft.pageCount)
-        : undefined,
+      title: bookDraft.title,
+      author: bookDraft.author,
+      isbn: bookDraft.isbn.trim() || null,
+      coverUrl: bookDraft.coverUrl.trim() || null,
+      publisher: bookDraft.publisher.trim() || null,
+      publishYear,
+      pageCount,
     });
     if (!updated || !displayedBook) return;
-    await Promise.all(
+    const copyResults = await Promise.all(
       displayedBook.copies
         .filter(
           (copy) =>
@@ -262,40 +329,68 @@ export function BookDetailSheet({
           }),
         ),
     );
-    await Promise.all(
-      [...assignedSubjectIds].map((subjectId) =>
-        draftSubjectIds.has(subjectId)
-          ? Promise.resolve()
-          : fetch(
-              `/api/books/${displayedBook.id}/subjects?subjectId=${subjectId}`,
-              { method: 'DELETE' },
-            ),
-      ),
-    );
-    await Promise.all(
-      [...draftSubjectIds].map((subjectId) =>
-        assignedSubjectIds.has(subjectId)
-          ? Promise.resolve()
-          : fetch(`/api/books/${displayedBook.id}/subjects`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ subjectId }),
-            }),
-      ),
-    );
+    const subjectResults = await Promise.all([
+      ...[...assignedSubjectIds]
+        .filter((subjectId) => !draftSubjectIds.has(subjectId))
+        .map((subjectId) =>
+          requestSucceeded(
+            `/api/books/${displayedBook.id}/subjects?subjectId=${subjectId}`,
+            { method: 'DELETE' },
+          ),
+        ),
+      ...[...draftSubjectIds]
+        .filter((subjectId) => !assignedSubjectIds.has(subjectId))
+        .map((subjectId) =>
+          requestSucceeded(`/api/books/${displayedBook.id}/subjects`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ subjectId }),
+          }),
+        ),
+    ]);
+    // The book row is already written at this point, so a failed copy or
+    // subject write is a partial save: say so and keep the sheet open with the
+    // draft intact rather than closing on a success message that isn't true.
+    if ([...copyResults, ...subjectResults].some((ok) => !ok)) {
+      toast.error('Book saved, but some changes could not be applied.');
+      return;
+    }
     toast.success('Book changes saved.');
     onClose();
   }
 
-  async function updateCopy(copyId: number, patch: Record<string, unknown>) {
-    const res = await fetch(`/api/copies/${copyId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(patch),
-    });
+  // Resolves to false instead of throwing, so one failed write is reported
+  // without aborting the rest of the save.
+  async function requestSucceeded(
+    url: string,
+    init: RequestInit,
+  ): Promise<boolean> {
+    try {
+      const res = await fetch(url, init);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  async function updateCopy(
+    copyId: number,
+    patch: Record<string, unknown>,
+  ): Promise<boolean> {
+    let res: Response;
+    try {
+      res = await fetch(`/api/copies/${copyId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      });
+    } catch {
+      toast.error('Could not update copy.');
+      return false;
+    }
     if (!res.ok) {
       toast.error('Could not update copy.');
-      return;
+      return false;
     }
     const updated = await res.json();
     setBook((prev) =>
@@ -307,6 +402,7 @@ export function BookDetailSheet({
         : prev,
     );
     onChanged();
+    return true;
   }
 
   async function handleConfirmDelete() {
@@ -616,48 +712,35 @@ export function BookDetailSheet({
                     }
                   />
                 </div>
-                {displayedBook.copies[0] && (
-                  <div className="space-y-2">
-                    <FieldLabel
-                      htmlFor={`copy-format-${displayedBook.copies[0].id}`}
-                    >
-                      Format
-                    </FieldLabel>
-                    <Select
-                      value={
-                        copyFormats[displayedBook.copies[0].id] ??
-                        displayedBook.copies[0].format
-                      }
-                      onValueChange={(v) =>
-                        v != null &&
-                        setCopyFormats((formats) => ({
-                          ...formats,
-                          [displayedBook.copies[0].id]: v,
-                        }))
-                      }
-                    >
-                      <SelectTrigger
-                        id={`copy-format-${displayedBook.copies[0].id}`}
-                        className="w-full"
-                      >
-                        <SelectValue>
-                          {(value: string) => formatLabel(value)}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {FORMATS.map((f) => (
-                          <SelectItem key={f.value} value={f.value}>
-                            {f.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                {/* A single-copy book keeps Format inline with Pages; once
+                    there is more than one copy each gets its own Format and
+                    Notes below, since they can differ per copy. */}
+                {singleCopy && (
+                  <CopyFormatSelect
+                    copyId={singleCopy.id}
+                    value={copyFormats[singleCopy.id] ?? singleCopy.format}
+                    onChange={(format) => setCopyFormat(singleCopy.id, format)}
+                  />
                 )}
               </div>
               <div className="space-y-4">
-                {displayedBook.copies.map((copy) => (
-                  <div key={copy.id} className="space-y-2">
+                {displayedBook.copies.map((copy, index) => (
+                  <div
+                    key={copy.id}
+                    className={
+                      singleCopy ? 'space-y-2' : 'space-y-2 rounded border p-3'
+                    }
+                  >
+                    {!singleCopy && (
+                      <h3 className="text-sm font-medium">Copy {index + 1}</h3>
+                    )}
+                    {!singleCopy && (
+                      <CopyFormatSelect
+                        copyId={copy.id}
+                        value={copyFormats[copy.id] ?? copy.format}
+                        onChange={(format) => setCopyFormat(copy.id, format)}
+                      />
+                    )}
                     <div className="space-y-2">
                       <FieldLabel htmlFor={`copy-notes-${copy.id}`}>
                         Notes
@@ -699,10 +782,22 @@ export function BookDetailSheet({
               <Button
                 type="button"
                 className="w-full"
-                disabled={searchingOpenLibrary || searchingIsbn}
+                disabled={
+                  savingChanges ||
+                  searchingOpenLibrary ||
+                  searchingIsbn ||
+                  uploadingCover
+                }
                 onClick={() => void handleSaveChanges()}
               >
-                Save Changes
+                {savingChanges ? (
+                  <>
+                    <LoaderCircle className="animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  'Save Changes'
+                )}
               </Button>
               <div className="space-y-2 border-t pt-4">
                 <h3 className="text-sm font-medium">Danger zone</h3>

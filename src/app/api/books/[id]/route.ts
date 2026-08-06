@@ -3,7 +3,7 @@ import {
   deleteBook,
   getBook,
   updateBook,
-  type NewBookInput,
+  type BookUpdateInput,
 } from '@/lib/books/repository';
 import { parseId, parseJsonBody } from '@/lib/api-helpers';
 import { requireUserId } from '@/lib/auth-helpers';
@@ -29,8 +29,7 @@ export async function PATCH(request: Request, { params }: Params) {
   const bookId = parseId(id);
   if (bookId == null)
     return NextResponse.json({ error: 'invalid id' }, { status: 400 });
-  const { data: body, error } =
-    await parseJsonBody<Partial<Omit<NewBookInput, 'format'>>>(request);
+  const { data: body, error } = await parseJsonBody<BookUpdateInput>(request);
   if (error) return error;
   const updated = await updateBook(userId, bookId, body);
   if (!updated)
