@@ -109,4 +109,5 @@
 - [x] [DONE: 2026-08-06] Defer all Edit Book changes until Save Changes
 - [x] [DONE: 2026-08-06] Show searched cover metadata in Edit Book before Save Changes
 - [x] [DONE: 2026-08-06] Populate all Create Book metadata from ISBN search before Save
+- [x] [DONE: 2026-08-06] Close Create and Edit Book drawers after successful save
 - [x] [DONE: 2026-08-06] Persist initial copy notes from Create Book

@@ -28,9 +28,19 @@ export function IsbnScanner({
   const scanInProgressRef = useRef(false);
 
   useEffect(() => {
-    if (open) return;
-    controlsRef.current?.stop();
-    controlsRef.current = null;
+    if (!open) {
+      controlsRef.current?.stop();
+      controlsRef.current = null;
+      return;
+    }
+    // Also release the stream on unmount. Both hosts render this scanner inside
+    // a Sheet, so closing the sheet tears the component down while `open` is
+    // still true — without this cleanup the camera (and its indicator light)
+    // would stay live until the tab is closed.
+    return () => {
+      controlsRef.current?.stop();
+      controlsRef.current = null;
+    };
   }, [open]);
 
   useEffect(() => {

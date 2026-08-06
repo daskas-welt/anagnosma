@@ -34,6 +34,7 @@ import {
 } from '@/components/ui/select';
 import type { BookWithCopies } from '@/lib/books/repository';
 import type { BookMetadata } from '@/lib/isbn-lookup/client';
+import { canonicalizeIsbn } from '@/lib/isbn';
 import { FORMATS, formatLabel } from '@/lib/formats';
 
 type Subject = { id: number; name: string; bookCount: number };
@@ -155,6 +156,26 @@ export function AddBookModal({
     }
   }
 
+  // `books` is the catalogue list, which is narrowed by whatever search or
+  // subject filter is active, so a local hit is a fast path rather than the
+  // source of truth — fall back to a server lookup that sees the whole library.
+  // Both sides are canonicalised because rows created before ISBNs were
+  // normalised on write still hold the separators the user typed.
+  async function findBookByIsbn(isbn: string): Promise<BookWithCopies | null> {
+    const local = books.find((book) => canonicalizeIsbn(book.isbn) === isbn);
+    if (local) return local;
+    try {
+      const res = await fetch(`/api/books?isbn=${encodeURIComponent(isbn)}`);
+      if (!res.ok) return null;
+      const matches: BookWithCopies[] = await res.json();
+      return matches[0] ?? null;
+    } catch {
+      // A failed duplicate check must not take the metadata lookup down with
+      // it: fall through and let the form populate as an ordinary new book.
+      return null;
+    }
+  }
+
   async function handleIsbnLookup(isbn: string): Promise<boolean> {
     if (!isbn) return false;
     setLookingUpIsbn(true);
@@ -175,28 +196,34 @@ export function AddBookModal({
         return false;
       }
       const meta = await res.json();
-      const existing = books.find((book) => book.isbn === meta.isbn);
+      const existing = await findBookByIsbn(meta.isbn);
       if (existing) {
         setDuplicateBook(existing);
         setScannedMetadata(meta);
         setDuplicateOpen(true);
       }
+      // Only overwrite where the lookup actually has a value — a field Open
+      // Library doesn't know about keeps whatever the user typed instead of
+      // being wiped. Matches how the edit sheet applies ISBN metadata.
       const options = { shouldDirty: true };
+      const current = getValues();
       setValue('isbn', meta.isbn ?? isbn, options);
       setValue('title', meta.title, options);
       setValue('author', meta.author, options);
-      setValue('publisher', meta.publisher ?? '', options);
+      setValue('publisher', meta.publisher ?? current.publisher ?? '', options);
       setValue(
         'publishYear',
-        meta.publishYear ? String(meta.publishYear) : '',
+        meta.publishYear
+          ? String(meta.publishYear)
+          : (current.publishYear ?? ''),
         options,
       );
       setValue(
         'pageCount',
-        meta.pageCount ? String(meta.pageCount) : '',
+        meta.pageCount ? String(meta.pageCount) : (current.pageCount ?? ''),
         options,
       );
-      setValue('coverUrl', meta.coverUrl ?? '', options);
+      setValue('coverUrl', meta.coverUrl ?? current.coverUrl ?? '', options);
       return true;
     } finally {
       setLookingUpIsbn(false);
@@ -270,6 +297,7 @@ export function AddBookModal({
     }
     onCreated(book);
     toast.success(`Added "${book.title}"`);
+    setOpen(false);
     reset(defaultValues);
     setSelectedSubjectIds(new Set());
     setSavedCount((count) => count + 1);
