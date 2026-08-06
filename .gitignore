@@ -52,3 +52,6 @@ next-env.d.ts
 /.clerk/
 
 .env*
+
+# graphify generated output and caches
+/graphify-out/
