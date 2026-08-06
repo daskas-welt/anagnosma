@@ -22,6 +22,7 @@
 - [x] [DONE: 2026-08-06] Remove confusing tab overflow arrows on desktop
 - [x] [DONE: 2026-08-06] Add a seeded 10-book sample catalog for first-time users
 - [x] [DONE: 2026-08-06] Add an operation to delete all sample books from the catalog
+- [x] [DONE: 2026-08-06] Improve mobile carousel cover sizing and navigation controls
 - [x] [DONE: 2026-08-06] Delete all books belonging to the logged-in user
 - [x] [DONE: 2026-08-05] Apply the pending database migrations to the development database
 - [x] [DONE: 2026-08-05] Apply the pending database migrations to the test database
