@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Search, Trash2 } from 'lucide-react';
+import { LoaderCircle, Search, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { IsbnScanner } from '@/components/isbn-scanner';
 import {
   Sheet,
   SheetContent,
@@ -13,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { FieldLabel } from '@/components/ui/field';
 import {
   Select,
   SelectContent,
@@ -31,10 +33,22 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { FORMATS, formatLabel } from '@/lib/formats';
-import type { OpenLibrarySearchResult } from '@/lib/isbn-lookup/client';
+import type {
+  BookMetadata,
+  OpenLibrarySearchResult,
+} from '@/lib/isbn-lookup/client';
 import type { BookWithCopies } from '@/lib/books/repository';
 
 type Subject = { id: number; name: string; bookCount: number };
+type BookDraft = {
+  title: string;
+  author: string;
+  isbn: string;
+  coverUrl: string;
+  publisher: string;
+  publishYear: string;
+  pageCount: string;
+};
 
 export function BookDetailSheet({
   bookId,
@@ -65,6 +79,21 @@ export function BookDetailSheet({
     OpenLibrarySearchResult[]
   >([]);
   const [searchingOpenLibrary, setSearchingOpenLibrary] = useState(false);
+  const [searchingIsbn, setSearchingIsbn] = useState(false);
+  const [bookDraft, setBookDraft] = useState<BookDraft>({
+    title: '',
+    author: '',
+    isbn: '',
+    coverUrl: '',
+    publisher: '',
+    publishYear: '',
+    pageCount: '',
+  });
+  const [copyNotes, setCopyNotes] = useState<Record<number, string>>({});
+  const [copyFormats, setCopyFormats] = useState<Record<number, string>>({});
+  const [draftSubjectIds, setDraftSubjectIds] = useState<Set<number>>(
+    new Set(),
+  );
 
   useEffect(() => {
     if (bookId == null) return;
@@ -74,6 +103,25 @@ export function BookDetailSheet({
         setBook(nextBook);
         setOpenLibraryQuery(nextBook.title);
         setOpenLibraryResults([]);
+        setBookDraft({
+          title: nextBook.title,
+          author: nextBook.author,
+          isbn: nextBook.isbn ?? '',
+          coverUrl: nextBook.coverUrl ?? '',
+          publisher: nextBook.publisher ?? '',
+          publishYear: nextBook.publishYear ? String(nextBook.publishYear) : '',
+          pageCount: nextBook.pageCount ? String(nextBook.pageCount) : '',
+        });
+        setCopyNotes(
+          Object.fromEntries(
+            nextBook.copies.map((copy) => [copy.id, copy.notes ?? '']),
+          ),
+        );
+        setCopyFormats(
+          Object.fromEntries(
+            nextBook.copies.map((copy) => [copy.id, copy.format]),
+          ),
+        );
       });
     fetch('/api/subjects')
       .then((r) => r.json())
@@ -82,6 +130,7 @@ export function BookDetailSheet({
       .then((r) => r.json())
       .then((ids: number[]) => {
         setAssignedSubjectIds(new Set(ids));
+        setDraftSubjectIds(new Set(ids));
         setAssignedSubjectIdsBookId(bookId);
       });
   }, [bookId]);
@@ -107,21 +156,57 @@ export function BookDetailSheet({
   }
 
   async function applyOpenLibraryResult(result: OpenLibrarySearchResult) {
-    const patch: Record<string, unknown> = {
+    setBookDraft((draft) => ({
+      ...draft,
       title: result.title,
       author: result.author,
-    };
-    if (result.isbn) patch.isbn = result.isbn;
-    if (result.coverUrl) patch.coverUrl = result.coverUrl;
-    if (result.publisher) patch.publisher = result.publisher;
-    if (result.publishYear) patch.publishYear = result.publishYear;
-    if (result.pageCount) patch.pageCount = result.pageCount;
-    if (result.description) patch.description = result.description;
-
-    const updated = await updateBookField(patch);
-    if (!updated) return;
+      ...(result.isbn ? { isbn: result.isbn } : {}),
+      ...(result.coverUrl ? { coverUrl: result.coverUrl } : {}),
+      ...(result.publisher ? { publisher: result.publisher } : {}),
+      ...(result.publishYear
+        ? { publishYear: String(result.publishYear) }
+        : {}),
+      ...(result.pageCount ? { pageCount: String(result.pageCount) } : {}),
+    }));
     setOpenLibraryResults([]);
-    toast.success(`Updated metadata for "${result.title}".`);
+    toast.success(`Loaded metadata for "${result.title}".`);
+  }
+
+  function handleScannedIsbn(isbn: string) {
+    setBookDraft((draft) => ({ ...draft, isbn }));
+  }
+
+  async function handleIsbnSearch() {
+    const isbn = bookDraft.isbn.trim();
+    if (!isbn) return;
+    setSearchingIsbn(true);
+    try {
+      const res = await fetch(`/api/lookup?isbn=${encodeURIComponent(isbn)}`);
+      if (!res.ok) {
+        toast.error('No metadata found for that ISBN.');
+        return;
+      }
+      const metadata = (await res.json()) as BookMetadata;
+      setBookDraft((draft) => ({
+        ...draft,
+        isbn: metadata.isbn,
+        title: metadata.title,
+        author: metadata.author,
+        coverUrl: metadata.coverUrl ?? draft.coverUrl,
+        publisher: metadata.publisher ?? draft.publisher,
+        publishYear: metadata.publishYear
+          ? String(metadata.publishYear)
+          : draft.publishYear,
+        pageCount: metadata.pageCount
+          ? String(metadata.pageCount)
+          : draft.pageCount,
+      }));
+      toast.success('Loaded ISBN metadata.');
+    } catch {
+      toast.error('Could not look up that ISBN.');
+    } finally {
+      setSearchingIsbn(false);
+    }
   }
 
   // Guard against showing stale data from a previously selected book while the
@@ -132,9 +217,7 @@ export function BookDetailSheet({
   // actually from the previous book could read as "assigned" and invert the
   // toggle (DELETE instead of POST) when clicked.
   const displayedAssignedSubjectIds =
-    assignedSubjectIdsBookId === bookId
-      ? assignedSubjectIds
-      : new Set<number>();
+    assignedSubjectIdsBookId === bookId ? draftSubjectIds : new Set<number>();
 
   async function updateBookField(
     patch: Record<string, unknown>,
@@ -153,6 +236,55 @@ export function BookDetailSheet({
     setBook(updated);
     onChanged();
     return true;
+  }
+
+  async function handleSaveChanges() {
+    const publishYear = bookDraft.publishYear.trim();
+    const updated = await updateBookField({
+      ...bookDraft,
+      publishYear: publishYear ? Number(publishYear) : undefined,
+      pageCount: bookDraft.pageCount.trim()
+        ? Number(bookDraft.pageCount)
+        : undefined,
+    });
+    if (!updated || !displayedBook) return;
+    await Promise.all(
+      displayedBook.copies
+        .filter(
+          (copy) =>
+            copyNotes[copy.id] !== (copy.notes ?? '') ||
+            copyFormats[copy.id] !== copy.format,
+        )
+        .map((copy) =>
+          updateCopy(copy.id, {
+            notes: copyNotes[copy.id] ?? '',
+            format: copyFormats[copy.id] ?? copy.format,
+          }),
+        ),
+    );
+    await Promise.all(
+      [...assignedSubjectIds].map((subjectId) =>
+        draftSubjectIds.has(subjectId)
+          ? Promise.resolve()
+          : fetch(
+              `/api/books/${displayedBook.id}/subjects?subjectId=${subjectId}`,
+              { method: 'DELETE' },
+            ),
+      ),
+    );
+    await Promise.all(
+      [...draftSubjectIds].map((subjectId) =>
+        assignedSubjectIds.has(subjectId)
+          ? Promise.resolve()
+          : fetch(`/api/books/${displayedBook.id}/subjects`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ subjectId }),
+            }),
+      ),
+    );
+    toast.success('Book changes saved.');
+    onClose();
   }
 
   async function updateCopy(copyId: number, patch: Record<string, unknown>) {
@@ -211,38 +343,19 @@ export function BookDetailSheet({
         return;
       }
       const { url } = await res.json();
-      await updateBookField({ coverUrl: url });
+      setBookDraft((draft) => ({ ...draft, coverUrl: url }));
     } finally {
       setUploadingCover(false);
     }
   }
 
   async function toggleSubject(subjectId: number, assigned: boolean) {
-    if (!displayedBook) return;
-    if (assigned) {
-      await fetch(
-        `/api/books/${displayedBook.id}/subjects?subjectId=${subjectId}`,
-        { method: 'DELETE' },
-      );
-    } else {
-      await fetch(`/api/books/${displayedBook.id}/subjects`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subjectId }),
-      });
-    }
-    // Base the update on `displayedAssignedSubjectIds` (the value actually
-    // shown and toggled), not the raw `assignedSubjectIds`, in case the fetch
-    // for this book hadn't resolved yet — and stamp the bookId so this
-    // now-correct state isn't immediately treated as stale by the guard above.
-    setAssignedSubjectIds(() => {
+    setDraftSubjectIds(() => {
       const next = new Set(displayedAssignedSubjectIds);
       if (assigned) next.delete(subjectId);
       else next.add(subjectId);
       return next;
     });
-    setAssignedSubjectIdsBookId(displayedBook.id);
-    onChanged();
   }
 
   return (
@@ -287,44 +400,62 @@ export function BookDetailSheet({
                     disabled={searchingOpenLibrary || !openLibraryQuery.trim()}
                     aria-label="Search Open Library"
                   >
-                    <Search />
+                    {searchingOpenLibrary ? (
+                      <LoaderCircle className="animate-spin" />
+                    ) : (
+                      <Search />
+                    )}
                   </Button>
                 </div>
                 {openLibraryResults.length > 0 && (
-                  <div className="space-y-2" aria-label="Open Library results">
-                    {openLibraryResults.map((result, index) => (
-                      <div
-                        key={`${result.isbn ?? result.title}-${index}`}
-                        className="flex items-center gap-3 rounded border p-2"
+                  <div aria-label="Open Library results">
+                    <div className="mb-2 flex justify-end">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label="Close Open Library results"
+                        title="Close results"
+                        onClick={() => setOpenLibraryResults([])}
                       >
-                        {result.coverUrl && (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={result.coverUrl}
-                            alt=""
-                            className="h-12 w-8 shrink-0 rounded object-cover"
-                          />
-                        )}
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium">
-                            {result.title}
-                          </p>
-                          <p className="truncate text-xs text-muted-foreground">
-                            {result.author || 'Unknown author'}
-                            {result.publishYear
-                              ? ` · ${result.publishYear}`
-                              : ''}
-                          </p>
-                        </div>
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={() => applyOpenLibraryResult(result)}
+                        <X />
+                      </Button>
+                    </div>
+                    <div className="space-y-2">
+                      {openLibraryResults.map((result, index) => (
+                        <div
+                          key={`${result.isbn ?? result.title}-${index}`}
+                          className="flex items-center gap-3 rounded border p-2"
                         >
-                          Apply
-                        </Button>
-                      </div>
-                    ))}
+                          {result.coverUrl && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={result.coverUrl}
+                              alt=""
+                              className="h-12 w-8 shrink-0 rounded object-cover"
+                            />
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium">
+                              {result.title}
+                            </p>
+                            <p className="truncate text-xs text-muted-foreground">
+                              {result.author || 'Unknown author'}
+                              {result.publishYear
+                                ? ` · ${result.publishYear}`
+                                : ''}
+                            </p>
+                          </div>
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={() => applyOpenLibraryResult(result)}
+                          >
+                            Apply
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -333,70 +464,95 @@ export function BookDetailSheet({
                   <h3 className="mb-2 text-sm font-medium">Title</h3>
                   <Input
                     key={displayedBook.id}
-                    defaultValue={displayedBook.title}
+                    value={bookDraft.title}
                     placeholder="Title"
-                    onBlur={(e) => {
-                      if (
-                        e.target.value &&
-                        e.target.value !== displayedBook.title
-                      ) {
-                        updateBookField({ title: e.target.value });
-                      }
-                    }}
+                    onChange={(e) =>
+                      setBookDraft((draft) => ({
+                        ...draft,
+                        title: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div>
                   <h3 className="mb-2 text-sm font-medium">Author</h3>
                   <Input
                     key={displayedBook.id}
-                    defaultValue={displayedBook.author}
+                    value={bookDraft.author}
                     placeholder="Author"
-                    onBlur={(e) => {
-                      if (
-                        e.target.value &&
-                        e.target.value !== displayedBook.author
-                      ) {
-                        updateBookField({ author: e.target.value });
-                      }
-                    }}
+                    onChange={(e) =>
+                      setBookDraft((draft) => ({
+                        ...draft,
+                        author: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div>
                   <h3 className="mb-2 text-sm font-medium">ISBN</h3>
-                  <Input
-                    key={displayedBook.id}
-                    defaultValue={displayedBook.isbn ?? ''}
-                    placeholder="ISBN"
-                    onBlur={(e) => {
-                      if (e.target.value !== (displayedBook.isbn ?? '')) {
-                        updateBookField({ isbn: e.target.value });
+                  <div className="relative flex items-end gap-2">
+                    <Input
+                      key={displayedBook.id}
+                      className="flex-1"
+                      value={bookDraft.isbn}
+                      placeholder="ISBN"
+                      onChange={(e) =>
+                        setBookDraft((draft) => ({
+                          ...draft,
+                          isbn: e.target.value,
+                        }))
                       }
-                    }}
-                  />
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          void handleIsbnSearch();
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      aria-label="Search ISBN"
+                      title="Search ISBN"
+                      disabled={searchingIsbn}
+                      onClick={() => void handleIsbnSearch()}
+                    >
+                      {searchingIsbn ? (
+                        <LoaderCircle className="animate-spin" />
+                      ) : (
+                        <Search />
+                      )}
+                    </Button>
+                    <IsbnScanner
+                      compact
+                      busy={searchingIsbn}
+                      onScan={handleScannedIsbn}
+                    />
+                  </div>
                 </div>
                 <div className="col-span-2">
                   <h3 className="mb-2 text-sm font-medium">Cover</h3>
                   <div className="flex items-start gap-3">
-                    {displayedBook.coverUrl && (
+                    {bookDraft.coverUrl && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={displayedBook.coverUrl}
-                        alt={displayedBook.title}
-                        className="h-24 w-16 shrink-0 rounded object-cover"
+                        src={bookDraft.coverUrl}
+                        alt={bookDraft.title}
+                        className="h-48 w-32 shrink-0 rounded object-cover shadow-sm"
                       />
                     )}
                     <div className="flex-1 space-y-2">
                       <Input
                         key={`${displayedBook.id}-${displayedBook.coverUrl ?? ''}`}
-                        defaultValue={displayedBook.coverUrl ?? ''}
+                        value={bookDraft.coverUrl}
                         placeholder="Cover URL"
-                        onBlur={(e) => {
-                          if (
-                            e.target.value !== (displayedBook.coverUrl ?? '')
-                          ) {
-                            updateBookField({ coverUrl: e.target.value });
-                          }
-                        }}
+                        onChange={(e) =>
+                          setBookDraft((draft) => ({
+                            ...draft,
+                            coverUrl: e.target.value,
+                          }))
+                        }
                       />
                       <Input
                         type="file"
@@ -420,13 +576,14 @@ export function BookDetailSheet({
                   <h3 className="mb-2 text-sm font-medium">Publisher</h3>
                   <Input
                     key={displayedBook.id}
-                    defaultValue={displayedBook.publisher ?? ''}
+                    value={bookDraft.publisher}
                     placeholder="Publisher"
-                    onBlur={(e) => {
-                      if (e.target.value !== (displayedBook.publisher ?? '')) {
-                        updateBookField({ publisher: e.target.value });
-                      }
-                    }}
+                    onChange={(e) =>
+                      setBookDraft((draft) => ({
+                        ...draft,
+                        publisher: e.target.value,
+                      }))
+                    }
                   />
                 </div>
                 <div>
@@ -434,21 +591,90 @@ export function BookDetailSheet({
                   <Input
                     key={displayedBook.id}
                     inputMode="numeric"
-                    defaultValue={displayedBook.publishYear ?? ''}
+                    value={bookDraft.publishYear}
                     placeholder="Year"
-                    onBlur={(e) => {
-                      const raw = e.target.value.trim();
-                      if (!raw) return;
-                      const value = Number(raw);
-                      if (
-                        !Number.isNaN(value) &&
-                        value !== displayedBook.publishYear
-                      ) {
-                        updateBookField({ publishYear: value });
-                      }
-                    }}
+                    onChange={(e) =>
+                      setBookDraft((draft) => ({
+                        ...draft,
+                        publishYear: e.target.value,
+                      }))
+                    }
                   />
                 </div>
+                <div>
+                  <h3 className="mb-2 text-sm font-medium">Pages</h3>
+                  <Input
+                    key={displayedBook.id}
+                    inputMode="numeric"
+                    value={bookDraft.pageCount}
+                    placeholder="Pages"
+                    onChange={(e) =>
+                      setBookDraft((draft) => ({
+                        ...draft,
+                        pageCount: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                {displayedBook.copies[0] && (
+                  <div className="space-y-2">
+                    <FieldLabel
+                      htmlFor={`copy-format-${displayedBook.copies[0].id}`}
+                    >
+                      Format
+                    </FieldLabel>
+                    <Select
+                      value={
+                        copyFormats[displayedBook.copies[0].id] ??
+                        displayedBook.copies[0].format
+                      }
+                      onValueChange={(v) =>
+                        v != null &&
+                        setCopyFormats((formats) => ({
+                          ...formats,
+                          [displayedBook.copies[0].id]: v,
+                        }))
+                      }
+                    >
+                      <SelectTrigger
+                        id={`copy-format-${displayedBook.copies[0].id}`}
+                        className="w-full"
+                      >
+                        <SelectValue>
+                          {(value: string) => formatLabel(value)}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FORMATS.map((f) => (
+                          <SelectItem key={f.value} value={f.value}>
+                            {f.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+              <div className="space-y-4">
+                {displayedBook.copies.map((copy) => (
+                  <div key={copy.id} className="space-y-2">
+                    <div className="space-y-2">
+                      <FieldLabel htmlFor={`copy-notes-${copy.id}`}>
+                        Notes
+                      </FieldLabel>
+                      <Textarea
+                        id={`copy-notes-${copy.id}`}
+                        value={copyNotes[copy.id] ?? ''}
+                        onChange={(e) =>
+                          setCopyNotes((notes) => ({
+                            ...notes,
+                            [copy.id]: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
               <div>
                 <h3 className="mb-2 text-sm font-medium">Subjects</h3>
@@ -470,39 +696,14 @@ export function BookDetailSheet({
                   })}
                 </div>
               </div>
-              <div className="space-y-4">
-                <h3 className="text-sm font-medium">Copies</h3>
-                {displayedBook.copies.map((copy) => (
-                  <div key={copy.id} className="space-y-2 rounded border p-3">
-                    <Select
-                      value={copy.format}
-                      onValueChange={(v) =>
-                        v != null && updateCopy(copy.id, { format: v })
-                      }
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue>
-                          {(value: string) => formatLabel(value)}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {FORMATS.map((f) => (
-                          <SelectItem key={f.value} value={f.value}>
-                            {f.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Textarea
-                      defaultValue={copy.notes ?? ''}
-                      placeholder="Notes"
-                      onBlur={(e) =>
-                        updateCopy(copy.id, { notes: e.target.value })
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
+              <Button
+                type="button"
+                className="w-full"
+                disabled={searchingOpenLibrary || searchingIsbn}
+                onClick={() => void handleSaveChanges()}
+              >
+                Save Changes
+              </Button>
               <div className="space-y-2 border-t pt-4">
                 <h3 className="text-sm font-medium">Danger zone</h3>
                 <Button

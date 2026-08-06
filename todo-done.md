@@ -56,3 +56,57 @@
 - [x] [DONE: 2026-08-06] Remove the View source code action from the Developer page (Ref: src/app/developer/page.tsx:37)
 - [x] [DONE: 2026-08-06] Constrain the Import page content to a readable maximum width (Ref: src/app/import/page.tsx:5)
 - [x] [DONE: 2026-08-06] Add pagination controls to the Subjects page (Ref: src/app/subjects/page.tsx:19)
+- [x] [DONE: 2026-08-06] Add ISBN scanner flow for camera and keyboard-emulating devices
+- [x] [DONE: 2026-08-06] Support existing ISBN choices for metadata update or additional copy
+- [x] [DONE: 2026-08-06] Add scanner and duplicate-flow tests
+- [x] [DONE: 2026-08-06] Run lint, type checking, and focused tests
+- [x] [DONE: 2026-08-06] Replace nested ISBN scanner modal with inline panel (Ref: src/components/isbn-scanner.tsx)
+- [x] [DONE: 2026-08-06] Show ISBN lookup loading state and disable Add Book Save
+- [x] [DONE: 2026-08-06] Move Scan ISBN before the Add Book ISBN field
+- [x] [DONE: 2026-08-06] Restore direct Add Book form with compact ISBN scanner action
+- [x] [DONE: 2026-08-06] Preserve found, not-found, and manual creation paths
+- [x] [DONE: 2026-08-06] Run scanner UX verification
+- [x] [DONE: 2026-08-06] Convert Add Book form from dialog to responsive drawer
+- [x] [DONE: 2026-08-06] Preserve ISBN scanning and existing-book actions in drawer
+- [x] [DONE: 2026-08-06] Run drawer UI verification
+- [x] [DONE: 2026-08-06] Match Add Book drawer width to Edit Book drawer
+- [x] [DONE: 2026-08-06] Match Edit Book ISBN controls to Add Book compact scanner UX
+- [x] [DONE: 2026-08-06] Run Edit Book UX verification
+- [x] [DONE: 2026-08-06] Increase Edit Book cover preview size
+- [x] [DONE: 2026-08-06] Run cover layout verification
+- [x] [DONE: 2026-08-06] Anchor compact scanner panel under the full ISBN field in Add and Edit
+- [x] [DONE: 2026-08-06] Run scanner layout verification
+- [x] [DONE: 2026-08-06] Make the Add Book drawer clearly expose manual entry, ISBN entry, and scanning
+- [x] [DONE: 2026-08-06] Close the ISBN scanner panel when clicking outside it
+- [x] [DONE: 2026-08-06] Trigger typed ISBN lookup only from an explicit user action
+- [x] [DONE: 2026-08-06] Rename scanner panel to Scan ISBN only
+- [x] [DONE: 2026-08-06] Populate scanned ISBN without automatic lookup
+- [x] [DONE: 2026-08-06] Rename ISBN optional label to ISBN
+- [x] [DONE: 2026-08-06] Normalize ISBN input before Open Library lookup
+- [x] [DONE: 2026-08-06] Widen the Add Book drawer on desktop
+- [x] [DONE: 2026-08-06] Remove the ISBN helper text
+- [x] [DONE: 2026-08-06] Match Edit Book ISBN controls to Add Book search and scan UX
+- [x] [DONE: 2026-08-06] Match Create Book cover preview size to Edit Book
+- [x] [DONE: 2026-08-06] Place Add Book title and author fields on one row
+- [x] [DONE: 2026-08-06] Place Add Book publisher and year fields on one row
+- [x] [DONE: 2026-08-06] Add a Save Changes button to Edit Book
+- [x] [DONE: 2026-08-06] Submit Edit Book metadata only from Save Changes
+- [x] [DONE: 2026-08-06] Update Edit Book ISBN when applying an Open Library result
+- [x] [DONE: 2026-08-06] Populate Create Book cover from an ISBN lookup fallback
+- [x] [DONE: 2026-08-06] Apply Edit Book ISBN metadata directly without a confirmation modal
+- [x] [DONE: 2026-08-06] Show loading indicators for Edit Book Open Library searches
+- [x] [DONE: 2026-08-06] Disable Save Changes while searching Open Library
+- [x] [DONE: 2026-08-06] Add a close control for Open Library search results
+- [x] [DONE: 2026-08-06] Label Edit Book copy controls as Format and Notes
+- [x] [DONE: 2026-08-06] Remove the Edit Book Copies heading and border
+- [x] [DONE: 2026-08-06] Add editable Pages metadata to Create and Edit Book
+- [x] [DONE: 2026-08-06] Align Create Book Pages and Format fields on one row
+- [x] [DONE: 2026-08-06] Remove the Create Book notes placeholder
+- [x] [DONE: 2026-08-06] Remove the Edit Book notes placeholder
+- [x] [DONE: 2026-08-06] Make Create Book Title and Author span the full drawer width
+- [x] [DONE: 2026-08-06] Move Edit Book Subjects to the end of the form
+- [x] [DONE: 2026-08-06] Move Edit Book Format next to Pages
+- [x] [DONE: 2026-08-06] Defer all Edit Book changes until Save Changes
+- [x] [DONE: 2026-08-06] Show searched cover metadata in Edit Book before Save Changes
+- [x] [DONE: 2026-08-06] Populate all Create Book metadata from ISBN search before Save
+- [x] [DONE: 2026-08-06] Persist initial copy notes from Create Book
