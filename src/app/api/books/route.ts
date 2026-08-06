@@ -6,6 +6,7 @@ import {
 } from '@/lib/books/repository';
 import { parseJsonBody, isUniqueViolation } from '@/lib/api-helpers';
 import { requireUserId } from '@/lib/auth-helpers';
+import { seedSampleCatalog } from '@/lib/books/sample-catalog';
 
 export async function GET(request: Request) {
   const { userId, error: authError } = await requireUserId();
@@ -14,11 +15,15 @@ export async function GET(request: Request) {
   const q = url.searchParams.get('q') ?? undefined;
   const format = url.searchParams.get('format') ?? undefined;
   const subjectIdParam = url.searchParams.get('subjectId');
-  const books = await listBooks(userId, {
+  let books = await listBooks(userId, {
     q,
     format,
     subjectId: subjectIdParam ? Number(subjectIdParam) : undefined,
   });
+  if (!q && !format && !subjectIdParam && books.length === 0) {
+    await seedSampleCatalog(userId);
+    books = await listBooks(userId);
+  }
   return NextResponse.json(books);
 }
 

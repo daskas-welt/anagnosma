@@ -1,6 +1,11 @@
 import { eq, and, or, ilike, inArray } from 'drizzle-orm';
 import { db } from '@/lib/db';
-import { books, copies, bookSubjects } from '@/lib/db/schema';
+import {
+  books,
+  copies,
+  bookSubjects,
+  catalogPreferences,
+} from '@/lib/db/schema';
 
 export type NewBookInput = {
   isbn?: string;
@@ -21,13 +26,19 @@ export type BookWithCopies = typeof books.$inferSelect & {
 export async function createBook(
   userId: string,
   input: NewBookInput,
+  options: { isSample?: boolean } = {},
 ): Promise<BookWithCopies> {
   const { format, ...bookFields } = input;
   const isbn = input.isbn?.trim() || undefined;
   return db.transaction(async (tx) => {
     const [book] = await tx
       .insert(books)
-      .values({ ...bookFields, isbn, userId })
+      .values({
+        ...bookFields,
+        isbn,
+        userId,
+        isSample: options.isSample ?? false,
+      })
       .returning();
     const [copy] = await tx
       .insert(copies)
@@ -162,4 +173,18 @@ export async function updateBook(
 
 export async function deleteBook(userId: string, id: number): Promise<void> {
   await db.delete(books).where(and(eq(books.id, id), eq(books.userId, userId)));
+}
+
+export async function deleteSampleBooks(userId: string): Promise<number> {
+  return db.transaction(async (tx) => {
+    await tx
+      .insert(catalogPreferences)
+      .values({ userId, sampleCatalogSeeded: true })
+      .onConflictDoNothing();
+    const deleted = await tx
+      .delete(books)
+      .where(and(eq(books.userId, userId), eq(books.isSample, true)))
+      .returning({ id: books.id });
+    return deleted.length;
+  });
 }

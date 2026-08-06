@@ -14,6 +14,7 @@ function book(overrides: Partial<BookWithCopies> = {}): BookWithCopies {
     publishYear: 1965,
     pageCount: 412,
     description: null,
+    isSample: false,
     createdAt: new Date(),
     copies: [
       {

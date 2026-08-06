@@ -3,6 +3,7 @@ import {
   serial,
   text,
   integer,
+  boolean,
   timestamp,
   primaryKey,
   unique,
@@ -21,6 +22,7 @@ export const books = pgTable(
     publishYear: integer('publish_year'),
     pageCount: integer('page_count'),
     description: text('description'),
+    isSample: boolean('is_sample').notNull().default(false),
     createdAt: timestamp('created_at').notNull().defaultNow(),
   },
   (t) => ({
@@ -37,6 +39,13 @@ export const copies = pgTable('copies', {
   notes: text('notes'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const catalogPreferences = pgTable('catalog_preferences', {
+  userId: text('user_id').primaryKey(),
+  sampleCatalogSeeded: boolean('sample_catalog_seeded')
+    .notNull()
+    .default(false),
 });
 
 export const subjects = pgTable(

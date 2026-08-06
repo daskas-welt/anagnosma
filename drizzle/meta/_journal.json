@@ -64,6 +64,20 @@
       "when": 1785839731277,
       "tag": "0008_books_isbn_per_user_unique",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1785999030216,
+      "tag": "0009_cooing_namora",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1786000015483,
+      "tag": "0010_certain_blockbuster",
+      "breakpoints": true
     }
   ]
 }

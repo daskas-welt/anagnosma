@@ -46,10 +46,10 @@ export function CatalogCarousel({
                       alt={book.title}
                       width={420}
                       height={630}
-                      className="h-[630px] w-[420px] shrink-0 object-cover"
+                      className="aspect-[2/3] h-auto max-h-[630px] w-full max-w-[420px] shrink-0 object-cover"
                     />
                   ) : (
-                    <div className="flex h-[630px] w-[420px] shrink-0 items-center justify-center bg-muted text-sm text-muted-foreground">
+                    <div className="flex aspect-[2/3] h-auto max-h-[630px] w-full max-w-[420px] shrink-0 items-center justify-center bg-muted text-sm text-muted-foreground">
                       No cover
                     </div>
                   )}
