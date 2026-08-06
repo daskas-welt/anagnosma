@@ -24,6 +24,35 @@
 - [x] [DONE: 2026-08-06] Add an operation to delete all sample books from the catalog
 - [x] [DONE: 2026-08-06] Improve mobile carousel cover sizing and navigation controls
 - [x] [DONE: 2026-08-06] Hide Table and By Subject tabs on mobile screens
+- [x] [DONE: 2026-08-06] Add Anagnosma description, developer information, and privacy note
+- [x] [DONE: 2026-08-06] Add an About page beside Subjects in the navigation
 - [x] [DONE: 2026-08-06] Delete all books belonging to the logged-in user
 - [x] [DONE: 2026-08-05] Apply the pending database migrations to the development database
 - [x] [DONE: 2026-08-05] Apply the pending database migrations to the test database
+- [x] [DONE: 2026-08-06] Move developer image into the Developer section (Ref: src/app/about/page.tsx:35)
+- [x] [DONE: 2026-08-06] Place the developer image directly under the Developer header (Ref: src/app/about/page.tsx:35)
+- [x] [DONE: 2026-08-06] Add a 2026 Anagnosma copyright footer (Ref: src/app/layout.tsx:47)
+- [x] [DONE: 2026-08-06] Add Privacy Policy and Terms of Service footer links and pages (Ref: src/app/layout.tsx:48)
+- [x] [DONE: 2026-08-06] Remove the About Anagnosma block from the catalog page (Ref: src/app/page.tsx:226)
+- [x] [DONE: 2026-08-06] Add LinkedIn and developer website icon links to the footer (Ref: src/app/layout.tsx:62)
+- [x] [DONE: 2026-08-06] Put copyright, legal links, and social icons on one footer row (Ref: src/app/layout.tsx:49)
+- [x] [DONE: 2026-08-06] Add hover cursors and labels to footer social icons (Ref: src/app/layout.tsx:59)
+- [x] [DONE: 2026-08-06] Move the About link from the header navigation to the footer (Ref: src/components/nav.tsx:31)
+- [x] [DONE: 2026-08-06] Place About immediately before Privacy Policy in the footer (Ref: src/app/layout.tsx:52)
+- [x] [DONE: 2026-08-06] Update the footer copyright holder to Andreas Daskalopoulos (Ref: src/app/layout.tsx:52)
+- [x] [DONE: 2026-08-06] Add a dismissible Buy Me a Coffee support banner to the catalog (Ref: src/app/page.tsx:124)
+- [x] [DONE: 2026-08-06] Remove monetization and the Buy Me a Coffee support banner (Ref: src/app/page.tsx:1)
+- [x] [DONE: 2026-08-06] Remove the Privacy section from the About page (Ref: src/app/about/page.tsx:71)
+- [x] [DONE: 2026-08-06] Rename the About page heading to "Your personal book catalog" (Ref: src/app/about/page.tsx:10)
+- [x] [DONE: 2026-08-06] Optimize the Developer section with a responsive layout and shared social links (Ref: src/app/about/page.tsx:28)
+- [x] [DONE: 2026-08-06] Remove the source code and developer website text links from the Developer section (Ref: src/app/about/page.tsx:42)
+- [x] [DONE: 2026-08-06] Show text labels alongside Developer section social icons (Ref: src/components/social-links.tsx:3)
+- [x] [DONE: 2026-08-06] Place the developer picture under the Developer heading (Ref: src/app/about/page.tsx:28)
+- [x] [DONE: 2026-08-06] Remove the developer website link from the developer attribution text (Ref: src/app/about/page.tsx:38)
+- [x] [DONE: 2026-08-06] Add a Developer link after About in the footer (Ref: src/app/layout.tsx:56)
+- [x] [DONE: 2026-08-06] Move Developer content to a dedicated page and update the footer link (Ref: src/app/developer/page.tsx:1)
+- [x] [DONE: 2026-08-06] Add the developer biography and personal profile text (Ref: src/app/developer/page.tsx:31)
+- [x] [DONE: 2026-08-06] Improve Developer page UX with structured biography, profile card, metadata, and action links (Ref: src/app/developer/page.tsx:1)
+- [x] [DONE: 2026-08-06] Remove the View source code action from the Developer page (Ref: src/app/developer/page.tsx:37)
+- [x] [DONE: 2026-08-06] Constrain the Import page content to a readable maximum width (Ref: src/app/import/page.tsx:5)
+- [x] [DONE: 2026-08-06] Add pagination controls to the Subjects page (Ref: src/app/subjects/page.tsx:19)
