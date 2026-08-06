@@ -1,4 +1,4 @@
-import { createBook } from '@/lib/books/repository';
+import { createBook, listBooks } from '@/lib/books/repository';
 import { assignSubject, getOrCreateSubject } from '@/lib/subjects/repository';
 
 // Source: the 15 July 2026 catalog PDF supplied for this import.
@@ -240,20 +240,27 @@ async function main() {
     throw new Error('Usage: tsx scripts/import-pdf-catalog.ts <user-id>');
 
   const subjectIds = new Map<string, number>();
+  const existing = new Set(
+    (await listBooks(userId)).map((book) => `${book.title}\u0000${book.author}`),
+  );
   let created = 0;
   for (const entry of entries) {
+    const author = entry.author || 'Unknown';
+    const bookKey = `${entry.title}\u0000${author}`;
+    if (existing.has(bookKey)) continue;
     const subject =
       subjectIds.get(entry.subject) ??
       (await getOrCreateSubject(userId, entry.subject)).id;
     subjectIds.set(entry.subject, subject);
     const book = await createBook(userId, {
       title: entry.title,
-      author: entry.author || 'Unknown',
+      author,
       format: 'paperback',
       publisher: entry.publisher,
       publishYear: entry.publishYear,
     });
     await assignSubject(userId, book.id, subject);
+    existing.add(bookKey);
     created++;
   }
   console.log(

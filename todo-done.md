@@ -17,5 +17,6 @@
 - [x] [DONE: 2026-08-05] Apply the pending database migrations to the production database
 - [x] [DONE: 2026-08-05] Replace the invalid Clerk publishable key with a real instance key
 - [x] [DONE: 2026-08-06] Recreate Clerk and Neon integrations with Anagnosma-relative names
+- [x] [DONE: 2026-08-06] Delete all books belonging to the logged-in user
 - [x] [DONE: 2026-08-05] Apply the pending database migrations to the development database
 - [x] [DONE: 2026-08-05] Apply the pending database migrations to the test database
