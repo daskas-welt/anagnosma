@@ -2,7 +2,7 @@ import { CsvImportWizard } from '@/components/csv-import-wizard';
 
 export default function ImportPage() {
   return (
-    <div>
+    <div className="max-w-5xl">
       <h1 className="mb-4 text-xl font-semibold">Import from CSV</h1>
       <div className="mb-4 rounded-md border bg-muted/30 p-3 text-sm text-muted-foreground">
         <p className="font-medium text-foreground">Supported imports</p>
