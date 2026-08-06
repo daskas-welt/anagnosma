@@ -84,10 +84,13 @@ export function downloadExcel(filename: string, rows: ExportRow[]) {
         `<Row>${exportColumns.map((column) => cell(row[column])).join('')}</Row>`,
     )
     .join('');
+  const columnWidths = [220, 150, 100, 180, 60, 85, 60, 180, 260, 320]
+    .map((width) => `<Column ss:Width="${width}"/>`)
+    .join('');
   const workbook = `<?xml version="1.0" encoding="UTF-8"?>
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
-  <Worksheet ss:Name="Books"><Table>${header}${body}</Table></Worksheet>
+  <Worksheet ss:Name="Books"><Table>${columnWidths}${header}${body}</Table></Worksheet>
 </Workbook>`;
   downloadBlob(
     filename,

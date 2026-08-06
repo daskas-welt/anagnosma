@@ -6,6 +6,16 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { AddBookModal } from '@/components/add-book-modal';
 import { CatalogGrid } from '@/components/catalog-grid';
 import { CatalogCarousel } from '@/components/catalog-carousel';
@@ -37,6 +47,7 @@ function CatalogPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [books, setBooks] = useState<BookWithCopies[]>([]);
+  const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'grid' | 'carousel' | 'list' | 'subject'>(
     'grid',
   );
@@ -48,7 +59,14 @@ function CatalogPageInner() {
   );
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [exportFormat, setExportFormat] = useState<ExportFormat>('csv');
+  const [confirmingSampleDelete, setConfirmingSampleDelete] = useState(false);
+  const [deletingSamples, setDeletingSamples] = useState(false);
   const subjectNamesByBookId = useSubjectNamesByBook(true);
+  const showingSampleCatalog =
+    !query &&
+    subjectId == null &&
+    books.length > 0 &&
+    books.every((book) => book.isSample);
 
   async function handleExport() {
     const rows = buildExportRows(books, subjectNamesByBookId ?? {});
@@ -66,12 +84,32 @@ function CatalogPageInner() {
       downloadPdf(`anagnosma-books-${date}.pdf`, rows);
   }
 
+  async function handleDeleteSamples() {
+    setDeletingSamples(true);
+    try {
+      const response = await fetch('/api/books/samples', { method: 'DELETE' });
+      if (response.ok) {
+        setBooks((current) => current.filter((book) => !book.isSample));
+        setConfirmingSampleDelete(false);
+      }
+    } finally {
+      setDeletingSamples(false);
+    }
+  }
+
   async function refresh() {
+    setLoading(true);
     const params = new URLSearchParams();
     if (query) params.set('q', query);
     if (subjectId) params.set('subjectId', String(subjectId));
-    const res = await fetch(`/api/books?${params.toString()}`);
-    setBooks(await res.json());
+    try {
+      const res = await fetch(`/api/books?${params.toString()}`, {
+        cache: 'no-store',
+      });
+      setBooks(await res.json());
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -83,21 +121,42 @@ function CatalogPageInner() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
+      {showingSampleCatalog && (
+        <div
+          role="status"
+          className="rounded-lg border border-primary/20 bg-primary/5 p-4 text-sm"
+        >
+          <p className="font-medium">
+            We&apos;ve added sample books to your catalog
+          </p>
+          <p className="mt-1 text-muted-foreground">
+            These sample books show you how Anagnosma works. Add your own books
+            to start building your personal library.
+          </p>
+          <Button
+            variant="outline"
+            className="mt-3 h-11 sm:h-8"
+            onClick={() => setConfirmingSampleDelete(true)}
+          >
+            Remove sample books
+          </Button>
+        </div>
+      )}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <Input
           placeholder="Search title or author..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="max-w-sm"
+          className="h-11 w-full sm:h-8 sm:max-w-sm"
         />
-        <div className="flex flex-wrap gap-2">
+        <div className="flex w-full flex-wrap gap-2 sm:w-auto">
           <select
             aria-label="Export format"
             value={exportFormat}
             onChange={(event) =>
               setExportFormat(event.target.value as ExportFormat)
             }
-            className="h-8 rounded-md border bg-background px-3 text-sm"
+            className="h-11 min-w-0 flex-1 rounded-md border bg-background px-3 text-sm sm:h-8 sm:flex-none"
           >
             <option value="csv">CSV</option>
             <option value="xls">Excel</option>
@@ -108,6 +167,7 @@ function CatalogPageInner() {
             variant="outline"
             onClick={handleExport}
             disabled={books.length === 0}
+            className="h-11 sm:h-8"
           >
             Export
           </Button>
@@ -122,7 +182,7 @@ function CatalogPageInner() {
           setView(v as 'grid' | 'carousel' | 'list' | 'subject')
         }
       >
-        <TabsList>
+        <TabsList className="max-w-full overflow-x-auto overflow-y-hidden sm:max-w-none sm:overflow-visible">
           <TabsTrigger value="grid">Grid</TabsTrigger>
           <TabsTrigger value="carousel">Carousel</TabsTrigger>
           <TabsTrigger value="list">Table</TabsTrigger>
@@ -141,23 +201,50 @@ function CatalogPageInner() {
           Filtering by subject &times;
         </Badge>
       )}
-      {view === 'grid' && (
+      {loading ? (
+        <p className="py-12 text-center text-sm text-muted-foreground">
+          Loading your catalog...
+        </p>
+      ) : view === 'grid' ? (
         <CatalogGrid books={books} onSelect={setSelectedId} />
-      )}
-      {view === 'carousel' && (
+      ) : view === 'carousel' ? (
         <CatalogCarousel books={books} onSelect={setSelectedId} />
-      )}
-      {view === 'list' && (
+      ) : view === 'list' ? (
         <CatalogTable books={books} onSelect={setSelectedId} paginate />
-      )}
-      {view === 'subject' && (
+      ) : view === 'subject' ? (
         <CatalogBySubject books={books} onSelect={setSelectedId} />
-      )}
+      ) : null}
       <BookDetailSheet
         bookId={selectedId}
         onClose={() => setSelectedId(null)}
         onChanged={refresh}
       />
+      <AlertDialog
+        open={confirmingSampleDelete}
+        onOpenChange={setConfirmingSampleDelete}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove sample books?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes the 10 sample books and their copies.
+              Your personal books will not be affected.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deletingSamples}>
+              Keep them
+            </AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              disabled={deletingSamples}
+              onClick={() => void handleDeleteSamples()}
+            >
+              {deletingSamples ? 'Removing...' : 'Remove samples'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

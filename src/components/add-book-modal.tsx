@@ -204,8 +204,10 @@ export function AddBookModal({
         }
       }}
     >
-      <DialogTrigger render={<Button />}>+ Add Book</DialogTrigger>
-      <DialogContent>
+      <DialogTrigger render={<Button className="h-11 sm:h-8" />}>
+        + Add Book
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Add Book</DialogTitle>
           <DialogDescription>

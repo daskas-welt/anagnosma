@@ -241,7 +241,9 @@ async function main() {
 
   const subjectIds = new Map<string, number>();
   const existing = new Set(
-    (await listBooks(userId)).map((book) => `${book.title}\u0000${book.author}`),
+    (await listBooks(userId)).map(
+      (book) => `${book.title}\u0000${book.author}`,
+    ),
   );
   let created = 0;
   for (const entry of entries) {
