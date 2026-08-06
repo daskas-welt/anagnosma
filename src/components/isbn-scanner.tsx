@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { LoaderCircle, ScanLine } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { normalizeIsbn } from '@/lib/isbn';
@@ -63,20 +64,26 @@ export function IsbnScanner({
     return () => document.removeEventListener('pointerdown', handlePointerDown);
   }, [open]);
 
-  async function submit(rawValue: string) {
+  async function submit(rawValue: string, fromCamera = false) {
     if (scanInProgressRef.current) return;
     const isbn = normalizeIsbn(rawValue);
     if (!isbn) {
-      setCameraError('Enter a valid ISBN-10 or ISBN-13.');
+      const message = 'Could not find a valid ISBN. Try scanning again.';
+      setCameraError(message);
+      if (fromCamera) toast.error(message);
       return;
     }
     scanInProgressRef.current = true;
     controlsRef.current?.stop();
     try {
       await onScan(isbn);
+      if (fromCamera) toast.success('ISBN scanned successfully.');
       setValue('');
       setOpen(false);
       setCameraOpen(false);
+    } catch {
+      if (fromCamera) toast.error('Could not process the scanned ISBN.');
+      setCameraError('Could not process the scanned ISBN. Try again.');
     } finally {
       scanInProgressRef.current = false;
     }
@@ -92,13 +99,14 @@ export function IsbnScanner({
         undefined,
         videoRef.current!,
         (result) => {
-          if (result) void submit(result.getText());
+          if (result) void submit(result.getText(), true);
         },
       );
     } catch {
-      setCameraError(
-        'Camera access is unavailable. Check browser permissions or use the scanner input below.',
-      );
+      const message =
+        'Camera access is unavailable. Check browser permissions and try again.';
+      setCameraError(message);
+      toast.error(message);
       setCameraOpen(false);
     }
   }
