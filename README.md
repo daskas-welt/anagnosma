@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anagnosma
+
+Anagnosma is a personal book-library manager for organizing, browsing, and discovering the books you own.
+
+## Features
+
+- Manage books, copies, subjects, notes, covers, and metadata.
+- Search, sort, filter, and browse a personal catalog.
+- Import catalog data from CSV.
+- Export catalog data to CSV, Excel, Word, or PDF.
+- Use Clerk for authentication and Neon Postgres for catalog storage.
+- Responsive layouts for desktop and mobile screens.
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies and start the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env.local` and provide the required database and Clerk values. Apply database migrations with:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npx dotenv -e .env.local -- drizzle-kit migrate
+```
 
-## Learn More
+## Checks
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+npm run format:check
+npx tsc --noEmit
+npm test
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Privacy Note
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Clerk handles authentication and Neon hosts catalog data. Catalog records are associated with the authenticated account. For privacy questions or account/data deletion requests, contact `mcaibad2@gmail.com`.
 
-## Deploy on Vercel
+## Developer
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Anagnosma is developed by [Andreas Daskalopoulos](https://daskas-welt.github.io/).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Source code: [github.com/daskas-welt/anagnosma](https://github.com/daskas-welt/anagnosma)
+- Website: [daskas-welt.github.io](https://daskas-welt.github.io/)
+- Contact: [mcaibad2@gmail.com](mailto:mcaibad2@gmail.com)
