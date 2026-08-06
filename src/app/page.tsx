@@ -97,7 +97,7 @@ function CatalogPageInner() {
             onChange={(event) =>
               setExportFormat(event.target.value as ExportFormat)
             }
-            className="h-9 rounded-md border bg-background px-3 text-sm"
+            className="h-8 rounded-md border bg-background px-3 text-sm"
           >
             <option value="csv">CSV</option>
             <option value="xls">Excel</option>
