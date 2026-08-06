@@ -1,3 +1,5 @@
+import { normalizeIsbn } from '@/lib/isbn';
+
 export type BookMetadata = {
   isbn: string;
   title: string;
@@ -39,13 +41,16 @@ export async function lookupByIsbn(
   isbn: string,
   fetchImpl: typeof fetch = fetch,
 ): Promise<BookMetadata | null> {
+  const normalizedIsbn = normalizeIsbn(isbn);
+  if (!normalizedIsbn) return null;
+
   try {
     const res = await fetchImpl(
-      `https://openlibrary.org/api/books?bibkeys=ISBN:${encodeURIComponent(isbn)}&format=json&jscmd=data`,
+      `https://openlibrary.org/api/books?bibkeys=ISBN:${encodeURIComponent(normalizedIsbn)}&format=json&jscmd=data`,
     );
     if (!res.ok) return null;
     const data = await res.json();
-    const info: OpenLibraryBook | undefined = data[`ISBN:${isbn}`];
+    const info: OpenLibraryBook | undefined = data[`ISBN:${normalizedIsbn}`];
     if (!info) return null;
 
     const publishYearMatch = info.publish_date?.match(/\d{4}/);
@@ -56,10 +61,14 @@ export async function lookupByIsbn(
       typeof info.notes === 'string' ? info.notes : info.notes?.value;
 
     return {
-      isbn,
+      isbn: normalizedIsbn,
       title: info.title,
       author: (info.authors ?? []).map((a) => a.name).join(', '),
-      coverUrl: info.cover?.medium ?? info.cover?.large ?? info.cover?.small,
+      coverUrl:
+        info.cover?.medium ??
+        info.cover?.large ??
+        info.cover?.small ??
+        `https://covers.openlibrary.org/b/isbn/${normalizedIsbn}-M.jpg`,
       publisher: info.publishers?.[0]?.name,
       publishYear: Number.isNaN(publishYear) ? undefined : publishYear,
       pageCount: info.number_of_pages,

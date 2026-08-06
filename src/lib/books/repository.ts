@@ -1,5 +1,6 @@
-import { eq, and, or, ilike, inArray } from 'drizzle-orm';
+import { eq, and, or, ilike, inArray, sql } from 'drizzle-orm';
 import { db } from '@/lib/db';
+import { canonicalizeIsbn } from '@/lib/isbn';
 import {
   books,
   copies,
@@ -17,6 +18,20 @@ export type NewBookInput = {
   pageCount?: number;
   description?: string;
   format: string;
+  notes?: string;
+};
+
+// Update accepts null on every optional column so the client can clear a field
+// it previously set. `undefined` still means "leave this column alone".
+export type BookUpdateInput = {
+  isbn?: string | null;
+  title?: string;
+  author?: string;
+  coverUrl?: string | null;
+  publisher?: string | null;
+  publishYear?: number | null;
+  pageCount?: number | null;
+  description?: string | null;
 };
 
 export type BookWithCopies = typeof books.$inferSelect & {
@@ -28,8 +43,8 @@ export async function createBook(
   input: NewBookInput,
   options: { isSample?: boolean } = {},
 ): Promise<BookWithCopies> {
-  const { format, ...bookFields } = input;
-  const isbn = input.isbn?.trim() || undefined;
+  const { format, notes, ...bookFields } = input;
+  const isbn = canonicalizeIsbn(input.isbn);
   return db.transaction(async (tx) => {
     const [book] = await tx
       .insert(books)
@@ -42,7 +57,7 @@ export async function createBook(
       .returning();
     const [copy] = await tx
       .insert(copies)
-      .values({ bookId: book.id, format })
+      .values({ bookId: book.id, format, notes })
       .returning();
     return { ...book, copies: [copy] };
   });
@@ -60,7 +75,8 @@ export async function getBook(
   const bookCopies = await db
     .select()
     .from(copies)
-    .where(eq(copies.bookId, id));
+    .where(eq(copies.bookId, id))
+    .orderBy(copies.id);
   return { ...book, copies: bookCopies };
 }
 
@@ -68,6 +84,7 @@ export type BookFilters = {
   q?: string;
   format?: string;
   subjectId?: number;
+  isbn?: string;
 };
 
 export async function listBooks(
@@ -102,6 +119,16 @@ export async function listBooks(
         )
       : undefined,
     bookIds ? inArray(books.id, bookIds.length ? bookIds : [-1]) : undefined,
+    // Match the stored value both as-is and with separators stripped: ISBNs are
+    // canonicalised on write now, but rows created before that still hold
+    // whatever the user typed, and a duplicate check that misses them would let
+    // the same book be added twice.
+    filters.isbn
+      ? or(
+          eq(books.isbn, filters.isbn),
+          sql`upper(replace(replace(${books.isbn}, '-', ''), ' ', '')) = ${filters.isbn}`,
+        )
+      : undefined,
   ].filter((c): c is NonNullable<typeof c> => c !== undefined);
 
   const allBooks = await db
@@ -143,16 +170,14 @@ export async function listBooks(
 export async function updateBook(
   userId: string,
   id: number,
-  input: Partial<Omit<NewBookInput, 'format'>>,
+  input: BookUpdateInput,
 ): Promise<BookWithCopies | undefined> {
   // Whitelist explicitly rather than spreading `input` (or any object built
   // from it) into `.set()` — Drizzle's `.set()` writes any object key that
   // matches a real column name, so a raw spread would let an attacker-
   // supplied `userId`/`id`/`createdAt` key in the request body reassign
   // ownership of the row. Only these named, allowed fields may reach `.set()`.
-  const patch: Omit<Partial<Omit<NewBookInput, 'format'>>, 'isbn'> & {
-    isbn?: string | null;
-  } = {};
+  const patch: BookUpdateInput = {};
   if (input.title !== undefined) patch.title = input.title;
   if (input.author !== undefined) patch.author = input.author;
   if (input.coverUrl !== undefined) patch.coverUrl = input.coverUrl;
@@ -160,7 +185,8 @@ export async function updateBook(
   if (input.publishYear !== undefined) patch.publishYear = input.publishYear;
   if (input.pageCount !== undefined) patch.pageCount = input.pageCount;
   if (input.description !== undefined) patch.description = input.description;
-  if (input.isbn !== undefined) patch.isbn = input.isbn?.trim() || null;
+  if (input.isbn !== undefined)
+    patch.isbn = canonicalizeIsbn(input.isbn) ?? null;
 
   const [updated] = await db
     .update(books)
