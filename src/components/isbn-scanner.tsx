@@ -27,11 +27,14 @@ export function IsbnScanner({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const controlsRef = useRef<{ stop: () => void } | null>(null);
   const scanInProgressRef = useRef(false);
+  const cameraFailureToastedRef = useRef(false);
 
   useEffect(() => {
     if (!open) {
       controlsRef.current?.stop();
       controlsRef.current = null;
+      scanInProgressRef.current = false;
+      cameraFailureToastedRef.current = false;
       return;
     }
     // Also release the stream on unmount. Both hosts render this scanner inside
@@ -64,26 +67,37 @@ export function IsbnScanner({
     return () => document.removeEventListener('pointerdown', handlePointerDown);
   }, [open]);
 
+  function toastCameraFailure(message: string) {
+    if (cameraFailureToastedRef.current) return;
+    cameraFailureToastedRef.current = true;
+    toast.error(message);
+  }
+
   async function submit(rawValue: string, fromCamera = false) {
     if (scanInProgressRef.current) return;
+    scanInProgressRef.current = true;
+
     const isbn = normalizeIsbn(rawValue);
     if (!isbn) {
       const message = 'Could not find a valid ISBN. Try scanning again.';
       setCameraError(message);
-      if (fromCamera) toast.error(message);
+      if (fromCamera) toastCameraFailure(message);
+      scanInProgressRef.current = false;
       return;
     }
-    scanInProgressRef.current = true;
+
     controlsRef.current?.stop();
     try {
       await onScan(isbn);
-      if (fromCamera) toast.success('ISBN scanned successfully.');
+      if (fromCamera) toast.success('ISBN captured.');
       setValue('');
       setOpen(false);
       setCameraOpen(false);
+      setCameraError(null);
     } catch {
-      if (fromCamera) toast.error('Could not process the scanned ISBN.');
-      setCameraError('Could not process the scanned ISBN. Try again.');
+      const message = 'Could not process the scanned ISBN. Try again.';
+      setCameraError(message);
+      if (fromCamera) toastCameraFailure(message);
     } finally {
       scanInProgressRef.current = false;
     }
@@ -91,6 +105,7 @@ export function IsbnScanner({
 
   async function startCamera() {
     setCameraError(null);
+    cameraFailureToastedRef.current = false;
     setCameraOpen(true);
     try {
       const { BrowserMultiFormatReader } = await import('@zxing/browser');
@@ -112,104 +127,108 @@ export function IsbnScanner({
   }
 
   return (
-    <div className={compact ? 'contents' : 'relative space-y-3'}>
-      <Button
-        ref={buttonRef}
-        type="button"
-        variant="outline"
-        size={compact ? 'icon' : 'default'}
-        aria-label={compact ? (open ? 'Close ISBN scanner' : label) : undefined}
-        title={compact ? (open ? 'Close ISBN scanner' : label) : undefined}
-        onClick={() => {
-          if (busy) return;
-          setOpen((nextOpen) => !nextOpen);
-          setCameraError(null);
-          setCameraOpen(false);
-        }}
-      >
-        <ScanLine />
-        {compact ? (
-          <span className="sr-only">{open ? 'Close scanner' : label}</span>
-        ) : open ? (
-          'Close scanner'
-        ) : (
-          label
-        )}
-      </Button>
-      {open && (
-        <div
-          ref={panelRef}
-          className={`space-y-3 rounded-lg border bg-popover p-3 shadow-lg ${
-            compact
-              ? 'absolute top-full left-0 z-10 mt-2 w-full'
-              : 'w-full bg-muted/20'
-          }`}
+    <div className="relative">
+      <div className={compact ? 'contents' : 'space-y-3'}>
+        <Button
+          ref={buttonRef}
+          type="button"
+          variant="outline"
+          size={compact ? 'icon' : 'default'}
+          aria-label={
+            compact ? (open ? 'Close ISBN scanner' : label) : undefined
+          }
+          title={compact ? (open ? 'Close ISBN scanner' : label) : undefined}
+          onClick={() => {
+            if (busy) return;
+            setOpen((nextOpen) => !nextOpen);
+            setCameraError(null);
+            setCameraOpen(false);
+          }}
         >
-          <div>
-            <p className="font-medium">Scan ISBN</p>
-            <p className="text-sm text-muted-foreground">
-              Use your camera, or scan with a USB/Bluetooth barcode scanner. A
-              scanner that types like a keyboard works automatically.
-            </p>
-          </div>
-          <video
-            ref={videoRef}
-            className={
-              cameraOpen
-                ? 'aspect-video w-full rounded-lg bg-black object-cover'
-                : 'hidden'
-            }
-            muted
-            playsInline
-          />
-          {!cameraOpen && (
-            <Button
-              type="button"
-              className="w-full"
-              onClick={startCamera}
-              disabled={busy}
-            >
-              <ScanLine />
-              Use camera
-            </Button>
+          <ScanLine />
+          {compact ? (
+            <span className="sr-only">{open ? 'Close scanner' : label}</span>
+          ) : open ? (
+            'Close scanner'
+          ) : (
+            label
           )}
-          <div className="flex gap-2">
-            <Input
-              autoFocus
-              inputMode="numeric"
-              placeholder="Scan ISBN"
-              value={value}
-              onChange={(event) => setValue(event.target.value)}
-              disabled={busy}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault();
-                  void submit(value);
-                }
-              }}
+        </Button>
+        {open && (
+          <div
+            ref={panelRef}
+            className={`space-y-3 rounded-lg border bg-popover p-3 shadow-lg ${
+              compact
+                ? 'absolute top-full left-0 z-10 mt-2 w-full min-w-72'
+                : 'w-full bg-muted/20'
+            }`}
+          >
+            <div>
+              <p className="font-medium">Scan ISBN</p>
+              <p className="text-sm text-muted-foreground">
+                Use your camera, or scan with a USB/Bluetooth barcode scanner. A
+                scanner that types like a keyboard works automatically.
+              </p>
+            </div>
+            <video
+              ref={videoRef}
+              className={
+                cameraOpen
+                  ? 'aspect-video w-full rounded-lg bg-black object-cover'
+                  : 'hidden'
+              }
+              muted
+              playsInline
             />
-            <Button
-              type="button"
-              onClick={() => void submit(value)}
-              disabled={busy}
-            >
-              {busy ? (
-                <>
-                  <LoaderCircle className="animate-spin" />
-                  Looking up...
-                </>
-              ) : (
-                'Use ISBN'
-              )}
-            </Button>
+            {!cameraOpen && (
+              <Button
+                type="button"
+                className="w-full"
+                onClick={startCamera}
+                disabled={busy}
+              >
+                <ScanLine />
+                Use camera
+              </Button>
+            )}
+            <div className="flex gap-2">
+              <Input
+                autoFocus
+                inputMode="numeric"
+                placeholder="Scan ISBN"
+                value={value}
+                onChange={(event) => setValue(event.target.value)}
+                disabled={busy}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                    void submit(value);
+                  }
+                }}
+              />
+              <Button
+                type="button"
+                onClick={() => void submit(value)}
+                disabled={busy}
+              >
+                {busy ? (
+                  <>
+                    <LoaderCircle className="animate-spin" />
+                    Looking up...
+                  </>
+                ) : (
+                  'Use ISBN'
+                )}
+              </Button>
+            </div>
+            {cameraError && (
+              <p role="alert" className="text-sm text-destructive">
+                {cameraError}
+              </p>
+            )}
           </div>
-          {cameraError && (
-            <p role="alert" className="text-sm text-destructive">
-              {cameraError}
-            </p>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

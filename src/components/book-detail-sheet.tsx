@@ -33,6 +33,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { FORMATS, formatLabel } from '@/lib/formats';
+import { parsePageCount, parsePublishYear } from '@/lib/isbn';
 import type {
   BookMetadata,
   OpenLibrarySearchResult,
@@ -274,21 +275,16 @@ export function BookDetailSheet({
     return true;
   }
 
-  // Blank clears the column; a non-numeric entry aborts the save rather than
-  // silently wiping whatever was there before.
-  function parseOptionalCount(value: string): number | null | 'invalid' {
-    const trimmed = value.trim();
-    if (!trimmed) return null;
-    const parsed = Number(trimmed);
-    return Number.isInteger(parsed) && parsed >= 0 ? parsed : 'invalid';
-  }
-
   async function handleSaveChanges() {
     if (savingChanges) return;
-    const publishYear = parseOptionalCount(bookDraft.publishYear);
-    const pageCount = parseOptionalCount(bookDraft.pageCount);
-    if (publishYear === 'invalid' || pageCount === 'invalid') {
-      toast.error('Year and Pages must be whole numbers.');
+    const publishYear = parsePublishYear(bookDraft.publishYear);
+    const pageCount = parsePageCount(bookDraft.pageCount);
+    if (publishYear === 'invalid') {
+      toast.error('Year must be a 4-digit number.');
+      return;
+    }
+    if (pageCount === 'invalid') {
+      toast.error('Pages must be a whole number.');
       return;
     }
     setSavingChanges(true);
@@ -460,9 +456,9 @@ export function BookDetailSheet({
         {displayedBook && (
           <>
             <SheetHeader>
-              <SheetTitle>{displayedBook.title}</SheetTitle>
+              <SheetTitle>{bookDraft.title || displayedBook.title}</SheetTitle>
               <p className="text-sm text-muted-foreground">
-                {displayedBook.author}
+                {bookDraft.author || displayedBook.author}
               </p>
             </SheetHeader>
             <div className="space-y-6 px-4 pb-4">

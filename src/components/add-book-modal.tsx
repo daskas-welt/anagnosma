@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -81,8 +81,6 @@ export function AddBookModal({
   onChanged: () => void;
 }) {
   const [open, setOpen] = useState(false);
-  const isbnRef = useRef<HTMLInputElement | null>(null);
-  const [savedCount, setSavedCount] = useState(0);
   const [uploadingCover, setUploadingCover] = useState(false);
   const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
   const [selectedSubjectIds, setSelectedSubjectIds] = useState<Set<number>>(
@@ -110,15 +108,6 @@ export function AddBookModal({
   });
   const coverUrl = useWatch({ control, name: 'coverUrl' });
   const selectedFormat = useWatch({ control, name: 'format' });
-
-  // Ref access is deferred to an effect (not read during render/submit) to satisfy
-  // react-hooks/refs and avoid relying on RHF's setFocus, which does not reliably
-  // reach this component stack's underlying DOM node (see task-11-report.md).
-  useEffect(() => {
-    if (savedCount > 0) {
-      isbnRef.current?.focus();
-    }
-  }, [savedCount]);
 
   useEffect(() => {
     if (!open) return;
@@ -285,22 +274,38 @@ export function AddBookModal({
     }
     const book = await res.json();
     if (selectedSubjectIds.size > 0) {
-      await Promise.all(
-        [...selectedSubjectIds].map((subjectId) =>
-          fetch(`/api/books/${book.id}/subjects`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ subjectId }),
-          }),
-        ),
+      const subjectResults = await Promise.all(
+        [...selectedSubjectIds].map(async (subjectId) => {
+          try {
+            const subjectRes = await fetch(`/api/books/${book.id}/subjects`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ subjectId }),
+            });
+            return subjectRes.ok;
+          } catch {
+            return false;
+          }
+        }),
       );
+      if (subjectResults.some((ok) => !ok)) {
+        onCreated(book);
+        toast.error(
+          `Added "${book.title}", but some subjects could not be applied.`,
+        );
+        setOpen(false);
+        reset(defaultValues);
+        setSelectedSubjectIds(new Set());
+        setDuplicateOpen(false);
+        return;
+      }
     }
     onCreated(book);
     toast.success(`Added "${book.title}"`);
     setOpen(false);
     reset(defaultValues);
     setSelectedSubjectIds(new Set());
-    setSavedCount((count) => count + 1);
+    setDuplicateOpen(false);
   }
 
   const isbnField = register('isbn');
@@ -328,7 +333,8 @@ export function AddBookModal({
           <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3">
             <p className="font-medium">This ISBN is already in your library.</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              {duplicateBook.title} · choose what to do with the scanned book.
+              {duplicateBook.title} · these actions apply immediately to the
+              existing book.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Button type="button" onClick={() => void updateExistingBook()}>
@@ -363,13 +369,6 @@ export function AddBookModal({
                   placeholder="Enter ISBN-10 or ISBN-13"
                   aria-invalid={!!errors.isbn}
                   {...isbnField}
-                  ref={(el) => {
-                    isbnField.ref(el);
-                    isbnRef.current = el;
-                  }}
-                  onBlur={(e) => {
-                    isbnField.onBlur(e);
-                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
