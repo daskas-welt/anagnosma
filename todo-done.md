@@ -111,4 +111,5 @@
 - [x] [DONE: 2026-08-06] Populate all Create Book metadata from ISBN search before Save
 - [x] [DONE: 2026-08-06] Close Create and Edit Book drawers after successful save
 - [x] [DONE: 2026-08-06] Show camera scan success and failure notifications
+- [x] [DONE: 2026-08-07] Fix ISBN scan review findings (race, toasts, validation, cover fallback, subjects)
 - [x] [DONE: 2026-08-06] Persist initial copy notes from Create Book

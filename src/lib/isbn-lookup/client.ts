@@ -64,11 +64,7 @@ export async function lookupByIsbn(
       isbn: normalizedIsbn,
       title: info.title,
       author: (info.authors ?? []).map((a) => a.name).join(', '),
-      coverUrl:
-        info.cover?.medium ??
-        info.cover?.large ??
-        info.cover?.small ??
-        `https://covers.openlibrary.org/b/isbn/${normalizedIsbn}-M.jpg`,
+      coverUrl: info.cover?.medium ?? info.cover?.large ?? info.cover?.small,
       publisher: info.publishers?.[0]?.name,
       publishYear: Number.isNaN(publishYear) ? undefined : publishYear,
       pageCount: info.number_of_pages,
