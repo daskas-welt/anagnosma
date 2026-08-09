@@ -128,7 +128,7 @@ describe('runImport', () => {
     );
     expect(create).toHaveBeenCalledTimes(1);
     expect(result.duplicates).toEqual([
-      { row: 2, matchedId: 42, reason: 'isbn' },
+      { row: 2, matchedId: 42, reason: 'isbn', collection: 'catalog' },
     ]);
     expect(result.successCount).toBe(2);
     expect(result.failures).toHaveLength(0);
@@ -158,7 +158,7 @@ describe('runImport', () => {
     );
     expect(create).toHaveBeenCalledTimes(1);
     expect(result.duplicates).toEqual([
-      { row: 2, matchedId: 42, reason: 'isbn' },
+      { row: 2, matchedId: 42, reason: 'isbn', collection: 'catalog' },
     ]);
     expect(result.successCount).toBe(2);
     expect(result.failures).toHaveLength(0);
@@ -210,5 +210,34 @@ describe('runImport', () => {
     );
     expect(result.successCount).toBe(1);
     expect(result.failures).toEqual([{ row: 1, reason: 'db error' }]);
+  });
+
+  it('routes rows to the collection column and rejects invalid values', async () => {
+    const create = vi.fn().mockResolvedValueOnce({ id: 1 });
+    const result = await runImport(
+      [
+        {
+          title: 'Dune',
+          author: 'Frank Herbert',
+          collection: 'Wishlist',
+        },
+        {
+          title: 'Unknown',
+          author: 'Author',
+          collection: 'Archive',
+        },
+      ],
+      [],
+      create,
+    );
+
+    expect(create).toHaveBeenCalledWith(
+      expect.objectContaining({ format: undefined }),
+      'wishlist',
+    );
+    expect(result.successCount).toBe(1);
+    expect(result.failures).toEqual([
+      { row: 2, reason: 'collection must be Catalog or Wishlist' },
+    ]);
   });
 });

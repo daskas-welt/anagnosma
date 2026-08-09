@@ -31,6 +31,7 @@ export const HEADER_PRESETS: Record<string, Record<string, string>> = {
     Title: 'title',
     Author: 'author',
     ISBN: 'isbn',
+    Collection: 'collection',
     Publisher: 'publisher',
     Year: 'publishYear',
     Format: 'format',

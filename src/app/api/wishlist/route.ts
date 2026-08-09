@@ -16,13 +16,14 @@ export async function GET(request: Request) {
   const q = url.searchParams.get('q') ?? undefined;
   const subjectIdParam = url.searchParams.get('subjectId');
   const isbn = canonicalizeIsbn(url.searchParams.get('isbn'));
+  const skipSamples = url.searchParams.get('skipSamples') === 'true';
   let books = await listBooks(userId, {
     q,
     subjectId: subjectIdParam ? Number(subjectIdParam) : undefined,
     isbn,
     wishlist: true,
   });
-  if (!q && !subjectIdParam && !isbn) {
+  if (!skipSamples && !q && !subjectIdParam && !isbn) {
     await seedSampleWishlist(userId);
     books = await listBooks(userId, { wishlist: true });
   }
@@ -60,7 +61,10 @@ export async function POST(request: Request) {
   } catch (err) {
     if (isUniqueViolation(err)) {
       return NextResponse.json(
-        { error: 'you already have a book with this ISBN in your wishlist' },
+        {
+          error:
+            'you already have a book with this ISBN in your catalog or wishlist',
+        },
         { status: 409 },
       );
     }

@@ -12,8 +12,10 @@ export type ImportRow = {
   coverUrl?: string;
   subjects?: string;
   notes?: string;
+  collection?: string;
   [key: string]: string | undefined;
 };
+export type ImportCollection = 'catalog' | 'wishlist';
 export type ImportResult = {
   successCount: number;
   failures: { row: number; reason: string }[];
@@ -21,14 +23,31 @@ export type ImportResult = {
     row: number;
     matchedId: number;
     reason: 'isbn' | 'title-author';
+    collection?: ImportCollection;
   }[];
 };
-export type CreateBookFn = (row: ImportRow) => Promise<{ id: number }>;
+export type CreateBookFn = (
+  row: ImportRow,
+  collection: ImportCollection,
+) => Promise<{ id: number }>;
+
+function parseCollection(
+  value: string | undefined,
+  fallback: ImportCollection,
+): ImportCollection | 'invalid' {
+  if (!value?.trim()) return fallback;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'catalog' || normalized === 'library') return 'catalog';
+  if (normalized === 'wishlist' || normalized === 'wish list')
+    return 'wishlist';
+  return 'invalid';
+}
 
 export async function runImport(
   rows: ImportRow[],
   existing: ExistingBook[],
   createBookFn: CreateBookFn,
+  defaultCollection: ImportCollection = 'catalog',
 ): Promise<ImportResult> {
   const result: ImportResult = {
     successCount: 0,
@@ -50,6 +69,14 @@ export async function runImport(
       result.failures.push({ row: rowNumber, reason: 'author is required' });
       continue;
     }
+    const collection = parseCollection(row.collection, defaultCollection);
+    if (collection === 'invalid') {
+      result.failures.push({
+        row: rowNumber,
+        reason: 'collection must be Catalog or Wishlist',
+      });
+      continue;
+    }
     // Trim once and reuse everywhere below — findDuplicate, the in-batch
     // working list, and createBookFn must all see the same normalized value,
     // otherwise a leading/trailing space on the ISBN column defeats duplicate
@@ -69,28 +96,45 @@ export async function runImport(
         row: rowNumber,
         matchedId: duplicate.id,
         reason: duplicate.reason,
+        ...(working.find((book) => book.id === duplicate.id)?.collection
+          ? {
+              collection: working.find((book) => book.id === duplicate.id)
+                ?.collection,
+            }
+          : {}),
       });
       result.successCount++;
       continue;
     }
     try {
-      const created = await createBookFn({
-        ...row,
-        isbn,
-        format: row.format || 'paperback',
-      });
+      const created = await createBookFn(
+        {
+          ...row,
+          isbn,
+          format:
+            collection === 'catalog' ? row.format || 'paperback' : undefined,
+        },
+        collection,
+      );
       result.successCount++;
       working.push({
         id: created.id,
         isbn: isbn ?? null,
         title: row.title,
         author: row.author,
+        collection,
       });
       if (duplicate)
         result.duplicates.push({
           row: rowNumber,
           matchedId: duplicate.id,
           reason: duplicate.reason,
+          ...(working.find((book) => book.id === duplicate.id)?.collection
+            ? {
+                collection: working.find((book) => book.id === duplicate.id)
+                  ?.collection,
+              }
+            : {}),
         });
     } catch (err) {
       const reason = isUniqueViolation(err)

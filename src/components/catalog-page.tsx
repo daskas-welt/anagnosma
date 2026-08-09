@@ -2,10 +2,21 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'sonner';
+import { Download } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -58,7 +69,6 @@ function CatalogPageInner({ wishlist }: { wishlist: boolean }) {
       : null,
   );
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [exportFormat, setExportFormat] = useState<ExportFormat>('csv');
   const [confirmingSampleDelete, setConfirmingSampleDelete] = useState(false);
   const [deletingSamples, setDeletingSamples] = useState(false);
   const subjectNamesByBookId = useSubjectNamesByBook(true);
@@ -69,21 +79,26 @@ function CatalogPageInner({ wishlist }: { wishlist: boolean }) {
     subjectId == null &&
     books.length > 0 &&
     books.every((book) => book.isSample);
-
-  async function handleExport() {
-    const rows = buildExportRows(books, subjectNamesByBookId ?? {});
-    const date = new Date().toISOString().slice(0, 10);
-    if (exportFormat === 'csv')
-      downloadCsv(
-        `anagnosma-books-${date}.csv`,
-        buildCsv(books, subjectNamesByBookId ?? {}),
-      );
-    if (exportFormat === 'xls')
-      downloadExcel(`anagnosma-books-${date}.xls`, rows);
-    if (exportFormat === 'docx')
-      await downloadWord(`anagnosma-books-${date}.docx`, rows);
-    if (exportFormat === 'pdf')
-      downloadPdf(`anagnosma-books-${date}.pdf`, rows);
+  async function handleExport(format: ExportFormat) {
+    try {
+      const rows = buildExportRows(books, subjectNamesByBookId ?? {});
+      const date = new Date().toISOString().slice(0, 10);
+      const filename = `anagnosma-${wishlist ? 'wishlist' : 'catalog'}-${date}`;
+      const exportTitle = wishlist ? 'Book Wishlist' : 'Book Catalog';
+      if (format === 'csv')
+        downloadCsv(
+          `${filename}.csv`,
+          buildCsv(books, subjectNamesByBookId ?? {}),
+        );
+      if (format === 'xls')
+        downloadExcel(`${filename}.xlsx`, rows, undefined, exportTitle);
+      if (format === 'docx')
+        await downloadWord(`${filename}.docx`, rows, undefined, exportTitle);
+      if (format === 'pdf')
+        downloadPdf(`${filename}.pdf`, rows, undefined, exportTitle);
+    } catch {
+      toast.error('Could not export the selected books.');
+    }
   }
 
   async function handleDeleteSamples() {
@@ -156,26 +171,45 @@ function CatalogPageInner({ wishlist }: { wishlist: boolean }) {
           className="h-11 w-full sm:h-8 sm:max-w-sm"
         />
         <div className="flex w-full flex-wrap gap-2 sm:w-auto">
-          <select
-            aria-label="Export format"
-            value={exportFormat}
-            onChange={(event) =>
-              setExportFormat(event.target.value as ExportFormat)
-            }
-            className="h-11 min-w-0 flex-1 rounded-md border bg-background px-3 text-sm sm:h-8 sm:flex-none"
-          >
-            <option value="csv">CSV</option>
-            <option value="xls">Excel</option>
-            <option value="docx">Word</option>
-            <option value="pdf">PDF</option>
-          </select>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              disabled={books.length === 0}
+              render={
+                <Button variant="outline" className="h-11 sm:h-8">
+                  <Download />
+                  Export
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Export as</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => void handleExport('csv')}>
+                  CSV
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => void handleExport('xls')}>
+                  Excel
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => void handleExport('docx')}>
+                  Word
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => void handleExport('pdf')}>
+                  PDF
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Button
             variant="outline"
-            onClick={handleExport}
-            disabled={books.length === 0}
+            onClick={() =>
+              router.push(
+                `/import?collection=${wishlist ? 'wishlist' : 'catalog'}`,
+              )
+            }
             className="h-11 sm:h-8"
           >
-            Export
+            Import
           </Button>
           <AddBookModal
             books={books}
@@ -215,7 +249,10 @@ function CatalogPageInner({ wishlist }: { wishlist: boolean }) {
         </Badge>
       )}
       {loading ? (
-        <p className="py-12 text-center text-sm text-muted-foreground">
+        <p
+          role="status"
+          className="flex min-h-[60vh] items-center justify-center text-center text-sm text-muted-foreground"
+        >
           Loading your {collectionName}...
         </p>
       ) : view === 'grid' ? (

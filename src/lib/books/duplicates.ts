@@ -8,6 +8,7 @@ export type ExistingBook = {
   isbn: string | null;
   title: string;
   author: string;
+  collection?: 'catalog' | 'wishlist';
 };
 export type DuplicateMatch = { id: number; reason: 'isbn' | 'title-author' };
 

@@ -27,11 +27,7 @@ export const books = pgTable(
     createdAt: timestamp('created_at').notNull().defaultNow(),
   },
   (t) => ({
-    userIdIsbnUnique: unique('books_user_id_isbn_wishlist_unique').on(
-      t.userId,
-      t.isbn,
-      t.isWishlist,
-    ),
+    userIdIsbnUnique: unique('books_user_id_isbn_unique').on(t.userId, t.isbn),
   }),
 );
 
