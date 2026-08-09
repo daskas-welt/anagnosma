@@ -53,6 +53,9 @@ export default function RootLayout({
                 <Link className="underline underline-offset-4" href="/about">
                   About
                 </Link>
+                <Link className="underline underline-offset-4" href="/releases">
+                  Releases
+                </Link>
                 <Link
                   className="underline underline-offset-4"
                   href="/developer"
