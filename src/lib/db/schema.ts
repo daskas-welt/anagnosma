@@ -23,10 +23,15 @@ export const books = pgTable(
     pageCount: integer('page_count'),
     description: text('description'),
     isSample: boolean('is_sample').notNull().default(false),
+    isWishlist: boolean('is_wishlist').notNull().default(false),
     createdAt: timestamp('created_at').notNull().defaultNow(),
   },
   (t) => ({
-    userIdIsbnUnique: unique('books_user_id_isbn_unique').on(t.userId, t.isbn),
+    userIdIsbnUnique: unique('books_user_id_isbn_wishlist_unique').on(
+      t.userId,
+      t.isbn,
+      t.isWishlist,
+    ),
   }),
 );
 
@@ -44,6 +49,9 @@ export const copies = pgTable('copies', {
 export const catalogPreferences = pgTable('catalog_preferences', {
   userId: text('user_id').primaryKey(),
   sampleCatalogSeeded: boolean('sample_catalog_seeded')
+    .notNull()
+    .default(false),
+  sampleWishlistSeeded: boolean('sample_wishlist_seeded')
     .notNull()
     .default(false),
 });
