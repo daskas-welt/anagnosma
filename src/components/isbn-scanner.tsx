@@ -12,11 +12,13 @@ export function IsbnScanner({
   label = 'Scan ISBN',
   busy = false,
   compact = false,
+  mobileOnly = false,
 }: {
   onScan: (isbn: string) => void | Promise<void>;
   label?: string;
   busy?: boolean;
   compact?: boolean;
+  mobileOnly?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
@@ -46,6 +48,23 @@ export function IsbnScanner({
       controlsRef.current = null;
     };
   }, [open]);
+
+  useEffect(() => {
+    if (!mobileOnly) return;
+    const desktopQuery = window.matchMedia('(min-width: 640px)');
+    const closeOnDesktop = () => {
+      if (!desktopQuery.matches) return;
+      controlsRef.current?.stop();
+      controlsRef.current = null;
+      setOpen(false);
+      setCameraOpen(false);
+      setCameraError(null);
+    };
+
+    closeOnDesktop();
+    desktopQuery.addEventListener('change', closeOnDesktop);
+    return () => desktopQuery.removeEventListener('change', closeOnDesktop);
+  }, [mobileOnly]);
 
   useEffect(() => {
     if (!open) return;
@@ -127,7 +146,7 @@ export function IsbnScanner({
   }
 
   return (
-    <div className="relative">
+    <div className={mobileOnly ? 'relative sm:hidden' : 'relative'}>
       <div className={compact ? 'contents' : 'space-y-3'}>
         <Button
           ref={buttonRef}

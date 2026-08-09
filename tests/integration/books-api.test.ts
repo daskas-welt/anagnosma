@@ -8,6 +8,7 @@ vi.mock('@/lib/auth-helpers', () => ({
 }));
 
 import { GET, POST } from '@/app/api/books/route';
+import { POST as POST_WISHLIST } from '@/app/api/wishlist/route';
 import { GET as GET_ONE, PATCH, DELETE } from '@/app/api/books/[id]/route';
 import { requireUserId } from '@/lib/auth-helpers';
 
@@ -106,6 +107,29 @@ describe('books API', () => {
     expect(res.status).toBe(409);
     const body = await res.json();
     expect(body.error).toMatch(/already have a book with this isbn/i);
+  });
+
+  it('POST rejects an ISBN already in the wishlist', async () => {
+    await POST_WISHLIST(
+      new Request('http://localhost/api/wishlist', {
+        method: 'POST',
+        body: JSON.stringify({
+          title: 'Dune wishlist',
+          author: 'Frank Herbert',
+          isbn: '9780441013593',
+        }),
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    );
+    const res = await POST(
+      req({
+        title: 'Dune',
+        author: 'Frank Herbert',
+        format: 'paperback',
+        isbn: '9780441013593',
+      }),
+    );
+    expect(res.status).toBe(409);
   });
 
   it('DELETE removes a book', async () => {

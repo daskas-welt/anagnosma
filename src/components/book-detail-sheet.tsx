@@ -619,6 +619,7 @@ export function BookDetailSheet({
                     <IsbnScanner
                       compact
                       busy={searchingIsbn}
+                      mobileOnly
                       onScan={handleScannedIsbn}
                     />
                   </div>

@@ -73,7 +73,12 @@ describe('import API', () => {
     const body = await res.json();
     expect(body.failures).toHaveLength(0);
     expect(body.duplicates).toEqual([
-      { row: 1, matchedId: expect.any(Number), reason: 'isbn' },
+      {
+        row: 1,
+        matchedId: expect.any(Number),
+        reason: 'isbn',
+        collection: 'catalog',
+      },
     ]);
     expect(body.successCount).toBe(1);
 
@@ -123,5 +128,40 @@ describe('import API', () => {
     expect(await listSubjectIdsForBook('user_test_a', stored.id)).toEqual(
       expect.arrayContaining(importedSubjectIds),
     );
+  });
+
+  it('imports rows into both collections using the Collection column', async () => {
+    const res = await POST(
+      new Request('http://localhost/api/import', {
+        method: 'POST',
+        body: JSON.stringify({
+          rows: [
+            {
+              title: 'Dune',
+              author: 'Frank Herbert',
+              isbn: '9780441172719',
+              collection: 'Catalog',
+              format: 'paperback',
+            },
+            {
+              title: 'The Name of the Wind',
+              author: 'Patrick Rothfuss',
+              isbn: '9780756404741',
+              collection: 'Wishlist',
+            },
+          ],
+        }),
+      }),
+    );
+
+    expect((await res.json()).successCount).toBe(2);
+    expect((await listBooks('user_test_a')).map((book) => book.title)).toEqual([
+      'Dune',
+    ]);
+    const wishlist = await listBooks('user_test_a', { wishlist: true });
+    expect(wishlist.map((book) => book.title)).toEqual([
+      'The Name of the Wind',
+    ]);
+    expect(wishlist[0].copies).toEqual([]);
   });
 });

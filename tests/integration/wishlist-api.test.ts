@@ -53,14 +53,7 @@ describe('wishlist API', () => {
     expect(body.copies).toEqual([]);
   });
 
-  it('allows the same ISBN in the catalog and wishlist', async () => {
-    await POST(
-      jsonRequest({
-        title: 'Dune wishlist',
-        author: 'Frank Herbert',
-        isbn: '9780441013593',
-      }),
-    );
+  it('rejects an ISBN already in the catalog', async () => {
     const owned = await createBook('user_test_a', {
       title: 'Dune',
       author: 'Frank Herbert',
@@ -68,6 +61,14 @@ describe('wishlist API', () => {
       format: 'paperback',
     });
     expect(owned.isWishlist).toBe(false);
+    const res = await POST(
+      jsonRequest({
+        title: 'Dune duplicate',
+        author: 'Frank Herbert',
+        isbn: '9780441013593',
+      }),
+    );
+    expect(res.status).toBe(409);
   });
 
   it('seeds ten sample wishlist books only on first access', async () => {

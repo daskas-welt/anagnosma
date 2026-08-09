@@ -9,9 +9,8 @@ export function Nav() {
   const pathname = usePathname();
   const navItems = [
     { href: '/', label: 'Catalog' },
-    { href: '/import', label: 'Import' },
-    { href: '/subjects', label: 'Subjects' },
     { href: '/wishlist', label: 'Wishlist' },
+    { href: '/subjects', label: 'Subjects' },
   ];
 
   return (

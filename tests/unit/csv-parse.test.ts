@@ -46,6 +46,7 @@ describe('HEADER_PRESETS', () => {
       Title: 'title',
       Author: 'author',
       ISBN: 'isbn',
+      Collection: 'collection',
       Publisher: 'publisher',
       Year: 'publishYear',
       Format: 'format',

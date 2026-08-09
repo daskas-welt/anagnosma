@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -38,6 +39,7 @@ import { canonicalizeIsbn } from '@/lib/isbn';
 import { FORMATS, formatLabel } from '@/lib/formats';
 
 type Subject = { id: number; name: string; bookCount: number };
+type BookCollection = 'catalog' | 'wishlist';
 
 const schema = z.object({
   isbn: z.string().optional(),
@@ -91,6 +93,8 @@ export function AddBookModal({
   const [duplicateBook, setDuplicateBook] = useState<BookWithCopies | null>(
     null,
   );
+  const [duplicateCollection, setDuplicateCollection] =
+    useState<BookCollection | null>(null);
   const [scannedMetadata, setScannedMetadata] = useState<BookMetadata | null>(
     null,
   );
@@ -153,14 +157,38 @@ export function AddBookModal({
   // source of truth — fall back to a server lookup that sees the whole library.
   // Both sides are canonicalised because rows created before ISBNs were
   // normalised on write still hold the separators the user typed.
-  async function findBookByIsbn(isbn: string): Promise<BookWithCopies | null> {
+  async function findBookByIsbn(
+    isbn: string,
+  ): Promise<{ book: BookWithCopies; collection: BookCollection } | null> {
     const local = books.find((book) => canonicalizeIsbn(book.isbn) === isbn);
-    if (local) return local;
+    if (local)
+      return { book: local, collection: wishlist ? 'wishlist' : 'catalog' };
     try {
-      const res = await fetch(`${endpoint}?isbn=${encodeURIComponent(isbn)}`);
-      if (!res.ok) return null;
-      const matches: BookWithCopies[] = await res.json();
-      return matches[0] ?? null;
+      const candidates: { endpoint: string; collection: BookCollection }[] =
+        wishlist
+          ? [
+              { endpoint: '/api/wishlist', collection: 'wishlist' },
+              { endpoint: '/api/books', collection: 'catalog' },
+            ]
+          : [
+              { endpoint: '/api/books', collection: 'catalog' },
+              { endpoint: '/api/wishlist', collection: 'wishlist' },
+            ];
+      const matches = await Promise.all(
+        candidates.map(async ({ endpoint: candidateEndpoint, collection }) => {
+          try {
+            const res = await fetch(
+              `${candidateEndpoint}?isbn=${encodeURIComponent(isbn)}`,
+            );
+            if (!res.ok) return null;
+            const books: BookWithCopies[] = await res.json();
+            return books[0] ? { book: books[0], collection } : null;
+          } catch {
+            return null;
+          }
+        }),
+      );
+      return matches.find((match) => match !== null) ?? null;
     } catch {
       // A failed duplicate check must not take the metadata lookup down with
       // it: fall through and let the form populate as an ordinary new book.
@@ -171,6 +199,9 @@ export function AddBookModal({
   async function handleIsbnLookup(isbn: string): Promise<boolean> {
     if (!isbn) return false;
     setLookingUpIsbn(true);
+    setDuplicateBook(null);
+    setDuplicateCollection(null);
+    setDuplicateOpen(false);
     try {
       let res: Response;
       try {
@@ -190,7 +221,8 @@ export function AddBookModal({
       const meta = await res.json();
       const existing = await findBookByIsbn(meta.isbn);
       if (existing) {
-        setDuplicateBook(existing);
+        setDuplicateBook(existing.book);
+        setDuplicateCollection(existing.collection);
         setScannedMetadata(meta);
         setDuplicateOpen(true);
       }
@@ -223,7 +255,12 @@ export function AddBookModal({
   }
 
   async function updateExistingBook() {
-    if (!duplicateBook || !scannedMetadata) return;
+    if (
+      !duplicateBook ||
+      !scannedMetadata ||
+      duplicateCollection !== (wishlist ? 'wishlist' : 'catalog')
+    )
+      return;
     const res = await fetch(`/api/books/${duplicateBook.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -239,7 +276,13 @@ export function AddBookModal({
   }
 
   async function addExistingCopy() {
-    if (!duplicateBook || !selectedFormat) return;
+    if (
+      !duplicateBook ||
+      !selectedFormat ||
+      duplicateCollection !== 'catalog' ||
+      wishlist
+    )
+      return;
     const res = await fetch('/api/copies', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -305,6 +348,8 @@ export function AddBookModal({
         reset(defaultValues);
         setSelectedSubjectIds(new Set());
         setDuplicateOpen(false);
+        setDuplicateBook(null);
+        setDuplicateCollection(null);
         return;
       }
     }
@@ -335,33 +380,52 @@ export function AddBookModal({
       }}
     >
       <SheetTrigger render={<Button className="h-11 sm:h-8" />}>
-        + Add Book
+        + {wishlist ? 'Add book to wishlist' : 'Add book to catalog'}
       </SheetTrigger>
       <SheetContent className="w-full overflow-y-auto p-0 sm:max-w-2xl data-[side=right]:sm:max-w-2xl">
         <SheetHeader className="border-b">
-          <SheetTitle>{wishlist ? 'Add to Wishlist' : 'Add Book'}</SheetTitle>
+          <SheetTitle>
+            {wishlist ? 'Add book to wishlist' : 'Add book to catalog'}
+          </SheetTitle>
         </SheetHeader>
         {duplicateOpen && duplicateBook && scannedMetadata && (
           <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3">
             <p className="font-medium">
-              This ISBN is already in your {wishlist ? 'wishlist' : 'library'}.
+              This ISBN is already in your{' '}
+              {duplicateCollection === 'wishlist' ? 'wishlist' : 'catalog'}.
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              {duplicateBook.title} · these actions apply immediately to the
-              existing book.
+              {duplicateCollection === (wishlist ? 'wishlist' : 'catalog')
+                ? `${duplicateBook.title} · these actions apply immediately to the existing book.`
+                : `${duplicateBook.title} is already tracked there. Remove it from that collection before adding it here.`}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
-              <Button type="button" onClick={() => void updateExistingBook()}>
-                Update metadata
-              </Button>
-              {!wishlist && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => void addExistingCopy()}
+              {duplicateCollection === (wishlist ? 'wishlist' : 'catalog') ? (
+                <>
+                  <Button
+                    type="button"
+                    onClick={() => void updateExistingBook()}
+                  >
+                    Update metadata
+                  </Button>
+                  {!wishlist && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => void addExistingCopy()}
+                    >
+                      Add another copy
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <Link
+                  href={duplicateCollection === 'wishlist' ? '/wishlist' : '/'}
+                  className="inline-flex min-h-9 items-center rounded-md border px-3 text-sm font-medium hover:bg-muted"
+                  onClick={() => setOpen(false)}
                 >
-                  Add another copy
-                </Button>
+                  Open {duplicateCollection}
+                </Link>
               )}
               <Button
                 type="button"
@@ -406,6 +470,7 @@ export function AddBookModal({
                 <IsbnScanner
                   compact
                   busy={lookingUpIsbn}
+                  mobileOnly
                   onScan={(isbn) => {
                     setValue('isbn', isbn, { shouldDirty: true });
                   }}
