@@ -18,6 +18,7 @@ export const releases = [
       'Search, sort, filter, and browse your personal catalog.',
       'Import catalog data from CSV and export it in several formats.',
       'Scan ISBNs and look up book details from Open Library.',
+      'See clearly which section of the app is currently active.',
     ],
   },
 ] as const satisfies readonly Release[];
