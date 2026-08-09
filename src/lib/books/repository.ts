@@ -17,7 +17,7 @@ export type NewBookInput = {
   publishYear?: number;
   pageCount?: number;
   description?: string;
-  format: string;
+  format?: string;
   notes?: string;
 };
 
@@ -41,10 +41,12 @@ export type BookWithCopies = typeof books.$inferSelect & {
 export async function createBook(
   userId: string,
   input: NewBookInput,
-  options: { isSample?: boolean } = {},
+  options: { isSample?: boolean; isWishlist?: boolean } = {},
 ): Promise<BookWithCopies> {
   const { format, notes, ...bookFields } = input;
   const isbn = canonicalizeIsbn(input.isbn);
+  const isWishlist = options.isWishlist ?? false;
+  if (!isWishlist && !format) throw new Error('format is required');
   return db.transaction(async (tx) => {
     const [book] = await tx
       .insert(books)
@@ -53,11 +55,13 @@ export async function createBook(
         isbn,
         userId,
         isSample: options.isSample ?? false,
+        isWishlist,
       })
       .returning();
+    if (isWishlist) return { ...book, copies: [] };
     const [copy] = await tx
       .insert(copies)
-      .values({ bookId: book.id, format, notes })
+      .values({ bookId: book.id, format: format ?? 'paperback', notes })
       .returning();
     return { ...book, copies: [copy] };
   });
@@ -85,6 +89,7 @@ export type BookFilters = {
   format?: string;
   subjectId?: number;
   isbn?: string;
+  wishlist?: boolean;
 };
 
 export async function listBooks(
@@ -112,6 +117,7 @@ export async function listBooks(
 
   const bookConditions = [
     eq(books.userId, userId),
+    eq(books.isWishlist, filters.wishlist ?? false),
     filters.q
       ? or(
           ilike(books.title, `%${filters.q}%`),
@@ -201,15 +207,28 @@ export async function deleteBook(userId: string, id: number): Promise<void> {
   await db.delete(books).where(and(eq(books.id, id), eq(books.userId, userId)));
 }
 
-export async function deleteSampleBooks(userId: string): Promise<number> {
+export async function deleteSampleBooks(
+  userId: string,
+  options: { wishlist?: boolean } = {},
+): Promise<number> {
   return db.transaction(async (tx) => {
     await tx
       .insert(catalogPreferences)
-      .values({ userId, sampleCatalogSeeded: true })
+      .values(
+        options.wishlist
+          ? { userId, sampleWishlistSeeded: true }
+          : { userId, sampleCatalogSeeded: true },
+      )
       .onConflictDoNothing();
     const deleted = await tx
       .delete(books)
-      .where(and(eq(books.userId, userId), eq(books.isSample, true)))
+      .where(
+        and(
+          eq(books.userId, userId),
+          eq(books.isSample, true),
+          eq(books.isWishlist, options.wishlist ?? false),
+        ),
+      )
       .returning({ id: books.id });
     return deleted.length;
   });

@@ -15,6 +15,7 @@ function book(overrides: Partial<BookWithCopies> = {}): BookWithCopies {
     pageCount: 412,
     description: null,
     isSample: false,
+    isWishlist: false,
     createdAt: new Date(),
     copies: [
       {
