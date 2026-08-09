@@ -95,7 +95,7 @@ export default function ReleasesPage() {
       <footer className="border-t pt-6 text-sm text-muted-foreground">
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center underline underline-offset-4"
+          className="inline-flex min-h-11 items-center rounded-md border px-4 text-sm font-medium hover:bg-muted"
         >
           Back to catalog
         </Link>
