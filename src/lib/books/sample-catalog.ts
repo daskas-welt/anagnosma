@@ -1,3 +1,4 @@
+import { and, eq } from 'drizzle-orm';
 import { createBook, listBooks } from '@/lib/books/repository';
 import { db } from '@/lib/db';
 import { catalogPreferences } from '@/lib/db/schema';
@@ -96,13 +97,29 @@ const SAMPLE_BOOKS = [
   ],
 ] as const;
 
-export async function seedSampleCatalog(userId: string) {
-  const [claimed] = await db
+export async function claimSampleCatalogSeed(userId: string): Promise<boolean> {
+  const [created] = await db
     .insert(catalogPreferences)
     .values({ userId, sampleCatalogSeeded: true })
     .onConflictDoNothing()
-    .returning();
-  if (!claimed) return;
+    .returning({ userId: catalogPreferences.userId });
+  if (created) return true;
+
+  const [claimed] = await db
+    .update(catalogPreferences)
+    .set({ sampleCatalogSeeded: true })
+    .where(
+      and(
+        eq(catalogPreferences.userId, userId),
+        eq(catalogPreferences.sampleCatalogSeeded, false),
+      ),
+    )
+    .returning({ userId: catalogPreferences.userId });
+  return Boolean(claimed);
+}
+
+export async function seedSampleCatalog(userId: string) {
+  if (!(await claimSampleCatalogSeed(userId))) return;
   if ((await listBooks(userId)).length > 0) return;
 
   for (const [

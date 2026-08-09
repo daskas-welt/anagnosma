@@ -7,33 +7,25 @@ import {
 import { parseJsonBody, isUniqueViolation } from '@/lib/api-helpers';
 import { canonicalizeIsbn } from '@/lib/isbn';
 import { requireUserId } from '@/lib/auth-helpers';
-import { seedSampleCatalog } from '@/lib/books/sample-catalog';
+import { seedSampleWishlist } from '@/lib/books/sample-wishlist';
 
 export async function GET(request: Request) {
   const { userId, error: authError } = await requireUserId();
   if (authError) return authError;
   const url = new URL(request.url);
   const q = url.searchParams.get('q') ?? undefined;
-  const format = url.searchParams.get('format') ?? undefined;
   const subjectIdParam = url.searchParams.get('subjectId');
   const isbn = canonicalizeIsbn(url.searchParams.get('isbn'));
   const skipSamples = url.searchParams.get('skipSamples') === 'true';
   let books = await listBooks(userId, {
     q,
-    format,
     subjectId: subjectIdParam ? Number(subjectIdParam) : undefined,
     isbn,
+    wishlist: true,
   });
-  if (
-    !skipSamples &&
-    !q &&
-    !format &&
-    !subjectIdParam &&
-    !isbn &&
-    books.length === 0
-  ) {
-    await seedSampleCatalog(userId);
-    books = await listBooks(userId);
+  if (!skipSamples && !q && !subjectIdParam && !isbn) {
+    await seedSampleWishlist(userId);
+    books = await listBooks(userId, { wishlist: true });
   }
   return NextResponse.json(books);
 }
@@ -44,14 +36,27 @@ export async function POST(request: Request) {
   const { data: body, error } =
     await parseJsonBody<Partial<NewBookInput>>(request);
   if (error) return error;
-  if (!body.title || !body.author || !body.format) {
+  if (!body.title || !body.author) {
     return NextResponse.json(
-      { error: 'title, author, and format are required' },
+      { error: 'title and author are required' },
       { status: 400 },
     );
   }
   try {
-    const book = await createBook(userId, body as NewBookInput);
+    const book = await createBook(
+      userId,
+      {
+        isbn: body.isbn,
+        title: body.title,
+        author: body.author,
+        coverUrl: body.coverUrl,
+        publisher: body.publisher,
+        publishYear: body.publishYear,
+        pageCount: body.pageCount,
+        description: body.description,
+      },
+      { isWishlist: true },
+    );
     return NextResponse.json(book, { status: 201 });
   } catch (err) {
     if (isUniqueViolation(err)) {
