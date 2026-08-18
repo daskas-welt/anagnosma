@@ -1,5 +1,9 @@
 import { describe, it, expect, vi } from 'vitest';
-import { lookupByIsbn, searchOpenLibrary } from '@/lib/isbn-lookup/client';
+import {
+  lookupByIsbn,
+  searchGoogleBooks,
+  searchOpenLibrary,
+} from '@/lib/isbn-lookup/client';
 
 const sampleResponse = {
   'ISBN:9780441013593': {
@@ -100,6 +104,9 @@ describe('searchOpenLibrary', () => {
             first_publish_year: 1965,
             number_of_pages_median: 412,
             cover_i: 12345,
+            first_sentence: ['A desert planet...'],
+            ratings_average: 4.6,
+            ratings_count: 1200,
           },
         ],
       }),
@@ -116,10 +123,45 @@ describe('searchOpenLibrary', () => {
         publisher: 'Ace Books',
         publishYear: 1965,
         pageCount: 412,
+        description: 'A desert planet...',
+        averageRating: 4.6,
+        ratingsCount: 1200,
       },
     ]);
     expect(fetchImpl).toHaveBeenCalledWith(
       expect.stringContaining('https://openlibrary.org/search.json?'),
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
     );
+  });
+});
+
+describe('searchGoogleBooks', () => {
+  it('maps descriptions from search results', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        items: [
+          {
+            volumeInfo: {
+              title: 'Dune',
+              authors: ['Frank Herbert'],
+              description: 'A Google Books description',
+              industryIdentifiers: [
+                { type: 'ISBN_13', identifier: '9780441013593' },
+              ],
+            },
+          },
+        ],
+      }),
+    });
+
+    await expect(
+      searchGoogleBooks('Dune', fetchImpl as unknown as typeof fetch),
+    ).resolves.toEqual([
+      expect.objectContaining({
+        title: 'Dune',
+        description: 'A Google Books description',
+      }),
+    ]);
   });
 });
