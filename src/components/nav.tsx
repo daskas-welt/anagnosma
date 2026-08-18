@@ -11,6 +11,7 @@ export function Nav() {
     { href: '/', label: 'Catalog' },
     { href: '/wishlist', label: 'Wishlist' },
     { href: '/subjects', label: 'Subjects' },
+    { href: '/recommendations', label: 'Recommendations' },
   ];
 
   return (

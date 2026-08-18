@@ -9,7 +9,8 @@ export default function AboutPage() {
           Your personal book catalog
         </h1>
         <p className="text-lg text-muted-foreground">
-          Anagnosma helps you organize, browse, and discover the books you own.
+          Anagnosma helps you organize, browse, and discover books across your
+          catalog and wishlist.
         </p>
       </header>
 
@@ -18,6 +19,14 @@ export default function AboutPage() {
         <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
           <li>Manage books, copies, subjects, notes, covers, and metadata.</li>
           <li>Search, sort, filter, and browse your personal catalog.</li>
+          <li>Keep a separate wishlist for books you want to read or buy.</li>
+          <li>
+            Get popular recommendations shaped by your subjects, catalog, and
+            wishlist using Google Books and Open Library.
+          </li>
+          <li>
+            Refresh recommendations and choose to see 6, 12, 18, or 24 books.
+          </li>
           <li>
             Import catalog data from CSV and export it in several formats.
           </li>
