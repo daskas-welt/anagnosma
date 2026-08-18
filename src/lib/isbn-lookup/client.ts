@@ -9,11 +9,15 @@ export type BookMetadata = {
   publishYear?: number;
   pageCount?: number;
   description?: string;
+  averageRating?: number;
+  ratingsCount?: number;
 };
 
 export type OpenLibrarySearchResult = Omit<BookMetadata, 'isbn'> & {
   isbn?: string;
 };
+
+export type BookSearchResult = OpenLibrarySearchResult;
 
 type OpenLibraryAuthor = { name: string };
 type OpenLibraryPublisher = { name: string };
@@ -35,6 +39,9 @@ type OpenLibrarySearchDoc = {
   first_publish_year?: number;
   number_of_pages_median?: number;
   cover_i?: number;
+  first_sentence?: string[] | string;
+  ratings_average?: number;
+  ratings_count?: number;
 };
 
 export async function lookupByIsbn(
@@ -78,17 +85,27 @@ export async function lookupByIsbn(
 export async function searchOpenLibrary(
   query: string,
   fetchImpl: typeof fetch = fetch,
+  options: { limit?: number; page?: number } = {},
 ): Promise<OpenLibrarySearchResult[]> {
   try {
     const params = new URLSearchParams({
       q: query,
-      limit: '8',
+      limit: String(options.limit ?? 8),
+      page: String(options.page ?? 1),
       fields:
-        'title,author_name,isbn,publisher,first_publish_year,number_of_pages_median,cover_i',
+        'title,author_name,isbn,publisher,first_publish_year,number_of_pages_median,cover_i,first_sentence,ratings_average,ratings_count',
     });
-    const res = await fetchImpl(
-      `https://openlibrary.org/search.json?${params.toString()}`,
-    );
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    let res: Response;
+    try {
+      res = await fetchImpl(
+        `https://openlibrary.org/search.json?${params.toString()}`,
+        { signal: controller.signal },
+      );
+    } finally {
+      clearTimeout(timeout);
+    }
     if (!res.ok) return [];
     const data = await res.json();
     const docs: OpenLibrarySearchDoc[] = data.docs ?? [];
@@ -109,8 +126,98 @@ export async function searchOpenLibrary(
           publisher: doc.publisher?.[0],
           publishYear: doc.first_publish_year,
           pageCount: doc.number_of_pages_median,
+          ...(doc.ratings_average !== undefined
+            ? { averageRating: doc.ratings_average }
+            : {}),
+          ...(doc.ratings_count !== undefined
+            ? { ratingsCount: doc.ratings_count }
+            : {}),
+          ...(doc.first_sentence
+            ? {
+                description: Array.isArray(doc.first_sentence)
+                  ? doc.first_sentence[0]
+                  : doc.first_sentence,
+              }
+            : {}),
         };
       });
+  } catch {
+    return [];
+  }
+}
+
+type GoogleBook = {
+  volumeInfo?: {
+    title?: string;
+    authors?: string[];
+    publishedDate?: string;
+    publisher?: string;
+    pageCount?: number;
+    description?: string;
+    averageRating?: number;
+    ratingsCount?: number;
+    imageLinks?: { thumbnail?: string; smallThumbnail?: string };
+    industryIdentifiers?: Array<{
+      type?: string;
+      identifier?: string;
+    }>;
+  };
+};
+
+export async function searchGoogleBooks(
+  query: string,
+  fetchImpl: typeof fetch = fetch,
+  options: { limit?: number; page?: number } = {},
+): Promise<BookSearchResult[]> {
+  try {
+    const params = new URLSearchParams({
+      q: query,
+      maxResults: String(Math.min(options.limit ?? 8, 40)),
+      startIndex: String(((options.page ?? 1) - 1) * (options.limit ?? 8)),
+      printType: 'books',
+    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    let res: Response;
+    try {
+      res = await fetchImpl(
+        `https://www.googleapis.com/books/v1/volumes?${params.toString()}`,
+        { signal: controller.signal },
+      );
+    } finally {
+      clearTimeout(timeout);
+    }
+    if (!res.ok) return [];
+    const data = await res.json();
+    const items: GoogleBook[] = data.items ?? [];
+    return items.flatMap((item) => {
+      const info = item.volumeInfo;
+      if (!info?.title) return [];
+      const identifier =
+        info.industryIdentifiers?.find((value) => value.type === 'ISBN_13') ??
+        info.industryIdentifiers?.[0];
+      const publishYear = info.publishedDate?.match(/\d{4}/)?.[0];
+      return [
+        {
+          isbn: identifier?.identifier,
+          title: info.title,
+          author: (info.authors ?? []).join(', '),
+          coverUrl: (
+            info.imageLinks?.thumbnail ?? info.imageLinks?.smallThumbnail
+          )?.replace(/^http:/, 'https:'),
+          publisher: info.publisher,
+          publishYear: publishYear ? Number(publishYear) : undefined,
+          pageCount: info.pageCount,
+          ...(info.averageRating !== undefined
+            ? { averageRating: info.averageRating }
+            : {}),
+          ...(info.ratingsCount !== undefined
+            ? { ratingsCount: info.ratingsCount }
+            : {}),
+          ...(info.description ? { description: info.description } : {}),
+        },
+      ];
+    });
   } catch {
     return [];
   }

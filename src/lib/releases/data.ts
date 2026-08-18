@@ -8,6 +8,22 @@ export type Release = {
 
 export const releases = [
   {
+    version: '0.2.0',
+    releasedAt: '2026-08-19',
+    title: 'A better next read',
+    summary:
+      'Recommendations now help you discover popular books from the subjects, catalog, and wishlist you already care about.',
+    changes: [
+      'Recommend books using Google Books and Open Library, preferring Google Books descriptions and metadata when both sources match.',
+      'Rank recommendations by rating quality and rating volume to surface popular, well-reviewed books first.',
+      'Keep at least 12 recommendations available with provider refill attempts and a curated fallback library.',
+      'Refresh recommendations explicitly while preserving the current set when revisiting the page.',
+      'Choose to display 6, 12, 18, or 24 recommendations.',
+      'Show ISBNs, publishers, page counts, ratings, descriptions, and subjects when available.',
+      'Align recommendation cards with catalog and wishlist grids across responsive layouts.',
+    ],
+  },
+  {
     version: '0.1.0',
     releasedAt: '2026-08-09',
     title: 'The first shelf',
