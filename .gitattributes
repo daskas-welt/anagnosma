@@ -1,0 +1,17 @@
+# Normalize line endings: LF stored in the repository and LF checked out on every platform.
+# This keeps `biome format` (lineEnding: "lf") consistent between Windows, macOS, CI, and Linux.
+* text=auto eol=lf
+
+# Binary assets must never be line-ending converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.avif binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
