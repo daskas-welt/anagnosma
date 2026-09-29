@@ -41,6 +41,14 @@ npm test
 
 Clerk handles authentication and Neon hosts catalog data. Catalog records are associated with the authenticated account. For privacy questions or account/data deletion requests, contact `mcaibad2@gmail.com`.
 
+## Supporting Anagnosma
+
+Anagnosma is a personal project, and running it isn't free — hosting and third-party services (Vercel, Neon Postgres, Clerk, and Vercel Blob) come with recurring costs. If you'd like to help cover them:
+
+- [GitHub Sponsors](https://github.com/sponsors/daskas-welt)
+
+Support is entirely optional — thank you!
+
 ## Developer
 
 Anagnosma is developed by [Andreas Daskalopoulos](https://daskas-welt.github.io/).
