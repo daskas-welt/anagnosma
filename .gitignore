@@ -55,3 +55,6 @@ next-env.d.ts
 
 # graphify generated output and caches
 /graphify-out/
+
+# private notes (kept local, intentionally excluded from the public repository)
+/book-app-investigation.md

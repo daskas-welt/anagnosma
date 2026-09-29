@@ -56,3 +56,7 @@ Anagnosma is developed by [Andreas Daskalopoulos](https://daskas-welt.github.io/
 - Source code: [github.com/daskas-welt/anagnosma](https://github.com/daskas-welt/anagnosma)
 - Website: [daskas-welt.github.io](https://daskas-welt.github.io/)
 - Contact: [mcaibad2@gmail.com](mailto:mcaibad2@gmail.com)
+
+## License
+
+Licensed under the [GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0). Because Anagnosma is a network application, anyone who runs a modified version and offers it to users over a network must make the corresponding source available.
