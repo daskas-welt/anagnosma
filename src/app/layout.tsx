@@ -68,6 +68,15 @@ export default function RootLayout({
                 <Link className="underline underline-offset-4" href="/terms">
                   Terms of Service
                 </Link>
+                <a
+                  className="underline underline-offset-4"
+                  href="https://github.com/daskas-welt/anagnosma"
+                  target="_blank"
+                  rel="noreferrer"
+                  title="View the Anagnosma source code (AGPL-3.0)"
+                >
+                  Source
+                </a>
                 <SocialLinks />
               </div>
             </footer>
