@@ -62,3 +62,9 @@ next-env.d.ts
 # vendored agent skills (sources are locked in skills-lock.json; kept local only)
 /.agents/
 /.claude/
+
+# local-only development artifacts (kept on disk, never published)
+/dev-server.log
+/.neon
+/todo.md
+/todo-done.md
