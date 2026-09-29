@@ -58,3 +58,7 @@ next-env.d.ts
 
 # private notes (kept local, intentionally excluded from the public repository)
 /book-app-investigation.md
+
+# vendored agent skills (sources are locked in skills-lock.json; kept local only)
+/.agents/
+/.claude/
