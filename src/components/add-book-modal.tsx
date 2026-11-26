@@ -37,6 +37,7 @@ import type { BookWithCopies } from '@/lib/books/repository';
 import type { BookMetadata } from '@/lib/isbn-lookup/client';
 import { canonicalizeIsbn } from '@/lib/isbn';
 import { FORMATS, formatLabel } from '@/lib/formats';
+import { uploadCoverFile } from '@/lib/cover-upload-client';
 
 type Subject = { id: number; name: string; bookCount: number };
 type BookCollection = 'catalog' | 'wishlist';
@@ -135,18 +136,14 @@ export function AddBookModal({
   async function uploadCover(file: File) {
     setUploadingCover(true);
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': file.type, 'X-Filename': file.name },
-        body: file,
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        toast.error(body.error ?? 'Could not upload cover image.');
-        return;
-      }
-      const { url } = await res.json();
-      setValue('coverUrl', url);
+      const blob = await uploadCoverFile(file);
+      setValue('coverUrl', blob.url);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : 'Could not upload cover image.',
+      );
     } finally {
       setUploadingCover(false);
     }

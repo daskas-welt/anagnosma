@@ -10,6 +10,17 @@ import { requireUserId } from '@/lib/auth-helpers';
 
 type Params = { params: Promise<{ id: string }> };
 
+const BOOK_UPDATE_FIELDS = new Set([
+  'isbn',
+  'title',
+  'author',
+  'coverUrl',
+  'publisher',
+  'publishYear',
+  'pageCount',
+  'description',
+]);
+
 export async function GET(_request: Request, { params }: Params) {
   const { userId, error: authError } = await requireUserId();
   if (authError) return authError;
@@ -31,6 +42,16 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: 'invalid id' }, { status: 400 });
   const { data: body, error } = await parseJsonBody<BookUpdateInput>(request);
   if (error) return error;
+  if (
+    body === null ||
+    typeof body !== 'object' ||
+    !Object.keys(body).some((field) => BOOK_UPDATE_FIELDS.has(field))
+  ) {
+    return NextResponse.json(
+      { error: 'no book fields to update' },
+      { status: 400 },
+    );
+  }
   const updated = await updateBook(userId, bookId, body);
   if (!updated)
     return NextResponse.json({ error: 'not found' }, { status: 404 });

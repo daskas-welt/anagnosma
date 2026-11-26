@@ -1,5 +1,6 @@
 import { findDuplicate, type ExistingBook } from '@/lib/books/duplicates';
 import { isUniqueViolation } from '@/lib/api-helpers';
+import { canonicalizeIsbn } from '@/lib/isbn';
 
 export type ImportRow = {
   title: string;
@@ -77,12 +78,10 @@ export async function runImport(
       });
       continue;
     }
-    // Trim once and reuse everywhere below — findDuplicate, the in-batch
-    // working list, and createBookFn must all see the same normalized value,
-    // otherwise a leading/trailing space on the ISBN column defeats duplicate
-    // detection against already-trimmed existing/working entries and hits
-    // the DB unique constraint instead.
-    const isbn = row.isbn?.trim() || undefined;
+    // Normalize once for duplicate detection, persistence, and the in-batch
+    // working set. Equivalent ISBNs with different separators must compare
+    // equal before the database's per-user unique constraint is reached.
+    const isbn = canonicalizeIsbn(row.isbn);
     const duplicate = findDuplicate(
       { isbn, title: row.title, author: row.author },
       working,

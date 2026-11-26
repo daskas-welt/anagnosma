@@ -1,42 +1,60 @@
 import { NextResponse } from 'next/server';
-import { put } from '@vercel/blob';
+import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
+import { requireUserId } from '@/lib/auth-helpers';
+import {
+  ALLOWED_COVER_CONTENT_TYPES,
+  MAX_COVER_SIZE_BYTES,
+} from '@/lib/cover-upload-constants';
 
-const MAX_SIZE_BYTES = 8 * 1024 * 1024; // 8MB — plenty for a book cover image
+const COVER_PATH_PATTERN = /^covers\/[0-9a-f-]{36}$/i;
 
 export async function POST(request: Request) {
-  const contentType = request.headers.get('content-type') ?? '';
-  if (!contentType.startsWith('image/')) {
+  let body: HandleUploadBody;
+  try {
+    body = (await request.json()) as HandleUploadBody;
+  } catch {
+    return NextResponse.json({ error: 'invalid JSON body' }, { status: 400 });
+  }
+
+  if (!body || typeof body !== 'object' || !('type' in body)) {
     return NextResponse.json(
-      { error: 'file must be an image' },
+      { error: 'invalid upload request' },
       { status: 400 },
     );
   }
 
-  const contentLength = Number(request.headers.get('content-length') ?? '0');
-  if (contentLength > MAX_SIZE_BYTES) {
+  // This endpoint is public at the proxy layer so Vercel Blob can deliver its
+  // signed completion callback. Token generation still requires a Clerk user;
+  // handleUpload verifies the signature on completion callbacks.
+  if (body.type === 'blob.generate-client-token') {
+    const { error: authError } = await requireUserId();
+    if (authError) return authError;
+  }
+
+  try {
+    const result = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async (pathname) => {
+        if (!COVER_PATH_PATTERN.test(pathname)) {
+          throw new Error('invalid cover path');
+        }
+        return {
+          allowedContentTypes: ALLOWED_COVER_CONTENT_TYPES,
+          maximumSizeInBytes: MAX_COVER_SIZE_BYTES,
+        };
+      },
+      onUploadCompleted: async () => {},
+    });
+
+    return NextResponse.json(result);
+  } catch (error) {
     return NextResponse.json(
-      { error: 'image is too large (max 8MB)' },
+      {
+        error:
+          error instanceof Error ? error.message : 'could not process upload',
+      },
       { status: 400 },
     );
   }
-
-  if (!request.body) {
-    return NextResponse.json(
-      { error: 'no file body received' },
-      { status: 400 },
-    );
-  }
-
-  const filenameHeader = request.headers.get('x-filename') ?? 'cover';
-  const extension = filenameHeader.includes('.')
-    ? filenameHeader.split('.').pop()
-    : contentType.split('/')[1];
-  const pathname = `covers/${crypto.randomUUID()}.${extension}`;
-
-  const blob = await put(pathname, request.body, {
-    access: 'public',
-    contentType,
-  });
-
-  return NextResponse.json({ url: blob.url });
 }

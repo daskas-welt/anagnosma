@@ -1,3 +1,5 @@
+import { canonicalizeIsbn } from '@/lib/isbn';
+
 export type DuplicateCandidate = {
   isbn?: string;
   title: string;
@@ -16,8 +18,11 @@ export function findDuplicate(
   candidate: DuplicateCandidate,
   existing: ExistingBook[],
 ): DuplicateMatch | null {
-  if (candidate.isbn) {
-    const isbnMatch = existing.find((b) => b.isbn === candidate.isbn);
+  const candidateIsbn = canonicalizeIsbn(candidate.isbn);
+  if (candidateIsbn) {
+    const isbnMatch = existing.find(
+      (book) => canonicalizeIsbn(book.isbn) === candidateIsbn,
+    );
     if (isbnMatch) return { id: isbnMatch.id, reason: 'isbn' };
   }
   const normalizedTitle = candidate.title.trim().toLowerCase();

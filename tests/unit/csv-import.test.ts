@@ -164,6 +164,66 @@ describe('runImport', () => {
     expect(result.failures).toHaveLength(0);
   });
 
+  it('treats separator variants of an ISBN as an in-batch duplicate', async () => {
+    const create = vi
+      .fn()
+      .mockResolvedValueOnce({ id: 42 })
+      .mockResolvedValueOnce({ id: 43 });
+    const result = await runImport(
+      [
+        {
+          title: 'Dune',
+          author: 'Frank Herbert',
+          isbn: '978-0-441-01359-3',
+        },
+        {
+          title: 'Dune (reprint)',
+          author: 'Frank Herbert',
+          isbn: '9780441013593',
+        },
+      ],
+      [],
+      create,
+    );
+
+    expect(create).toHaveBeenCalledTimes(1);
+    expect(result.duplicates).toEqual([
+      { row: 2, matchedId: 42, reason: 'isbn', collection: 'catalog' },
+    ]);
+    expect(result.successCount).toBe(2);
+    expect(result.failures).toHaveLength(0);
+  });
+
+  it('matches a separator-variant ISBN against an existing catalog entry', async () => {
+    const create = vi.fn().mockResolvedValue({ id: 42 });
+    const result = await runImport(
+      [
+        {
+          title: 'Dune',
+          author: 'Frank Herbert',
+          isbn: '9780441013593',
+        },
+      ],
+      [
+        {
+          id: 7,
+          isbn: '978-0-441-01359-3',
+          title: 'Dune',
+          author: 'Frank Herbert',
+          collection: 'catalog',
+        },
+      ],
+      create,
+    );
+
+    expect(create).not.toHaveBeenCalled();
+    expect(result.duplicates).toEqual([
+      { row: 1, matchedId: 7, reason: 'isbn', collection: 'catalog' },
+    ]);
+    expect(result.successCount).toBe(1);
+    expect(result.failures).toHaveLength(0);
+  });
+
   it('reports a friendly message (not the raw Postgres error) when createBookFn rejects with a unique-violation', async () => {
     // Simulates a cross-tenant-turned-per-tenant ISBN collision that slips
     // past in-batch/existing-book duplicate detection and hits the DB's

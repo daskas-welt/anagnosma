@@ -34,6 +34,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { FORMATS, formatLabel } from '@/lib/formats';
 import { parsePageCount, parsePublishYear } from '@/lib/isbn';
+import { uploadCoverFile } from '@/lib/cover-upload-client';
 import type {
   BookMetadata,
   OpenLibrarySearchResult,
@@ -424,18 +425,14 @@ export function BookDetailSheet({
   async function uploadCover(file: File) {
     setUploadingCover(true);
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': file.type, 'X-Filename': file.name },
-        body: file,
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        toast.error(body.error ?? 'Could not upload cover image.');
-        return;
-      }
-      const { url } = await res.json();
-      setBookDraft((draft) => ({ ...draft, coverUrl: url }));
+      const blob = await uploadCoverFile(file);
+      setBookDraft((draft) => ({ ...draft, coverUrl: blob.url }));
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : 'Could not upload cover image.',
+      );
     } finally {
       setUploadingCover(false);
     }

@@ -98,7 +98,7 @@ export async function listBooks(
 ): Promise<BookWithCopies[]> {
   let bookIds: number[] | undefined;
 
-  if (filters.subjectId) {
+  if (filters.subjectId !== undefined) {
     // Join through books and scope to this user so the subquery never scans
     // every other tenant's book_subjects rows just to intersect them away
     // below via bookConditions.

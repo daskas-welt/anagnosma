@@ -4,7 +4,7 @@ import {
   listBooks,
   type NewBookInput,
 } from '@/lib/books/repository';
-import { parseJsonBody, isUniqueViolation } from '@/lib/api-helpers';
+import { parseId, parseJsonBody, isUniqueViolation } from '@/lib/api-helpers';
 import { canonicalizeIsbn } from '@/lib/isbn';
 import { requireUserId } from '@/lib/auth-helpers';
 import { seedSampleCatalog } from '@/lib/books/sample-catalog';
@@ -16,12 +16,24 @@ export async function GET(request: Request) {
   const q = url.searchParams.get('q') ?? undefined;
   const format = url.searchParams.get('format') ?? undefined;
   const subjectIdParam = url.searchParams.get('subjectId');
+  let subjectId: number | undefined;
+  if (subjectIdParam !== null) {
+    const parsedSubjectId = parseId(subjectIdParam);
+    if (
+      parsedSubjectId === null ||
+      parsedSubjectId <= 0 ||
+      parsedSubjectId > 2_147_483_647
+    ) {
+      return NextResponse.json({ error: 'invalid subjectId' }, { status: 400 });
+    }
+    subjectId = parsedSubjectId;
+  }
   const isbn = canonicalizeIsbn(url.searchParams.get('isbn'));
   const skipSamples = url.searchParams.get('skipSamples') === 'true';
   let books = await listBooks(userId, {
     q,
     format,
-    subjectId: subjectIdParam ? Number(subjectIdParam) : undefined,
+    subjectId,
     isbn,
   });
   if (
