@@ -68,3 +68,5 @@ next-env.d.ts
 /.neon
 /todo.md
 /todo-done.md
+
+.vercel
